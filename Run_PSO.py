@@ -19,7 +19,7 @@ from CostFunctions import (
 from GBestPSO import GBest_PSO
 from RPSO import RPSO
 
-PSO_TYPE = "gbest"
+PSO_TYPE = "rpso"
 
 
 class Main:
@@ -101,20 +101,6 @@ class Main:
             )
 
 
-iterations = 10000
-num_particles = 30
-num_dimensions = 30
-inertia = 0.1
-c1 = 0.5
-c2 = 0.5
-pso_runs = 50
-Cp_min = 0.5
-Cp_max = 2.5
-Cg_min = 0.5
-Cg_max = 2.5
-w_min = 0.4
-w_max = 0.9
-
 pso_functions = [
     {
         "function": sphere,
@@ -167,8 +153,20 @@ pso_functions = [
     },
 ]
 
-
-options = pso_functions[0]
+iterations = 10000
+num_particles = 30
+num_dimensions = 30
+inertia = 0.1
+c1 = 1.49445
+c2 = 1.49445
+pso_runs = 50
+Cp_min = 0.5
+Cp_max = 2.5
+Cg_min = 0.5
+Cg_max = 2.5
+w_min = 0.4
+w_max = 0.9
+options = pso_functions[2]
 
 
 def run_pso_threaded(_, pso_type):
@@ -242,7 +240,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "mode",
-        choices=["single", "threaded", "many_single"],
+        choices=["single", "threaded"],
         help="Select execution mode: single or threaded",
     )
     args = parser.parse_args()
