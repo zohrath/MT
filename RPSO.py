@@ -122,6 +122,7 @@ class RPSO:
         w_min,
         w_max,
         threshold,
+        function,
     ):
         self.num_particles = num_particles
         self.num_dimensions = num_dimensions
@@ -135,6 +136,7 @@ class RPSO:
         self.w_min = w_min
         self.w_max = w_max
         self.threshold = threshold
+        self.function = function
         self.swarm_best_fitness = float("inf")
         self.swarm_best_position = None
 
@@ -171,7 +173,7 @@ class RPSO:
         # _, X_test, _, y_test = get_regression_data()
         for _ in range(self.iterations):
             for particle in self.particles:
-                fitness = sphere(particle.position)
+                fitness = self.function(particle.position)
                 # fitness = self.run_linear_regression(particle, X_test, y_test)
                 if fitness < particle.best_fitness:
                     particle.best_fitness = fitness
