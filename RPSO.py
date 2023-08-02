@@ -179,7 +179,9 @@ class RPSO:
                 if fitness < self.swarm_best_fitness:
                     self.swarm_best_fitness = fitness
                     self.swarm_best_position = particle.position
-
+            # Check if fitness threshold has been reached
+            if fitness <= self.threshold:
+                break
             for particle in self.particles:
                 particle.velocity = particle.update_particle_velocity(
                     particle.best_position,
