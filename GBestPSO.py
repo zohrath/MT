@@ -2,11 +2,6 @@ from CostFunctions import (
     ann_cost_function,
     get_regression_data,
     linear_regression,
-    penalized1,
-    rastrigin,
-    rosenbrock,
-    schwefel,
-    sphere,
 )
 from Particle import Particle
 
@@ -22,6 +17,7 @@ class GBest_PSO:
         inertia,
         c1,
         c2,
+        function,
     ):
         self.num_particles = num_particles
         self.num_dimensions = num_dimensions
@@ -31,6 +27,7 @@ class GBest_PSO:
         self.inertia = inertia
         self.c1 = c1
         self.c2 = c2
+        self.function = function
         self.swarm_best_fitness = float("inf")
         self.swarm_best_position = None
 
@@ -58,10 +55,10 @@ class GBest_PSO:
         return particles
 
     def run_pso(self):
-        _, X_test, _, y_test = get_regression_data()
+        # _, X_test, _, y_test = get_regression_data()
         for _ in range(self.iterations):
             for particle in self.particles:
-                fitness = rosenbrock(particle.position)
+                fitness = self.function(particle.position)
                 # fitness = self.run_linear_regression(particle, X_test, y_test)
                 if fitness < particle.best_fitness:
                     particle.best_fitness = fitness

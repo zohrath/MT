@@ -19,7 +19,7 @@ from CostFunctions import (
 from GBestPSO import GBest_PSO
 from RPSO import RPSO
 
-PSO_TYPE = "rpso"
+PSO_TYPE = "gbest"
 
 
 class Main:
@@ -67,6 +67,7 @@ class Main:
                 self.inertia,
                 self.c1,
                 self.c2,
+                self.function,
             )
             swarm.run_pso()
 
@@ -103,7 +104,7 @@ class Main:
 iterations = 10000
 num_particles = 30
 num_dimensions = 30
-inertia = 0.5
+inertia = 0.1
 c1 = 0.5
 c2 = 0.5
 pso_runs = 50
@@ -167,7 +168,7 @@ pso_functions = [
 ]
 
 
-options = pso_functions[1]
+options = pso_functions[0]
 
 
 def run_pso_threaded(_, pso_type):
@@ -201,7 +202,7 @@ def handle_data(fitness_histories):
 
     plt.xlabel("Iteration")
     plt.ylabel("Fitness Value")
-    plt.title(f"RPSO {str(options['function_name'])}")
+    plt.title(f"GBest {str(options['function_name'])}")
 
     fitness_values = np.array(
         [fitness_history[-1] for fitness_history in fitness_histories]
