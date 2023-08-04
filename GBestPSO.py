@@ -73,6 +73,7 @@ class GBest_PSO:
                     self.c1,
                     particle.best_position,
                     particle.position,
+                    particle.velocity,
                     self.c2,
                     self.swarm_best_position,
                 )

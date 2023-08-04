@@ -36,8 +36,8 @@ class Particle:
         r1 = np.random.rand()
         return c1 * r1 * (particle_best_position - particle_current_position)
 
-    def get_inertia_velocity_part(self, inertia, particle_current_position):
-        return inertia * particle_current_position
+    def get_inertia_velocity_part(self, inertia, particle_current_velocity):
+        return inertia * particle_current_velocity
 
     def update_particle_velocity(
         self,
@@ -45,11 +45,12 @@ class Particle:
         c1,
         particle_best_position,
         particle_current_position,
+        particle_current_velocity,
         c2,
         swarm_best_position,
     ):
         inertia_param = self.get_inertia_velocity_part(
-            inertia, particle_current_position
+            inertia, particle_current_velocity
         )
         cognitive_param = self.get_cognitive_parameter(
             c1, particle_best_position, particle_current_position

@@ -16,7 +16,7 @@ def get_GWN(mean=0, std_dev=0.07):
     return np.random.normal(loc=mean, scale=std_dev, size=1)
 
 
-class RPSOParticle(Particle):
+class RPSOParticle:
     def __init__(
         self,
         Cp_min,
@@ -30,7 +30,17 @@ class RPSOParticle(Particle):
         position_bounds,
         velocity_bounds,
     ):
-        super().__init__(num_dimensions, position_bounds, velocity_bounds)
+        self.num_dimensions = num_dimensions
+        self.position_bounds = position_bounds
+        self.velocity_bounds = velocity_bounds
+
+        self.position = self.initialize_particle_position()
+        self.velocity = self.initialize_particle_velocity()
+
+        self.best_position = self.position
+        self.best_fitness = float("inf")
+
+        self.position_history = []
 
         self.Cg_min = Cg_min
         self.Cg_max = Cg_max
@@ -45,6 +55,18 @@ class RPSOParticle(Particle):
         self.Cp = self.get_cognitive_parameter()
         self.Cg = self.get_social_parameter()
         self.inertia_weight = self.get_inertia_weight_parameter()
+
+    def initialize_particle_position(self):
+        return np.random.uniform(
+            self.position_bounds[0],
+            self.position_bounds[1],
+            size=self.num_dimensions,
+        )
+
+    def initialize_particle_velocity(self):
+        return np.random.uniform(
+            self.velocity_bounds[0], self.velocity_bounds[1], size=self.num_dimensions
+        )
 
     def get_inertia_weight_parameter(self):
         return self.w_max - (self.w_max - self.w_min) * (
@@ -61,47 +83,48 @@ class RPSOParticle(Particle):
             (self.max_iterations - self.current_iteration) / self.max_iterations
         ) + self.Cg_max
 
-    def get_social_velocity_part(
-        self, Cg, swarm_best_position, particle_current_position
-    ):
-        r2 = np.random.rand()
-        d2 = get_GWN()
-        return r2 * (self.Cg + d2) * (swarm_best_position - particle_current_position)
+    def get_update_velocity_inertia_part(self):
+        return self.get_inertia_weight_parameter() * self.velocity
 
-    def get_cognitive_velocity_part(
-        self, Cp, particle_best_position, particle_current_position
-    ):
-        r1 = np.random.rand()
+    # Clip this velocity?
+    def get_cognitive_velocity_part(self):
+        updated_Cp = self.get_cognitive_parameter()
+        r1 = np.random.uniform(0, 1)
         d1 = get_GWN()
-        return (
-            r1 * (self.Cp + d1) * (particle_best_position - particle_current_position)
-        )
+        return r1 * (updated_Cp + d1) * (self.best_position - self.position)
+
+    # Clip this velocity?
+    def get_social_velocity_part(self, swarm_best_position):
+        updated_Cg = self.get_social_parameter()
+        r2 = np.random.uniform(0, 1)
+        d2 = get_GWN()
+        return r2 * (updated_Cg + d2) * (swarm_best_position - self.position)
 
     def update_particle_velocity(
         self,
-        particle_best_position,
-        particle_current_position,
         swarm_best_position,
     ):
-        inertia_param = self.get_inertia_velocity_part(
-            self.get_inertia_weight_parameter(), particle_current_position
-        )
-        cognitive_param = self.get_cognitive_velocity_part(
-            self.get_cognitive_parameter(),
-            particle_best_position,
-            particle_current_position,
-        )
-        social_param = self.get_social_velocity_part(
-            self.get_social_parameter(), swarm_best_position, particle_current_position
-        )
+        inertia_param = self.get_update_velocity_inertia_part()
+        cognitive_param = self.get_cognitive_velocity_part()
+        social_param = self.get_social_velocity_part(swarm_best_position)
 
         updated_velocity = inertia_param + cognitive_param + social_param
 
-        # updated_velocity = np.clip(
-        #     updated_velocity, self.velocity_bounds[0], self.velocity_bounds[1]
-        # )
+        updated_velocity = np.clip(
+            updated_velocity, self.velocity_bounds[0], self.velocity_bounds[1]
+        )
 
-        return updated_velocity
+        self.velocity = updated_velocity
+
+    def update_position(self):
+        new_position = np.clip(
+            self.position + self.velocity,
+            self.position_bounds[0],
+            self.position_bounds[1],
+        )
+
+        self.position_history.append(new_position)
+        self.position = new_position
 
     def update_current_iteration(self):
         self.current_iteration += 1
@@ -185,14 +208,10 @@ class RPSO:
             if fitness <= self.threshold:
                 break
             for particle in self.particles:
-                particle.velocity = particle.update_particle_velocity(
-                    particle.best_position,
-                    particle.position,
+                particle.update_particle_velocity(
                     self.swarm_best_position,
                 )
-                particle.position = particle.update_position(
-                    particle.position, particle.velocity
-                )
+                particle.update_position()
                 particle.update_current_iteration()
             self.swarm_fitness_history.append(self.swarm_best_fitness)
             swarm_positions = [particle.position for particle in self.particles]

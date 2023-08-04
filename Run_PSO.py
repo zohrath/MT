@@ -156,7 +156,7 @@ pso_functions = [
 iterations = 10000
 num_particles = 30
 num_dimensions = 30
-inertia = 0.1
+inertia = 0.9
 c1 = 1.49445
 c2 = 1.49445
 pso_runs = 50
@@ -166,7 +166,7 @@ Cg_min = 0.5
 Cg_max = 2.5
 w_min = 0.4
 w_max = 0.9
-options = pso_functions[2]
+options = pso_functions[0]
 
 
 def run_pso_threaded(_, pso_type):
@@ -200,7 +200,7 @@ def handle_data(fitness_histories):
 
     plt.xlabel("Iteration")
     plt.ylabel("Fitness Value")
-    plt.title(f"GBest {str(options['function_name'])}")
+    plt.title(f"{PSO_TYPE} {str(options['function_name'])}")
 
     fitness_values = np.array(
         [fitness_history[-1] for fitness_history in fitness_histories]
