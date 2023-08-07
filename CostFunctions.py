@@ -3,6 +3,11 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.metrics import (
+    mean_squared_error,
+    mean_absolute_error,
+    explained_variance_score,
+)
 from tensorflow import keras
 import tensorflow as tf
 from mpl_toolkits.mplot3d import Axes3D
@@ -24,60 +29,97 @@ weights = model.get_weights()
 num_dimensions = sum(w.size for w in weights)
 
 
-def build_keras_model(num_hidden_layers):
-    if num_hidden_layers < 1:
-        raise ValueError("Number of hidden layers must be at least 1.")
-
-    model = keras.Sequential(
-        [
-            keras.layers.Dense(4, activation="relu", input_shape=(2,)),
-        ]
-    )
-
-    for _ in range(num_hidden_layers - 1):
-        model.add(keras.layers.Dense(4, activation="relu"))
-
-    model.add(keras.layers.Dense(1))
-
-    return model
-
-
-def replace_hidden_layer_nodes(model, num_nodes):
-    if len(num_nodes) != len(model.layers):
-        raise ValueError(
-            "Length of num_nodes array must match the number of layers in the model."
-        )
-
-    new_model = keras.models.clone_model(model)
-    new_model.build()  # Build the new model to initialize the weights
-
-    # Initialize GlorotUniform initializer with unique seeds for each layer
-    initializer = tf.keras.initializers.GlorotUniform(seed=42)
-
-    # Iterate through the layers and update the number of nodes for each layer
-    for layer, nodes in zip(new_model.layers[1:-1], num_nodes[1:-1]):
-        if isinstance(layer, tf.keras.layers.Dense):
-            layer.units = nodes
-            # Rebuild the layer with the updated number of nodes and the unique initializer
-            layer.build(layer.input_shape)
-            layer.kernel_initializer = initializer
-            layer.bias_initializer = initializer
-
-    return new_model
-
-
 def get_regression_data():
     df = pd.read_csv("fake_reg.csv")
 
     X = df[["feature1", "feature2"]].values
     y = df["price"].values
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42
+    )
 
     scaler = MinMaxScaler()
     scaler.fit(X_train)
 
     return X_train, X_test, y_train, y_test
+
+
+def get_fingerprinted_data():
+    df = pd.read_csv("fingerprints.csv", delimiter=",")
+
+    df = df.drop(
+        [
+            "AP1_dev",
+            "AP2_dev",
+            "AP3_dev",
+            "AP1_dist_dev",
+            "AP2_dist_dev",
+            "AP3_dist_dev",
+        ],
+        axis=1,
+    )
+
+    free_variables = df.drop(["X", "Y"], axis=1).values
+    dependent_variables = df[["X", "Y"]].values
+
+    # Split
+    X_train, X_test, y_train, y_test = train_test_split(
+        free_variables, dependent_variables, test_size=0.2, random_state=42
+    )
+
+    scaler = MinMaxScaler()
+
+    X_train = scaler.fit_transform(X_train)
+    X_test = scaler.transform(X_test)
+
+    return X_train, X_test, y_train, y_test
+
+
+def ann_node_count_fitness(num_nodes_per_layer):
+    num_nodes_per_layer = np.round(num_nodes_per_layer)
+    if len(num_nodes_per_layer) < 1:
+        raise ValueError("Number of layers must be at least 1.")
+
+    X_train, X_test, y_train, y_test = get_fingerprinted_data()
+
+    model = keras.Sequential(
+        [
+            keras.layers.Dense(num_nodes_per_layer[0], activation="relu"),
+        ]
+    )
+
+    if len(num_nodes_per_layer) > 1:
+        for nodeCount in num_nodes_per_layer[1:]:
+            model.add(keras.layers.Dense(nodeCount, activation="relu"))
+
+    model.add(keras.layers.Dense(2))
+    model.compile(optimizer="adam", loss="mse")
+
+    model.fit(X_train, y_train, epochs=25, validation_data=(X_test, y_test), verbose=0)
+    # losses = pd.DataFrame(model.history.history)
+
+    # # Extract loss and validation loss columns
+    # train_loss = losses["loss"]
+    # val_loss = losses["val_loss"]
+
+    # # Create a plot
+    # plt.figure(figsize=(10, 6))
+    # plt.plot(train_loss, label="Training Loss")
+    # plt.plot(val_loss, label="Validation Loss")
+    # plt.xlabel("Epoch")
+    # plt.ylabel("Loss")
+    # plt.title("Training and Validation Loss Over Epochs")
+    # plt.legend()
+    # plt.grid(True)
+    # plt.show()
+
+    predictions = model.predict(X_test, verbose=0)
+
+    # print("RMSE: ", np.sqrt(mean_squared_error(y_test, predictions)))
+    # print("Explained variance score: ", explained_variance_score(y_test, predictions))
+
+    return np.sqrt(mean_squared_error(y_test, predictions))
 
 
 def linear_regression(particle_position, X_test, y_test):
@@ -93,7 +135,7 @@ def linear_regression(particle_position, X_test, y_test):
 
 def ann_cost_function(particle):
     X_train, X_test, y_train, y_test = get_regression_data()
-    model = build_keras_model(2)
+    model = ann_node_count_fitness(2)
     start = 0
     for layer in model.layers:
         num_weights = layer.get_weights()[0].size
