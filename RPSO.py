@@ -1,5 +1,6 @@
 import numpy as np
 from CostFunctions import (
+    ann_node_count_fitness,
     get_regression_data,
     linear_regression,
     penalized1,
@@ -86,14 +87,12 @@ class RPSOParticle:
     def get_update_velocity_inertia_part(self):
         return self.get_inertia_weight_parameter() * self.velocity
 
-    # Clip this velocity?
     def get_cognitive_velocity_part(self):
         updated_Cp = self.get_cognitive_parameter()
         r1 = np.random.uniform(0, 1)
         d1 = get_GWN()
         return r1 * (updated_Cp + d1) * (self.best_position - self.position)
 
-    # Clip this velocity?
     def get_social_velocity_part(self, swarm_best_position):
         updated_Cg = self.get_social_parameter()
         r2 = np.random.uniform(0, 1)
@@ -193,11 +192,10 @@ class RPSO:
         return linear_regression(particle.position, X_test, y_test)
 
     def run_pso(self):
-        # _, X_test, _, y_test = get_regression_data()
-        for _ in range(self.iterations):
+        for iter in range(self.iterations):
             for particle in self.particles:
-                fitness = self.function(particle.position)
-                # fitness = self.run_linear_regression(particle, X_test, y_test)
+                # fitness = self.function(particle.position)
+                fitness = ann_node_count_fitness(particle.position)
                 if fitness < particle.best_fitness:
                     particle.best_fitness = fitness
                     particle.best_position = particle.position
@@ -214,5 +212,5 @@ class RPSO:
                 particle.update_position()
                 particle.update_current_iteration()
             self.swarm_fitness_history.append(self.swarm_best_fitness)
-            swarm_positions = [particle.position for particle in self.particles]
-            self.swarm_position_history.append(swarm_positions)
+            self.swarm_positions = [particle.position for particle in self.particles]
+            self.swarm_position_history.append(self.swarm_positions)

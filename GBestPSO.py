@@ -1,5 +1,6 @@
 from CostFunctions import (
     ann_cost_function,
+    ann_node_count_fitness,
     get_regression_data,
     linear_regression,
 )
@@ -17,6 +18,7 @@ class GBest_PSO:
         inertia,
         c1,
         c2,
+        threshold,
         function,
     ):
         self.num_particles = num_particles
@@ -27,6 +29,7 @@ class GBest_PSO:
         self.inertia = inertia
         self.c1 = c1
         self.c2 = c2
+        self.threshold = threshold
         self.function = function
         self.swarm_best_fitness = float("inf")
         self.swarm_best_position = None
@@ -55,18 +58,17 @@ class GBest_PSO:
         return particles
 
     def run_pso(self):
-        # _, X_test, _, y_test = get_regression_data()
         for _ in range(self.iterations):
             for particle in self.particles:
-                fitness = self.function(particle.position)
-                # fitness = self.run_linear_regression(particle, X_test, y_test)
+                fitness = ann_node_count_fitness(particle.position)
                 if fitness < particle.best_fitness:
                     particle.best_fitness = fitness
                     particle.best_position = particle.position
                 if fitness < self.swarm_best_fitness:
                     self.swarm_best_fitness = fitness
                     self.swarm_best_position = particle.position
-            # Stopping condition here
+            if fitness <= self.threshold:
+                break
             for particle in self.particles:
                 particle.velocity = particle.update_particle_velocity(
                     self.inertia,
