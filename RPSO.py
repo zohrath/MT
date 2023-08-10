@@ -41,7 +41,7 @@ class RPSOParticle:
         self.best_position = self.position
         self.best_fitness = float("inf")
 
-        self.position_history = []
+        self.position_history = np.empty((num_dimensions, max_iterations))
 
         self.Cg_min = Cg_min
         self.Cg_max = Cg_max
@@ -121,8 +121,7 @@ class RPSOParticle:
             self.position_bounds[0],
             self.position_bounds[1],
         )
-
-        self.position_history.append(new_position)
+        np.append(self.position_history, new_position)
         self.position = new_position
 
     def update_current_iteration(self):
@@ -194,8 +193,8 @@ class RPSO:
     def run_pso(self):
         for iter in range(self.iterations):
             for particle in self.particles:
-                # fitness = self.function(particle.position)
-                fitness = ann_node_count_fitness(particle.position)
+                fitness = self.function(particle.position)
+                # fitness = ann_node_count_fitness(particle.position)
                 if fitness < particle.best_fitness:
                     particle.best_fitness = fitness
                     particle.best_position = particle.position
