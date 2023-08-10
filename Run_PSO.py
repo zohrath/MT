@@ -20,6 +20,11 @@ from CostFunctions import (
 
 from GBestPSO import GBest_PSO
 from RPSO import RPSO
+from Statistic import (
+    plot_all_fitness_histories,
+    plot_average_total_distance,
+    plot_averages_fitness_histories,
+)
 
 PSO_TYPE = "rpso"
 
@@ -28,9 +33,6 @@ class Main:
     def __init__(
         self,
         iterations,
-        inertia,
-        c1,
-        c2,
         options,
     ):
         self.iterations = iterations
@@ -38,15 +40,6 @@ class Main:
         self.num_dimensions = options["num_dimensions"]
         self.position_bounds = options["position_bounds"]
         self.velocity_bounds = options["velocity_bounds"]
-        self.inertia = inertia
-        self.c1 = c1
-        self.c2 = c2
-        self.Cp_min = options["Cp_min"]
-        self.Cp_max = options["Cp_max"]
-        self.Cg_min = options["Cg_min"]
-        self.Cg_max = options["Cg_max"]
-        self.w_min = options["w_min"]
-        self.w_max = options["w_max"]
         self.threshold = options["threshold"]
         self.function = options["function"]
 
@@ -58,9 +51,9 @@ class Main:
                 self.num_dimensions,
                 self.position_bounds,
                 self.velocity_bounds,
-                self.inertia,
-                self.c1,
-                self.c2,
+                options["inertia"],
+                options["c1"],
+                options["c2"],
                 self.threshold,
                 self.function,
             )
@@ -79,14 +72,14 @@ class Main:
                 self.num_dimensions,
                 self.position_bounds,
                 self.velocity_bounds,
-                self.Cp_min,
-                self.Cp_max,
-                self.Cg_min,
-                self.Cg_max,
-                self.w_min,
-                self.w_max,
-                self.threshold,
-                self.function,
+                options["Cp_min"],
+                options["Cp_max"],
+                options["Cg_min"],
+                options["Cg_max"],
+                options["w_min"],
+                options["w_max"],
+                options["threshold"],
+                options["function"],
             )
             swarm.run_pso()
 
@@ -105,14 +98,17 @@ pso_functions = [
         "position_bounds": (-100, 100),
         "velocity_bounds": (-40, 40),
         "threshold": 0.01,
-        "num_particles": 3,
-        "num_dimensions": 3,
+        "num_particles": 30,
+        "num_dimensions": 30,
         "Cp_min": 0.5,
         "Cp_max": 2.5,
         "Cg_min": 0.5,
         "Cg_max": 2.5,
         "w_min": 0.4,
         "w_max": 0.9,
+        "inertia": 0.9,
+        "c1": 2.0,
+        "c2": 2.0,
     },
     {
         "function": rosenbrock,
@@ -128,6 +124,9 @@ pso_functions = [
         "Cg_max": 2.5,
         "w_min": 0.4,
         "w_max": 0.9,
+        "inertia": 0.9,
+        "c1": 2.0,
+        "c2": 2.0,
     },
     {
         "function": rastrigin,
@@ -135,14 +134,17 @@ pso_functions = [
         "position_bounds": (-5.12, 5.12),
         "velocity_bounds": (-2.048, 2.048),
         "threshold": 50,
-        "num_particles": 3,
-        "num_dimensions": 3,
+        "num_particles": 30,
+        "num_dimensions": 30,
         "Cp_min": 0.5,
         "Cp_max": 2.5,
         "Cg_min": 0.5,
         "Cg_max": 2.5,
         "w_min": 0.4,
         "w_max": 0.9,
+        "inertia": 0.9,
+        "c1": 2.0,
+        "c2": 2.0,
     },
     {
         "function": schwefel,
@@ -150,14 +152,17 @@ pso_functions = [
         "position_bounds": (-100, 100),
         "velocity_bounds": (-40, 40),
         "threshold": 0.01,
-        "num_particles": 3,
-        "num_dimensions": 3,
+        "num_particles": 30,
+        "num_dimensions": 30,
         "Cp_min": 0.5,
         "Cp_max": 2.5,
         "Cg_min": 0.5,
         "Cg_max": 2.5,
         "w_min": 0.4,
         "w_max": 0.9,
+        "inertia": 0.9,
+        "c1": 2,
+        "c2": 2,
     },
     {
         "function": griewank,
@@ -165,14 +170,17 @@ pso_functions = [
         "position_bounds": (-600, 600),
         "velocity_bounds": (-240, 240),
         "threshold": 0.01,
-        "num_particles": 3,
-        "num_dimensions": 3,
+        "num_particles": 30,
+        "num_dimensions": 30,
         "Cp_min": 0.5,
         "Cp_max": 2.5,
         "Cg_min": 0.5,
         "Cg_max": 2.5,
         "w_min": 0.4,
         "w_max": 0.9,
+        "inertia": 0.9,
+        "c1": 2,
+        "c2": 2,
     },
     {
         "function": penalized1,
@@ -188,6 +196,9 @@ pso_functions = [
         "Cg_max": 2.5,
         "w_min": 0.4,
         "w_max": 0.9,
+        "inertia": 0.9,
+        "c1": 1.49445,
+        "c2": 1.49445,
     },
     {
         "function": step,
@@ -203,6 +214,9 @@ pso_functions = [
         "Cg_max": 2.5,
         "w_min": 0.4,
         "w_max": 0.9,
+        "inertia": 0.9,
+        "c1": 1.49445,
+        "c2": 1.49445,
     },
     {
         "function": ann_node_count_fitness,
@@ -219,22 +233,29 @@ pso_functions = [
         "w_min": 0.4,
         "w_max": 0.9,
     },
+    {
+        "function": ann_node_count_fitness,
+        "function_name": "ANN Node Count Gbest",
+        "position_bounds": (1, 100),
+        "velocity_bounds": (-40, 40),
+        "threshold": 1,
+        "num_particles": 3,
+        "num_dimensions": 3,
+        "inertia": 0.9,
+        "c1": 1.49445,
+        "c2": 1.49445,
+    },
 ]
 
-iterations = 20
-inertia = 0.9
-c1 = 1.49445
-c2 = 1.49445
-pso_runs = 3
-options = pso_functions[7]
+# Common options for all PSO runs
+iterations = 50
+pso_runs = 50
+options = pso_functions[0]
 
 
 def run_pso_threaded(_, pso_type):
     swarm = Main(
         iterations,
-        inertia,
-        c1,
-        c2,
         options,
     )
     (
@@ -252,46 +273,10 @@ def run_pso_threaded(_, pso_type):
     )
 
 
-def handle_data(fitness_histories):
-    plt.figure(figsize=(10, 6))
-
-    for i, fitness_history in enumerate(fitness_histories):
-        plt.plot(fitness_history, label=f"PSO Run {i + 1}")
-
-    plt.xlabel("Iteration")
-    plt.ylabel("Fitness Value")
-    plt.title(f"{PSO_TYPE} {str(options['function_name'])}")
-
-    fitness_values = np.array(
-        [fitness_history[-1] for fitness_history in fitness_histories]
-    )
-    min_fitness = np.min(fitness_values)
-    mean_fitness = np.mean(fitness_values)
-    max_fitness = np.max(fitness_values)
-    std_fitness = np.std(fitness_values)
-
-    statistics_table = (
-        "Fitness Statistics:\n"
-        "Statistic           | Value\n"
-        "--------------------|----------\n"
-        "Min                 | {:.6f}\n"
-        "Mean                | {:.6f}\n"
-        "Max                 | {:.6f}\n"
-        "Standard Deviation  | {:.6f}\n"
-    ).format(min_fitness, mean_fitness, max_fitness, std_fitness)
-
-    plt.annotate(
-        statistics_table,
-        xy=(0.66, 0.8),
-        xycoords="axes fraction",
-        fontsize=10,
-        va="center",  # Vertically center the annotation
-        bbox=dict(boxstyle="round", facecolor="white", alpha=0.5),
-    )
-
-    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M")
-    file_name = f"fitness_histories_plot_{timestamp}.png"
-    plt.savefig(file_name)
+def handle_data(fitness_histories, swarm_position_histories):
+    plot_average_total_distance(swarm_position_histories, PSO_TYPE)
+    plot_averages_fitness_histories(fitness_histories, PSO_TYPE)
+    plot_all_fitness_histories(fitness_histories, options, PSO_TYPE)
 
 
 if __name__ == "__main__":
@@ -307,9 +292,6 @@ if __name__ == "__main__":
 
     main = Main(
         iterations,
-        inertia,
-        c1,
-        c2,
         options,
     )
 
@@ -341,7 +323,7 @@ if __name__ == "__main__":
         ) = zip(*results)
         np.save("history_data.npy", swarm_position_history)
         if fitness_histories:
-            handle_data(fitness_histories)
+            handle_data(fitness_histories, swarm_position_history)
 
         mean_best_fitness = np.mean(swarm_best_fitness)
         min_best_fitness = np.min(swarm_best_fitness)
@@ -350,7 +332,7 @@ if __name__ == "__main__":
         sys.stdout.write(
             f"Minimum fitness for {pso_runs} runs: {min_best_fitness}. Mean: {mean_best_fitness}. Max: {max_best_fitness}"
         )
-        sys.stdout.write(f"The best position was {swarm_best_position}\n\r")
+        # sys.stdout.write(f"The best position was {swarm_best_position}\n\r")
     else:
         print(
             "Invalid mode. Please choose either 'single' or 'threaded' as the execution mode."
