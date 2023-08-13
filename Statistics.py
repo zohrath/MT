@@ -50,6 +50,38 @@ def calculate_distance(position1, position2):
 
 
 def get_swarm_total_particle_distance(data):
+    """
+    Calculate the total distance between particles for each iteration of each PSO run.
+
+    This function computes the total distance between all pairs of particles in each iteration
+    of every PSO run and returns a nested structure representing these distances.
+
+    Parameters:
+        data (list of lists of lists): A 3D list containing the position histories
+            of particles for each iteration within each PSO run.
+            Format: [ [ [run1_iter1_positions], [run1_iter2_positions], ... ],
+                      [ [run2_iter1_positions], [run2_iter2_positions], ... ],
+                      ... ]
+
+    Returns:
+        list of lists: A nested structure representing the total distances between particles.
+            The outermost list corresponds to different PSO runs, the inner lists correspond
+            to iterations within each run, and each element of the inner lists represents
+            the total distance for that iteration.
+            Format: [ [run1_iter1_distance, run1_iter2_distance, ... ],
+                      [run2_iter1_distance, run2_iter2_distance, ... ],
+                      ... ]
+
+    Example:
+        >>> swarm_positions = [ [ [iter1_particle1, iter1_particle2, ...], [iter2_particle1, iter2_particle2, ...], ... ],
+        >>>                     [ [iter1_particle1, iter1_particle2, ...], [iter2_particle1, iter2_particle2, ...], ... ],
+        >>>                     ... ]
+        >>> distances = get_swarm_total_particle_distance(swarm_positions)
+
+    Note:
+        The input data structure is expected to be organized as a list of PSO runs,
+        where each run contains lists of particle positions for each iteration.
+    """
     total_distances = []
 
     for run_num, pso_run in enumerate(data):
@@ -76,26 +108,58 @@ def get_swarm_total_particle_distance(data):
 
 
 def plot_average_total_distance(swarm_position_histories, pso_type, save_image=True):
+    """
+    Plot and visualize the average total particle distances over iterations for multiple PSO runs.
+
+    This function calculates the average total particle distance for each iteration
+    across multiple PSO runs and generates a plot to visualize the trend.
+
+    Parameters:
+        swarm_position_histories (list of lists of lists): A 3D list containing the position histories
+            of particles for each iteration within each PSO run.
+            Format: [
+                    [
+                        [run1_iter1_positions], [run1_iter2_positions], ... ],
+                    [
+                        [run2_iter1_positions], [run2_iter2_positions], ... ],
+                    ... ]
+
+        pso_type (str): Type of the PSO algorithm for labeling the plot and filename.
+
+        save_image (bool, optional): Whether to save the plot as an image. Default is True.
+
+    Returns:
+        None. Generates a plot showing the average total particle distances over iterations.
+
+    Example:
+        >>> swarm_positions = [ [ [iter1_particle1, iter1_particle2, ...], [iter2_particle1, iter2_particle2, ...], ... ],
+        >>>                     [ [iter1_particle1, iter1_particle2, ...], [iter2_particle1, iter2_particle2, ...], ... ],
+        >>>                     ... ]
+        >>> plot_average_total_distance(swarm_positions, "PSO_Type_A")
+
+    Note:
+        This function assumes that the input data structure is organized as a list of PSO runs,
+        where each run is represented as a list of iterations, and each iteration is a list
+        containing the particle positions for that specific iteration.
+    """
     total_distances = get_swarm_total_particle_distance(swarm_position_histories)
     average_distances = np.mean(total_distances, axis=0)
     plt.plot(average_distances, label="Average Total Distance")
 
     if save_image:
+        sub_folder = f"{pso_type}_stats"
+        if not os.path.exists(sub_folder):
+            os.makedirs(sub_folder)
         timestamp = time.strftime("%Y-%m-%d_%H-%M-%S")
         plt.xlabel("Iteration")
         plt.ylabel("Total Particle Distance")
         plt.title("Average Total Particle Distance over Iterations")
         plt.legend()
-        plt.savefig(f"average_distance_plot_{pso_type}_{timestamp}.png")
-
-    plt.xlabel("Iteration")
-    plt.ylabel("Total Particle Distance")
-    plt.title("Average Total Particle Distance over Iterations")
-    plt.legend()
-    plt.show()
+        file_name = os.path.join(sub_folder, f"average_distance_plot_{timestamp}.png")
+        plt.savefig(file_name)
 
 
-def plot_averages_fitness_histories(fitness_histories, pso_type):
+def plot_averages_fitness_histories(fitness_histories, pso_type, pso_runs):
     """
     Saves an image with a history of the average fitness values of multiple PSO runs
 
@@ -115,6 +179,7 @@ def plot_averages_fitness_histories(fitness_histories, pso_type):
     # Generate the x-axis positions for the points
     x_positions = np.arange(1, len(averages) + 1)
 
+    plt.figure()
     # Plot the points
     plt.scatter(x_positions, averages, label="Averages", color="blue")
 
@@ -124,6 +189,7 @@ def plot_averages_fitness_histories(fitness_histories, pso_type):
     # Add labels and title
     plt.xlabel("Element Position")
     plt.ylabel("Average Value")
+    plt.title(f"Average fitness histories of {pso_runs} PSO runs")
     f"{str(pso_type)}"
 
     # Show the plot
@@ -135,13 +201,11 @@ def plot_averages_fitness_histories(fitness_histories, pso_type):
         os.makedirs(sub_folder)
 
     timestamp = time.strftime("%Y-%m-%d_%H-%M-%S")
-
-    # Save the plot to an image file
-    file_name = f"average_fitness_histories_{timestamp}.png"
+    file_name = os.path.join(sub_folder, f"average_fitness_histories_{timestamp}.png")
     plt.savefig(file_name)
 
 
-def plot_all_fitness_histories(fitness_histories, options, pso_type):
+def plot_all_fitness_histories(fitness_histories, options, pso_type, pso_runs):
     plt.figure(figsize=(10, 6))
 
     for i, fitness_history in enumerate(fitness_histories):
@@ -149,7 +213,9 @@ def plot_all_fitness_histories(fitness_histories, options, pso_type):
 
     plt.xlabel("Iteration")
     plt.ylabel("Fitness Value")
-    plt.title(f"{str(options['function_name'])} with {pso_type}")
+    plt.title(
+        f"All {pso_runs} fitness histories applied to {str(options['function_name'])} with {pso_type}"
+    )
 
     fitness_values = np.array(
         [fitness_history[-1] for fitness_history in fitness_histories]
@@ -185,3 +251,82 @@ def plot_all_fitness_histories(fitness_histories, options, pso_type):
     timestamp = time.strftime("%Y-%m-%d_%H-%M-%S")
     file_name = os.path.join(sub_folder, f"fitness_histories_plot_{timestamp}.png")
     plt.savefig(file_name)
+
+
+def get_particle_dimension_history(
+    swarm_position_histories, particle_index, *dimension_indices
+):
+    """
+    Collects historical particle positions for specified dimensions from a series of runs.
+
+    This function takes a series of runs, each containing iterations with particle positions,
+    and extracts historical positions for a specific particle and dimensions of interest.
+
+    Args:
+        swarm_position_histories (list): A list of runs, each containing iterations with particle positions.
+        particle_index (int): The index of the particle whose positions are being tracked.
+        *dimension_indices (int): Variable number of dimension indices to track positions for.
+
+    Returns:
+        list: A list of arrays containing historical positions for each specified dimension.
+
+    Example:
+        swarm_positions = [
+            [
+                [(1, 2, 3), (2, 3, 4), (3, 4, 5)],
+                [(4, 5, 6), (5, 6, 7), (6, 7, 8)]
+            ],
+            [
+                [(7, 8, 9), (8, 9, 10), (9, 10, 11)],
+                [(10, 11, 12), (11, 12, 13), (12, 13, 14)]
+            ]
+        ]
+
+        history = plot_particle_dimension_history(swarm_positions, 0, 1, 2)
+        # Returns: [[2, 5, 8], [3, 6, 9], [4, 7, 10]]
+    """
+    particle_position_history = []
+
+    for run in swarm_position_histories:
+        run_positions = [[] for _ in range(len(dimension_indices))]
+
+        for iteration in run:
+            dimensional_positions = iteration[particle_index]
+
+            for i, dim_idx in enumerate(dimension_indices):
+                if dim_idx < len(dimensional_positions):
+                    position = dimensional_positions[dim_idx]
+                    run_positions[i].append(position)
+
+        particle_position_history.append(run_positions)
+
+    return particle_position_history
+
+
+def plot_particle_positions(swarm_position_histories, particle_index, *dimensions):
+    particle_position_history = get_particle_dimension_history(
+        swarm_position_histories, particle_index, *dimensions
+    )
+    """
+    Plots historical particle positions of one particle
+
+    Args:
+        particle_position_history (list): A list of lists of arrays containing historical positions
+        for each specified dimension, separated by runs.
+    """
+    for run_idx, run_positions in enumerate(particle_position_history):
+        print(f"Run {run_idx}:", run_positions)
+        # Create a new figure
+        plt.figure()
+
+        # Plot lines for each data sublist
+        for i, line_data in enumerate(run_positions):
+            plt.plot(line_data, marker="o", label=f"Dimension {i}")
+
+        # Add labels and title
+        plt.xlabel("Iteration number")
+        plt.ylabel("Position value")
+        plt.title(f"Particle X's position in {len(run_positions)} different dimensions")
+        plt.legend()
+        # Show the plot
+        plt.show()

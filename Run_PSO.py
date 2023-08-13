@@ -1,12 +1,9 @@
 from __future__ import division
 import sys
-from matplotlib import pyplot as plt
-from matplotlib.animation import FuncAnimation
 import numpy as np
 import multiprocessing
 from functools import partial
 import argparse
-from datetime import datetime
 from CostFunctions import (
     ann_node_count_fitness,
     griewank,
@@ -24,6 +21,7 @@ from Statistics import (
     plot_all_fitness_histories,
     plot_average_total_distance,
     plot_averages_fitness_histories,
+    plot_particle_positions,
 )
 
 PSO_TYPE = "rpso"
@@ -248,8 +246,8 @@ pso_functions = [
 ]
 
 # Common options for all PSO runs
-iterations = 50
-pso_runs = 5
+iterations = 20
+pso_runs = 2
 options = pso_functions[0]
 
 
@@ -275,8 +273,9 @@ def run_pso_threaded(_, pso_type):
 
 def handle_data(fitness_histories, swarm_position_histories):
     plot_average_total_distance(swarm_position_histories, PSO_TYPE)
-    plot_averages_fitness_histories(fitness_histories, PSO_TYPE)
-    plot_all_fitness_histories(fitness_histories, options, PSO_TYPE)
+    plot_averages_fitness_histories(fitness_histories, PSO_TYPE, pso_runs)
+    plot_all_fitness_histories(fitness_histories, options, PSO_TYPE, pso_runs)
+    plot_particle_positions(swarm_position_histories, 0, 0, 1, 2)
 
 
 if __name__ == "__main__":
