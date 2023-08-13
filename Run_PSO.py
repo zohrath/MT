@@ -20,7 +20,7 @@ from CostFunctions import (
 
 from GBestPSO import GBest_PSO
 from RPSO import RPSO
-from Statistic import (
+from Statistics import (
     plot_all_fitness_histories,
     plot_average_total_distance,
     plot_averages_fitness_histories,
@@ -98,8 +98,8 @@ pso_functions = [
         "position_bounds": (-100, 100),
         "velocity_bounds": (-40, 40),
         "threshold": 0.01,
-        "num_particles": 30,
-        "num_dimensions": 30,
+        "num_particles": 3,
+        "num_dimensions": 3,
         "Cp_min": 0.5,
         "Cp_max": 2.5,
         "Cg_min": 0.5,
@@ -249,7 +249,7 @@ pso_functions = [
 
 # Common options for all PSO runs
 iterations = 50
-pso_runs = 50
+pso_runs = 5
 options = pso_functions[0]
 
 

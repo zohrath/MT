@@ -2,3 +2,4 @@
 report.log
 *.png
 .vscode
+history_data.npy

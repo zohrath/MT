@@ -1,3 +1,4 @@
+import os
 import time
 import numpy as np
 import matplotlib.pyplot as plt
@@ -129,6 +130,10 @@ def plot_averages_fitness_histories(fitness_histories, pso_type):
     plt.legend()
     plt.grid(True)
 
+    sub_folder = f"{pso_type}_stats"
+    if not os.path.exists(sub_folder):
+        os.makedirs(sub_folder)
+
     timestamp = time.strftime("%Y-%m-%d_%H-%M-%S")
 
     # Save the plot to an image file
@@ -172,7 +177,11 @@ def plot_all_fitness_histories(fitness_histories, options, pso_type):
         va="center",  # Vertically center the annotation
         bbox=dict(boxstyle="round", facecolor="white", alpha=0.5),
     )
+    sub_folder = f"{pso_type}_stats"
+
+    if not os.path.exists(sub_folder):
+        os.makedirs(sub_folder)
 
     timestamp = time.strftime("%Y-%m-%d_%H-%M-%S")
-    file_name = f"fitness_histories_plot_{timestamp}.png"
+    file_name = os.path.join(sub_folder, f"fitness_histories_plot_{timestamp}.png")
     plt.savefig(file_name)
