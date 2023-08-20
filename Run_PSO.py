@@ -4,8 +4,12 @@ import numpy as np
 import multiprocessing
 from functools import partial
 import argparse
+
+from sklearn.metrics import explained_variance_score
+from sklearn.preprocessing import MinMaxScaler
 from CostFunctions import (
     ann_node_count_fitness,
+    get_fingerprinted_data,
     griewank,
     penalized1,
     rastrigin,
@@ -23,8 +27,24 @@ from Statistics import (
     plot_averages_fitness_histories,
     plot_particle_positions,
 )
+from misc import ann_weights_fitness_function, create_model, get_final_model
 
-PSO_TYPE = "rpso"
+PSO_TYPE = "gbest"
+
+
+# Create the particle
+num_nodes_per_layer = [
+    6,
+    6,
+    6,
+]  # Example: Input layer with 15 nodes, Hidden layer with 3 nodes
+
+# Create and build the model based on the particle configuration
+model = create_model(num_nodes_per_layer)
+# # Calculate the total number of values required
+total_num_weights = sum(np.prod(w.shape) for w in model.get_weights()[::2])
+total_num_biases = sum(np.prod(b.shape) for b in model.get_weights()[1::2])
+total_number_of_values = total_num_weights + total_num_biases
 
 
 class Main:
@@ -55,7 +75,7 @@ class Main:
                 self.threshold,
                 self.function,
             )
-            swarm.run_pso()
+            swarm.run_pso(model)
 
             return (
                 swarm.swarm_best_fitness,
@@ -79,7 +99,7 @@ class Main:
                 options["threshold"],
                 options["function"],
             )
-            swarm.run_pso()
+            swarm.run_pso(model)
 
             return (
                 swarm.swarm_best_fitness,
@@ -243,12 +263,40 @@ pso_functions = [
         "c1": 1.49445,
         "c2": 1.49445,
     },
+    {
+        "function": ann_weights_fitness_function,
+        "function_name": "ANN Weights and biases gbest",
+        "position_bounds": (-1.0, 1.0),
+        "velocity_bounds": (-0.2, 0.2),
+        "threshold": 1,
+        "num_particles": 3,
+        "num_dimensions": total_number_of_values,
+        "inertia": 0.9,
+        "c1": 1.49445,
+        "c2": 1.49445,
+    },
+    {
+        "function": ann_weights_fitness_function,
+        "function_name": "ANN Node Count RPSO",
+        "position_bounds": (-1, 1),
+        "velocity_bounds": (-0.2, 0.2),
+        "threshold": 1,
+        "num_particles": 5,
+        "num_dimensions": total_number_of_values,
+        "Cp_min": 0.5,
+        "Cp_max": 2.5,
+        "Cg_min": 0.5,
+        "Cg_max": 2.5,
+        "w_min": 0.4,
+        "w_max": 0.9,
+    },
 ]
 
+
 # Common options for all PSO runs
-iterations = 20
-pso_runs = 2
-options = pso_functions[0]
+iterations = 100
+pso_runs = 50
+options = pso_functions[9]
 
 
 def run_pso_threaded(_, pso_type):
@@ -301,10 +349,21 @@ if __name__ == "__main__":
             swarm_fitness_history,
             swarm_position_history,
         ) = main.run_pso(PSO_TYPE)
-
+        X_train, X_test, y_train, y_test = get_fingerprinted_data()
         sys.stdout.write("Best fitness: {}\n".format(swarm_best_fitness))
+        finalModel = get_final_model(model, swarm_best_position)
+        predictions = model.predict(X_test)
+        print(explained_variance_score(y_test, predictions))
 
-        print(swarm_best_position)
+        some_position = [[75, 87, 80, 6920, 17112, 17286]]  # this should produce (1, 0)
+        some_position_2 = [[72, 78, 81, 8503, 8420, 8924]]  # this should produce (8,6)
+
+        scaler = MinMaxScaler()
+        scaler.fit(X_train)
+        transformed_some_position = scaler.transform(some_position_2)
+
+        x_value = model.predict(transformed_some_position)
+        print(x_value)
 
     elif args.mode == "threaded":
         num_cores = multiprocessing.cpu_count()
@@ -320,7 +379,7 @@ if __name__ == "__main__":
             swarm_fitness_history,
             swarm_position_history,
         ) = zip(*results)
-        np.save("history_data.npy", swarm_position_history)
+        # print(swarm_best_position)
         if fitness_histories:
             handle_data(fitness_histories, swarm_position_history)
 

@@ -315,7 +315,6 @@ def plot_particle_positions(swarm_position_histories, particle_index, *dimension
         for each specified dimension, separated by runs.
     """
     for run_idx, run_positions in enumerate(particle_position_history):
-        print(f"Run {run_idx}:", run_positions)
         # Create a new figure
         plt.figure()
 

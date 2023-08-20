@@ -4,6 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
+from matplotlib.animation import FuncAnimation
 
 from CostFunctions import (
     griewank,
@@ -191,6 +192,35 @@ def plot_step():
     plt.show()
 
 
+def animation():
+    # Create a figure and axis
+    fig, ax = plt.subplots()
+    ax.set_xlim(0, 10)
+    ax.set_ylim(-1, 1)
+
+    # Create a line and a scatter plot for the moving dot
+    (line,) = ax.plot([], [])
+    (dot,) = ax.plot([], [], "ro")
+
+    def init():
+        line.set_data([], [])
+        dot.set_data([], [])
+        return line, dot
+
+    def update(frame):
+        x = np.linspace(0, 10, 100)
+        y = np.sin(x + frame * 0.1)  # Simulate dot moving along a sine wave
+        line.set_data(x, y)
+        dot.set_data(x[frame], y[frame])
+        return line, dot
+
+    # Create the animation
+    num_frames = 100
+    ani = FuncAnimation(fig, update, frames=num_frames, init_func=init, blit=True)
+
+    plt.show()
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Plot functions")
     parser.add_argument(
@@ -203,6 +233,7 @@ if __name__ == "__main__":
             "griewank",
             "penalized1",
             "step",
+            "anim",
         ],
         help="Choose the function to plot",
     )
@@ -222,3 +253,5 @@ if __name__ == "__main__":
         plot_penalized1()
     elif args.function == "step":
         plot_step()
+    elif args.function == "anim":
+        animation()

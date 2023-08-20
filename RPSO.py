@@ -1,6 +1,7 @@
 import numpy as np
 from CostFunctions import (
     ann_node_count_fitness,
+    get_fingerprinted_data,
     get_regression_data,
     linear_regression,
     penalized1,
@@ -190,10 +191,11 @@ class RPSO:
     def run_linear_regression(self, particle, X_test, y_test):
         return linear_regression(particle.position, X_test, y_test)
 
-    def run_pso(self):
+    def run_pso(self, model):
+        X_train, X_test, y_train, y_test = get_fingerprinted_data()
         for iter in range(self.iterations):
             for particle in self.particles:
-                fitness = self.function(particle.position)
+                fitness = self.function(particle.position, model, X_train, y_train)
                 # fitness = ann_node_count_fitness(particle.position)
                 if fitness < particle.best_fitness:
                     particle.best_fitness = fitness
@@ -211,5 +213,6 @@ class RPSO:
                 particle.update_position()
                 particle.update_current_iteration()
             self.swarm_fitness_history.append(self.swarm_best_fitness)
-            self.swarm_positions = [particle.position for particle in self.particles]
-            self.swarm_position_history.append(self.swarm_positions)
+            self.swarm_position_history.append(
+                [particle.position for particle in self.particles]
+            )

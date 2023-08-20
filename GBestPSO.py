@@ -1,6 +1,7 @@
 from CostFunctions import (
     ann_cost_function,
     ann_node_count_fitness,
+    get_fingerprinted_data,
     get_regression_data,
     linear_regression,
 )
@@ -57,10 +58,12 @@ class GBest_PSO:
 
         return particles
 
-    def run_pso(self):
+    def run_pso(self, model):
+        X_train, X_test, y_train, y_test = get_fingerprinted_data()
         for _ in range(self.iterations):
             for particle in self.particles:
-                fitness = ann_node_count_fitness(particle.position)
+                fitness = self.function(particle.position, model, X_train, y_train)
+                # fitness = ann_node_count_fitness(particle.position)
                 if fitness < particle.best_fitness:
                     particle.best_fitness = fitness
                     particle.best_position = particle.position
