@@ -4,12 +4,14 @@ import numpy as np
 import multiprocessing
 from functools import partial
 import argparse
+import itertools
+from keras.layers import Dense
+from keras.models import Sequential
 
-from sklearn.metrics import explained_variance_score
 from sklearn.preprocessing import MinMaxScaler
 from CostFunctions import (
     ann_node_count_fitness,
-    get_fingerprinted_data,
+    ann_weights_fitness_function,
     griewank,
     penalized1,
     rastrigin,
@@ -21,26 +23,33 @@ from CostFunctions import (
 
 from GBestPSO import GBest_PSO
 from RPSO import RPSO
-from Statistics import (
-    plot_all_fitness_histories,
-    plot_average_total_distance,
-    plot_averages_fitness_histories,
-    plot_particle_positions,
-)
-from misc import ann_weights_fitness_function, create_model, get_final_model
+from Statistics import handle_data
+
 
 PSO_TYPE = "gbest"
 
 
-# Create the particle
-num_nodes_per_layer = [
-    6,
-    6,
-    6,
-]  # Example: Input layer with 15 nodes, Hidden layer with 3 nodes
+def create_model():
+    num_nodes_per_layer = [
+        6,
+        6,
+        6,
+    ]
+    model = Sequential()
+    model.add(Dense(num_nodes_per_layer[0], activation="relu", input_shape=(6,)))
+
+    for nodes in num_nodes_per_layer[1:]:
+        model.add(Dense(nodes, activation="relu"))
+
+    model.add(Dense(2))  # Output layer
+
+    model.compile(optimizer="adam", loss="mse", metrics=["accuracy"])
+
+    return model
+
 
 # Create and build the model based on the particle configuration
-model = create_model(num_nodes_per_layer)
+model = create_model()
 # # Calculate the total number of values required
 total_num_weights = sum(np.prod(w.shape) for w in model.get_weights()[::2])
 total_num_biases = sum(np.prod(b.shape) for b in model.get_weights()[1::2])
@@ -278,7 +287,7 @@ pso_functions = [
     {
         "function": ann_weights_fitness_function,
         "function_name": "ANN Node Count RPSO",
-        "position_bounds": (-1, 1),
+        "position_bounds": (-1.0, 1.0),
         "velocity_bounds": (-0.2, 0.2),
         "threshold": 1,
         "num_particles": 5,
@@ -293,13 +302,47 @@ pso_functions = [
 ]
 
 
+def run_grid_search(params_range, pso_type, iterations, total_number_of_values):
+    best_result = None
+    best_fitness = float("inf")
+
+    for params in params_range:
+        inertia, c1, c2 = params
+        main = Main(
+            iterations,
+            {
+                "function": ann_weights_fitness_function,
+                "function_name": "ANN Weights and biases gbest",
+                "position_bounds": (-1.0, 1.0),
+                "velocity_bounds": (-0.2, 0.2),
+                "threshold": 1,
+                "num_particles": 3,
+                "num_dimensions": total_number_of_values,
+                "inertia": inertia,
+                "c1": c1,
+                "c2": c2,
+            },
+        )
+        (
+            swarm_best_fitness,
+            swarm_best_position,
+            swarm_fitness_history,
+            swarm_position_history,
+        ) = main.run_pso(pso_type)
+
+        if swarm_best_fitness < best_fitness:
+            best_fitness = swarm_best_fitness
+            best_result = (swarm_best_fitness, params)
+
+    return best_result
+
+
 # Common options for all PSO runs
 iterations = 100
-pso_runs = 50
 options = pso_functions[9]
 
 
-def run_pso_threaded(_, pso_type):
+def run_pso(_, pso_type):
     swarm = Main(
         iterations,
         options,
@@ -319,55 +362,25 @@ def run_pso_threaded(_, pso_type):
     )
 
 
-def handle_data(fitness_histories, swarm_position_histories):
-    plot_average_total_distance(swarm_position_histories, PSO_TYPE)
-    plot_averages_fitness_histories(fitness_histories, PSO_TYPE, pso_runs)
-    plot_all_fitness_histories(fitness_histories, options, PSO_TYPE, pso_runs)
-    plot_particle_positions(swarm_position_histories, 0, 0, 1, 2)
-
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Run PSO algorithm with single or threaded execution."
     )
     parser.add_argument(
         "mode",
-        choices=["single", "threaded"],
+        choices=["single", "threaded", "gridSearch"],
         help="Select execution mode: single or threaded",
     )
+
     args = parser.parse_args()
 
-    main = Main(
-        iterations,
-        options,
-    )
-
     if args.mode == "single":
-        (
-            swarm_best_fitness,
-            swarm_best_position,
-            swarm_fitness_history,
-            swarm_position_history,
-        ) = main.run_pso(PSO_TYPE)
-        X_train, X_test, y_train, y_test = get_fingerprinted_data()
-        sys.stdout.write("Best fitness: {}\n".format(swarm_best_fitness))
-        finalModel = get_final_model(model, swarm_best_position)
-        predictions = model.predict(X_test)
-        print(explained_variance_score(y_test, predictions))
-
-        some_position = [[75, 87, 80, 6920, 17112, 17286]]  # this should produce (1, 0)
-        some_position_2 = [[72, 78, 81, 8503, 8420, 8924]]  # this should produce (8,6)
-
-        scaler = MinMaxScaler()
-        scaler.fit(X_train)
-        transformed_some_position = scaler.transform(some_position_2)
-
-        x_value = model.predict(transformed_some_position)
-        print(x_value)
+        run_pso(0, PSO_TYPE)
 
     elif args.mode == "threaded":
+        pso_runs = 6
         num_cores = multiprocessing.cpu_count()
-        run_pso_partial = partial(run_pso_threaded, pso_type=PSO_TYPE)
+        run_pso_partial = partial(run_pso, pso_type=PSO_TYPE)
 
         with multiprocessing.Pool(processes=num_cores - 1) as pool:
             results = pool.map(run_pso_partial, range(pso_runs))
@@ -379,9 +392,11 @@ if __name__ == "__main__":
             swarm_fitness_history,
             swarm_position_history,
         ) = zip(*results)
-        # print(swarm_best_position)
+
         if fitness_histories:
-            handle_data(fitness_histories, swarm_position_history)
+            handle_data(
+                fitness_histories, swarm_position_history, PSO_TYPE, pso_runs, options
+            )
 
         mean_best_fitness = np.mean(swarm_best_fitness)
         min_best_fitness = np.min(swarm_best_fitness)
@@ -390,7 +405,36 @@ if __name__ == "__main__":
         sys.stdout.write(
             f"Minimum fitness for {pso_runs} runs: {min_best_fitness}. Mean: {mean_best_fitness}. Max: {max_best_fitness}"
         )
-        # sys.stdout.write(f"The best position was {swarm_best_position}\n\r")
+    elif args.mode == "gridSearch":
+        param_grid = {
+            "inertia": [0.5, 0.7, 0.9],
+            "c1": [1.5, 2.0, 2.5],
+            "c2": [1.5, 2.0, 2.5],
+        }
+
+        num_cores = multiprocessing.cpu_count() - 1
+        param_ranges = np.array_split(
+            list(itertools.product(*param_grid.values())), num_cores
+        )
+
+        run_grid_search_partial = partial(
+            run_grid_search,
+            pso_type=PSO_TYPE,
+            iterations=iterations,
+            total_number_of_values=total_number_of_values,
+        )
+
+        with multiprocessing.Pool(processes=num_cores) as pool:
+            results = pool.map(run_grid_search_partial, param_ranges)
+
+        # Find the best result across all simulations
+        best_result = min(results, key=lambda x: x[0])
+        best_fitness = best_result[0]
+        best_params = best_result[1]
+
+        # Print the best parameters
+        print("Best Parameters:", best_params)
+        print("Best Fitness:", best_fitness)
     else:
         print(
             "Invalid mode. Please choose either 'single' or 'threaded' as the execution mode."

@@ -1,10 +1,4 @@
-from CostFunctions import (
-    ann_cost_function,
-    ann_node_count_fitness,
-    get_fingerprinted_data,
-    get_regression_data,
-    linear_regression,
-)
+from CostFunctions import get_fingerprinted_data
 from Particle import Particle
 
 
@@ -39,12 +33,6 @@ class GBest_PSO:
 
         self.swarm_position_history = []
         self.swarm_fitness_history = []
-
-    def run_linear_regression(self, particle, X_test, y_test):
-        return linear_regression(particle.position, X_test, y_test)
-
-    def run_ann_regression(self, particle):
-        return ann_cost_function(particle)
 
     def initialize_particles(self):
         particles = []

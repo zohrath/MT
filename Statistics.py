@@ -2,6 +2,48 @@ import os
 import time
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.metrics import explained_variance_score
+from sklearn.preprocessing import MinMaxScaler
+
+from CostFunctions import get_fingerprinted_data
+
+
+def get_final_model(model, particle):
+    for layer in model.layers:
+        weights = layer.get_weights()[0]
+        biases = layer.get_weights()[1]
+        num_weights = weights.size
+        num_biases = biases.size
+
+        # Slice off values from the continuous_values array for weights and biases
+        sliced_weights = particle[:num_weights]
+        sliced_biases = particle[num_weights : num_weights + num_biases]
+
+        # Update the continuous_values array for the next iteration
+        particle = particle[num_weights + num_biases :]
+
+        # Set the sliced weights and biases in the layer
+        layer.set_weights(
+            [sliced_weights.reshape(weights.shape), sliced_biases.reshape(biases.shape)]
+        )
+    return model
+
+
+def make_coordinate_prediction_with_ann_model(model, swarm_best_position):
+    X_train, X_test, y_train, y_test = get_fingerprinted_data()
+    finalModel = get_final_model(model, swarm_best_position)
+    predictions = finalModel.predict(X_test)
+    print(explained_variance_score(y_test, predictions))
+
+    some_position = [[75, 87, 80, 6920, 17112, 17286]]  # this should produce (1, 0)
+    some_position_2 = [[72, 78, 81, 8503, 8420, 8924]]  # this should produce (8,6)
+
+    scaler = MinMaxScaler()
+    scaler.fit(X_train)
+    transformed_some_position = scaler.transform(some_position_2)
+
+    x_value = finalModel.predict(transformed_some_position)
+    print(x_value)
 
 
 def get_ann_node_count(ann_nodes):
@@ -329,3 +371,12 @@ def plot_particle_positions(swarm_position_histories, particle_index, *dimension
         plt.legend()
         # Show the plot
         plt.show()
+
+
+def handle_data(
+    fitness_histories, swarm_position_histories, PSO_TYPE, pso_runs, options
+):
+    plot_average_total_distance(swarm_position_histories, PSO_TYPE)
+    plot_averages_fitness_histories(fitness_histories, PSO_TYPE, pso_runs)
+    plot_all_fitness_histories(fitness_histories, options, PSO_TYPE, pso_runs)
+    plot_particle_positions(swarm_position_histories, 0, 0, 1, 2)

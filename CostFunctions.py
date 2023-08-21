@@ -133,33 +133,30 @@ def linear_regression(particle_position, X_test, y_test):
     return mse
 
 
-def ann_cost_function(particle):
-    X_train, X_test, y_train, y_test = get_regression_data()
-    model = ann_node_count_fitness(2)
-    start = 0
+def ann_weights_fitness_function(particle, model, X_train, y_train):
     for layer in model.layers:
-        num_weights = layer.get_weights()[0].size
-        num_biases = layer.get_weights()[1].size
-        num_params = num_weights + num_biases
+        weights = layer.get_weights()[0]
+        biases = layer.get_weights()[1]
+        num_weights = weights.size
+        num_biases = biases.size
 
-        sliced_array = particle[start : start + num_params]
-        weights = sliced_array[:num_weights]
-        biases = sliced_array[num_weights:]
+        # Slice off values from the continuous_values array for weights and biases
+        sliced_weights = particle[:num_weights]
+        sliced_biases = particle[num_weights : num_weights + num_biases]
 
-        weight_shape = layer.get_weights()[0].shape
-        bias_shape = layer.get_weights()[1].shape
-        reshaped_weights = np.reshape(weights, weight_shape)
-        reshaped_biases = np.reshape(biases, bias_shape)
+        # Update the continuous_values array for the next iteration
+        particle = particle[num_weights + num_biases :]
 
-        layer.set_weights([reshaped_weights, reshaped_biases])
-        start += num_params
+        # Set the sliced weights and biases in the layer
+        layer.set_weights(
+            [sliced_weights.reshape(weights.shape), sliced_biases.reshape(biases.shape)]
+        )
 
-    model.compile(optimizer="adam", loss="mse")
+    # Evaluate the model and get the evaluation metrics
+    evaluation_metrics = model.evaluate(X_train, y_train, verbose=0)
+    rmse = np.sqrt(evaluation_metrics[0])
 
-    training_score = model.evaluate(X_train, y_train, verbose=0)
-    test_score = model.evaluate(X_test, y_test, verbose=0)
-
-    return training_score
+    return rmse
 
 
 def sphere(x):
