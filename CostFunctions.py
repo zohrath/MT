@@ -73,7 +73,7 @@ def get_fingerprinted_data():
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.transform(X_test)
 
-    return X_train, X_test, y_train, y_test
+    return X_train, X_test, y_train, y_test, scaler
 
 
 def ann_node_count_fitness(num_nodes_per_layer):
@@ -154,9 +154,9 @@ def ann_weights_fitness_function(particle, model, X_train, y_train):
 
     # Evaluate the model and get the evaluation metrics
     evaluation_metrics = model.evaluate(X_train, y_train, verbose=0)
-    rmse = np.sqrt(evaluation_metrics[0])
+    # rmse = np.sqrt(evaluation_metrics)
 
-    return rmse
+    return evaluation_metrics
 
 
 def sphere(x):

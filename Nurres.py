@@ -31,7 +31,6 @@ def generate_x_coord_model():
         ],
         axis=1,
     )
-    print(df.head())
     free_variables = df.drop(["X", "Y"], axis=1).values
     dependent_variables = df[["X", "Y"]].values
 
@@ -47,8 +46,8 @@ def generate_x_coord_model():
 
     Xmodel = Sequential()
     Xmodel.add(Dense(6, activation="relu"))
-    Xmodel.add(Dense(76, activation="relu"))
-    Xmodel.add(Dense(86, activation="relu"))
+    Xmodel.add(Dense(6, activation="relu"))
+    Xmodel.add(Dense(6, activation="relu"))
     Xmodel.add(Dense(2))
 
     Xmodel.compile(optimizer="adam", loss="mse")
@@ -73,7 +72,7 @@ def generate_x_coord_model():
 
     some_position = [[75, 87, 80, 6920, 17112, 17286]]  # this should produce (1, 0)
     some_position_2 = [[72, 78, 81, 8503, 8420, 8924]]  # this should produce (8,6)
-    transformed_some_position = scaler.transform(some_position_2)
+    transformed_some_position = scaler.transform(some_position)
 
     x_value = Xmodel.predict(transformed_some_position)
     # y_value = Ymodel.predict(transformed_some_position)
