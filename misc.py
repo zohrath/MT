@@ -229,6 +229,44 @@ class RPSO:
 # ------------------ THREADED ---------------#
 
 
+def run_parameter_variation(
+    upper_bound_values, lower_bound_values, optimizer_params, num_processes, num_runs
+):
+    # Create an empty list to store the results
+    all_results = []
+
+    # Loop through upper_bound and lower_bound values
+    for upper_bound in upper_bound_values:
+        for lower_bound in lower_bound_values:
+            optimizer_params["upper_bound"] = upper_bound
+            optimizer_params["lower_bound"] = lower_bound
+
+            # Create and run RPSO optimizer
+            optimizer = RPSO(**optimizer_params)
+
+            with multiprocessing.Pool(processes=num_processes) as pool:
+                optimizer_partial = partial(
+                    run_optimizer,
+                    optimizer=optimizer,
+                )
+                results_list = pool.map(optimizer_partial, range(num_runs))
+
+            # Find the best result among all processes
+            best_position, best_fitness = min(results_list, key=lambda x: x[1])
+
+            # Store the results
+            all_results.append(
+                {
+                    "upper_bound": upper_bound,
+                    "lower_bound": lower_bound,
+                    "best_position": best_position,
+                    "best_fitness": best_fitness,
+                }
+            )
+
+    return all_results
+
+
 def run_optimizer(process_id, optimizer):
     print(f"Process {process_id} started.")
 
@@ -256,7 +294,7 @@ if __name__ == "__main__":
     total_number_of_values = get_ann_dimensions(model)
 
     # Parameters for optimization
-    num_particles = 20
+    num_particles = 200
     num_dimensions = total_number_of_values
     max_iters = 100
     c1 = 0.5
@@ -306,7 +344,6 @@ if __name__ == "__main__":
             "num_particles": num_particles,
             "num_dimensions": num_dimensions,
             "max_iters": max_iters,
-            "c2": c2,
             "lower_bound": lower_bound,
             "upper_bound": upper_bound,
             "model": model,
@@ -321,6 +358,7 @@ if __name__ == "__main__":
             "w_min": w_min,
             "w_max": w_max,
         }
+
         # Create and run RPSO optimizer
         optimizer = RPSO(**optimizer_params)
 
@@ -328,7 +366,7 @@ if __name__ == "__main__":
         raise ValueError("Invalid PSO type specified")
 
     num_processes = 6  # Change this to the desired number of parallel processes
-    num_runs = 10
+    num_runs = 6
     with multiprocessing.Pool(processes=num_processes) as pool:
         optimizer_partial = partial(
             run_optimizer,
@@ -341,3 +379,21 @@ if __name__ == "__main__":
 
     print("Best position found:", best_position)
     print("Best fitness value:", best_fitness)
+
+# --------------- PARAMETER OPT --------------
+
+# upper_bound_values = [3.0, 2.75, 2.5, 2.25, 2.0]
+# lower_bound_values = [-1.0, -0.75, -0.5, -0.25, 0]
+
+# # Call the function
+# all_results = run_parameter_variation(
+#     upper_bound_values, lower_bound_values, optimizer_params, num_processes, num_runs
+# )
+
+# # Print or analyze the results
+# for result in all_results:
+#     print("Upper bound:", result["upper_bound"])
+#     print("Lower bound:", result["lower_bound"])
+#     print("Best position found:", result["best_position"])
+#     print("Best fitness value:", result["best_fitness"])
+#     print("-------------------------")
