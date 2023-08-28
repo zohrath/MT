@@ -181,7 +181,6 @@ def create_model():
 # Create a Keras Sequential model
 model = create_model()
 
-
 for layer in model.layers:
     weights = layer.get_weights()[0]
     biases = layer.get_weights()[1]

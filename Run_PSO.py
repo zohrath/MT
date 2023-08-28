@@ -7,11 +7,12 @@ import argparse
 import itertools
 from keras.layers import Dense
 from keras.models import Sequential
-
+from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import MinMaxScaler
 from CostFunctions import (
     ann_node_count_fitness,
     ann_weights_fitness_function,
+    get_fingerprinted_data,
     griewank,
     penalized1,
     rastrigin,
@@ -26,7 +27,7 @@ from RPSO import RPSO
 from Statistics import handle_data
 
 
-PSO_TYPE = "gbest"
+PSO_TYPE = "rpso"
 
 
 def create_model():
@@ -36,7 +37,8 @@ def create_model():
         6,
     ]
     model = Sequential()
-    model.add(Dense(num_nodes_per_layer[0], activation="relu", input_shape=(6,)))
+    model.add(Dense(num_nodes_per_layer[0],
+              activation="relu", input_shape=(6,)))
 
     for nodes in num_nodes_per_layer[1:]:
         model.add(Dense(nodes, activation="relu"))
@@ -302,25 +304,63 @@ pso_functions = [
 ]
 
 
+def run_grid_search_batch(batch_params, pso_type, iterations, total_number_of_values):
+    best_results = []
+
+    for params in batch_params:
+        Cp_min, Cp_max, Cg_min, Cg_max, w_min, w_max = params
+        main = Main(
+            iterations,
+            {
+                "function": ann_weights_fitness_function,
+                "function_name": "ANN Node Count RPSO",
+                "position_bounds": (-1.0, 1.0),
+                "velocity_bounds": (-0.2, 0.2),
+                "threshold": 1,
+                "num_particles": 30,
+                "num_dimensions": total_number_of_values,
+                "Cp_min": Cp_min,
+                "Cp_max": Cp_max,
+                "Cg_min": Cg_min,
+                "Cg_max": Cg_max,
+                "w_min": w_min,
+                "w_max": w_max,
+            },
+        )
+        (
+            swarm_best_fitness,
+            swarm_best_position,
+            swarm_fitness_history,
+            swarm_position_history,
+        ) = main.run_pso(pso_type)
+
+        best_results.append((swarm_best_fitness, params, swarm_best_position))
+
+    return best_results
+
+
 def run_grid_search(params_range, pso_type, iterations, total_number_of_values):
     best_result = None
     best_fitness = float("inf")
 
     for params in params_range:
-        inertia, c1, c2 = params
+        Cp_min, Cp_max, Cg_min, Cg_max, w_min, w_max = params
         main = Main(
             iterations,
             {
                 "function": ann_weights_fitness_function,
-                "function_name": "ANN Weights and biases gbest",
+                "function_name": "ANN Node Count RPSO",
                 "position_bounds": (-1.0, 1.0),
                 "velocity_bounds": (-0.2, 0.2),
                 "threshold": 1,
-                "num_particles": 3,
+                "num_particles": 30,
                 "num_dimensions": total_number_of_values,
-                "inertia": inertia,
-                "c1": c1,
-                "c2": c2,
+                "Cp_min": Cp_min,
+                "Cp_max": Cp_max,
+                "Cg_min": Cg_min,
+                "Cg_max": Cg_max,
+                "w_min": w_min,
+                "w_max": w_max,
             },
         )
         (
@@ -334,12 +374,12 @@ def run_grid_search(params_range, pso_type, iterations, total_number_of_values):
             best_fitness = swarm_best_fitness
             best_result = (swarm_best_fitness, params)
 
-    return best_result
+    return best_result, swarm_best_position
 
 
 # Common options for all PSO runs
-iterations = 100
-options = pso_functions[9]
+iterations = 10
+options = pso_functions[10]
 
 
 def run_pso(_, pso_type):
@@ -368,7 +408,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "mode",
-        choices=["single", "threaded", "gridSearch"],
+        choices=["single", "threaded", "gridSearch", "gridSearchBatch"],
         help="Select execution mode: single or threaded",
     )
 
@@ -407,9 +447,12 @@ if __name__ == "__main__":
         )
     elif args.mode == "gridSearch":
         param_grid = {
-            "inertia": [0.5, 0.7, 0.9],
-            "c1": [1.5, 2.0, 2.5],
-            "c2": [1.5, 2.0, 2.5],
+            "Cp_min": [0.1, 0.3, 0.5],
+            "Cp_max": [1.5, 2.5, 3.5],
+            "Cg_min": [0.1, 0.3],
+            "Cg_max": [1.5, 2.5],
+            "w_min": [0.1, 0.3],
+            "w_max": [0.8, 1.0],
         }
 
         num_cores = multiprocessing.cpu_count() - 1
@@ -428,6 +471,55 @@ if __name__ == "__main__":
             results = pool.map(run_grid_search_partial, param_ranges)
 
         # Find the best result across all simulations
+        best_result, best_swarm_position = min(results, key=lambda x: x[0])
+        best_fitness = best_result[0]
+        best_params = best_result[1]
+
+        # Print the best parameters
+        # print("Best position: ", best_swarm_position)
+        print("Best Parameters:", best_params)
+        print("Best Fitness:", best_fitness)
+
+        comma_separated_string = ', '.join(map(str, best_swarm_position))
+        print("[" + comma_separated_string + "]")
+    elif args.mode == "gridSearchBatch":
+        param_grid = {
+            "Cp_min": [np.float32(0.1), np.float32(0.3)],
+            "Cp_max": [np.float32(1.0), np.float32(1.3)],
+            "Cg_min": [np.float32(0.1), np.float32(0.3)],
+            "Cg_max": [np.float32(1.0), np.float32(1.3)],
+            "w_min": np.arange(np.float32(0.1), np.float32(0.5), np.float32(0.2)),
+            "w_max": np.arange(np.float32(0.5), np.float32(2.0), np.float32(0.2)),
+        }
+
+        # Create the parameter ranges array
+        param_ranges = list(itertools.product(*param_grid.values()))
+        # Split parameter ranges into batches
+        batch_size = 10
+
+        param_ranges_batches = [
+            param_ranges[i: i + batch_size]
+            for i in range(0, len(param_ranges), batch_size)
+        ]
+        print("Number of batches", len(param_ranges_batches))
+        run_grid_search_batch_partial = partial(
+            run_grid_search_batch,
+            pso_type=PSO_TYPE,
+            iterations=iterations,
+            total_number_of_values=total_number_of_values,
+        )
+
+        num_processes = multiprocessing.cpu_count() - 2
+
+        with multiprocessing.Pool(processes=num_processes) as pool:
+            results_batches = pool.map(
+                run_grid_search_batch_partial, param_ranges_batches)
+
+        # Flatten the results
+        results = [
+            result for batch_results in results_batches for result in batch_results]
+
+        # Find the best result across all simulations
         best_result = min(results, key=lambda x: x[0])
         best_fitness = best_result[0]
         best_params = best_result[1]
@@ -435,6 +527,12 @@ if __name__ == "__main__":
         # Print the best parameters
         print("Best Parameters:", best_params)
         print("Best Fitness:", best_fitness)
+
+        # Access the best swarm position from the tuple
+        best_swarm_position = best_result[2]
+
+        comma_separated_string = ', '.join(map(str, best_swarm_position))
+        print("[" + comma_separated_string + "]")
     else:
         print(
             "Invalid mode. Please choose either 'single' or 'threaded' as the execution mode."
