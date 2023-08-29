@@ -105,7 +105,6 @@ class RPSO:
         num_particles,
         num_dimensions,
         max_iters,
-        c2,
         w_min,
         w_max,
         cognitive_noise_stddev,
@@ -119,11 +118,12 @@ class RPSO:
         model,
         lower_bound,
         upper_bound,
+        velocity_min,
+        velocity_max,
     ):
         self.num_particles = num_particles
         self.num_dimensions = num_dimensions
         self.max_iters = max_iters
-        self.c2 = c2
         self.w_min = w_min
         self.w_max = w_max
         self.cognitive_noise_stddev = cognitive_noise_stddev
@@ -137,6 +137,8 @@ class RPSO:
         self.model = model
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
+        self.velocity_min = velocity_min
+        self.velocity_max = velocity_max
 
         self.particles = np.random.uniform(
             low=lower_bound, high=upper_bound, size=(num_particles, num_dimensions)
@@ -180,6 +182,12 @@ class RPSO:
                     * r2
                     * (self.global_best_position - self.particles[i])
                 )
+                # Clip the updated velocity to stay within velocity bounds
+                updated_velocity = np.clip(
+                    self.velocities[i], self.velocity_min, self.velocity_max
+                )
+
+                self.velocities[i] = updated_velocity
                 self.particles[i] += self.velocities[i]
 
                 # Clip particle position within bounds
@@ -201,25 +209,69 @@ class RPSO:
                         self.global_best_fitness = fitness
 
 
+# ---------------- SINGLE THREAD ------------------ #
 # X_train, X_test, y_train, y_test, _ = get_fingerprinted_data()
 
 # # Create your Keras model
 # model = create_ann_model(X_train.shape[1])
 # total_number_of_values = get_ann_dimensions(model)
 
-# # Parameters
-# num_particles = 20
+# # Parameters for optimization
+# num_particles = 30
 # num_dimensions = total_number_of_values
 # max_iters = 100
-# c1 = 0.5
-# c2 = 0.3
-# w = 0.9
+# c1 = 0.6971287
+# c2 = 1.82299344
+# w = 1.49365446
 # lower_bound = -1.0  # Adjust as needed based on your problem
 # upper_bound = 1.0  # Adjust as needed based on your problem
+# cognitive_noise_stddev = 0.07
+# social_noise_stddev = 0.07
+# Cp_min = 0.1
+# Cp_max = 2.0
+# Cg_min = 0.1
+# Cg_max = 2.0
+# w_min = 0.1
+# w_max = 1.0
+# velocity_min = -0.4
+# velocity_max = 0.4
 
-# # Create and run the optimizer
+# optimizer_params = {
+#     "num_particles": num_particles,
+#     "num_dimensions": num_dimensions,
+#     "max_iters": max_iters,
+#     "lower_bound": lower_bound,
+#     "upper_bound": upper_bound,
+#     "model": model,
+#     "X_train": X_train,
+#     "y_train": y_train,
+#     "cognitive_noise_stddev": cognitive_noise_stddev,
+#     "social_noise_stddev": social_noise_stddev,
+#     "Cp_min": Cp_min,
+#     "Cp_max": Cp_max,
+#     "Cg_min": Cg_min,
+#     "Cg_max": Cg_max,
+#     "w_min": w_min,
+#     "w_max": w_max,
+#     "velocity_min": velocity_min,
+#     "velocity_max": velocity_max,
+# }
+
+# Create and run RPSO optimizer
+# optimizer = RPSO(**optimizer_params)
+# Create and run the optimizer
 # optimizer = GlobalBestPSO(
-#     num_particles, num_dimensions, max_iters, c1, c2, w, lower_bound, upper_bound, model, X_train, y_train
+#     num_particles,
+#     num_dimensions,
+#     max_iters,
+#     c1,
+#     c2,
+#     w,
+#     lower_bound,
+#     upper_bound,
+#     model,
+#     X_train,
+#     y_train,
 # )
 # optimizer.optimize()
 
@@ -229,42 +281,42 @@ class RPSO:
 # ------------------ THREADED ---------------#
 
 
-def run_parameter_variation(
-    upper_bound_values, lower_bound_values, optimizer_params, num_processes, num_runs
-):
-    # Create an empty list to store the results
-    all_results = []
+# def run_parameter_variation(
+#     upper_bound_values, lower_bound_values, optimizer_params, num_processes, num_runs
+# ):
+#     # Create an empty list to store the results
+#     all_results = []
 
-    # Loop through upper_bound and lower_bound values
-    for upper_bound in upper_bound_values:
-        for lower_bound in lower_bound_values:
-            optimizer_params["upper_bound"] = upper_bound
-            optimizer_params["lower_bound"] = lower_bound
+#     # Loop through upper_bound and lower_bound values
+#     for upper_bound in upper_bound_values:
+#         for lower_bound in lower_bound_values:
+#             optimizer_params["upper_bound"] = upper_bound
+#             optimizer_params["lower_bound"] = lower_bound
 
-            # Create and run RPSO optimizer
-            optimizer = RPSO(**optimizer_params)
+#             # Create and run RPSO optimizer
+#             optimizer = RPSO(**optimizer_params)
 
-            with multiprocessing.Pool(processes=num_processes) as pool:
-                optimizer_partial = partial(
-                    run_optimizer,
-                    optimizer=optimizer,
-                )
-                results_list = pool.map(optimizer_partial, range(num_runs))
+#             with multiprocessing.Pool(processes=num_processes) as pool:
+#                 optimizer_partial = partial(
+#                     run_optimizer,
+#                     optimizer=optimizer,
+#                 )
+#                 results_list = pool.map(optimizer_partial, range(num_runs))
 
-            # Find the best result among all processes
-            best_position, best_fitness = min(results_list, key=lambda x: x[1])
+#             # Find the best result among all processes
+#             best_position, best_fitness = min(results_list, key=lambda x: x[1])
 
-            # Store the results
-            all_results.append(
-                {
-                    "upper_bound": upper_bound,
-                    "lower_bound": lower_bound,
-                    "best_position": best_position,
-                    "best_fitness": best_fitness,
-                }
-            )
+#             # Store the results
+#             all_results.append(
+#                 {
+#                     "upper_bound": upper_bound,
+#                     "lower_bound": lower_bound,
+#                     "best_position": best_position,
+#                     "best_fitness": best_fitness,
+#                 }
+#             )
 
-    return all_results
+#     return all_results
 
 
 def run_optimizer(process_id, optimizer):
@@ -294,22 +346,24 @@ if __name__ == "__main__":
     total_number_of_values = get_ann_dimensions(model)
 
     # Parameters for optimization
-    num_particles = 200
+    num_particles = 9
     num_dimensions = total_number_of_values
     max_iters = 100
-    c1 = 0.5
-    c2 = 0.3
+    c1 = 0.3
+    c2 = 0.5
     w = 0.9
     lower_bound = -1.0  # Adjust as needed based on your problem
     upper_bound = 1.0  # Adjust as needed based on your problem
     cognitive_noise_stddev = 0.07
     social_noise_stddev = 0.07
     Cp_min = 0.1
-    Cp_max = 2.0
+    Cp_max = 1.7
     Cg_min = 0.1
-    Cg_max = 2.0
+    Cg_max = 1.7
     w_min = 0.1
     w_max = 1.0
+    velocity_min = -0.4
+    velocity_max = 0.4
 
     if args.pso_type == "gbest":
         optimizer_args = (
@@ -357,6 +411,8 @@ if __name__ == "__main__":
             "Cg_max": Cg_max,
             "w_min": w_min,
             "w_max": w_max,
+            "velocity_min": velocity_min,
+            "velocity_max": velocity_max,
         }
 
         # Create and run RPSO optimizer
@@ -366,7 +422,7 @@ if __name__ == "__main__":
         raise ValueError("Invalid PSO type specified")
 
     num_processes = 6  # Change this to the desired number of parallel processes
-    num_runs = 6
+    num_runs = 20
     with multiprocessing.Pool(processes=num_processes) as pool:
         optimizer_partial = partial(
             run_optimizer,
