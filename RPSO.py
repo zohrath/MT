@@ -31,6 +31,7 @@ class RPSOParticle:
         num_dimensions,
         position_bounds,
         velocity_bounds,
+        gwn_std_dev,
     ):
         self.num_dimensions = num_dimensions
         self.position_bounds = position_bounds
@@ -57,6 +58,7 @@ class RPSOParticle:
         self.Cp = self.get_cognitive_parameter()
         self.Cg = self.get_social_parameter()
         self.inertia_weight = self.get_inertia_weight_parameter()
+        self.gwn_std_dev = gwn_std_dev
 
     def initialize_particle_position(self):
         return np.random.uniform(
@@ -91,13 +93,13 @@ class RPSOParticle:
     def get_cognitive_velocity_part(self):
         updated_Cp = self.get_cognitive_parameter()
         r1 = np.random.uniform(0, 1)
-        d1 = get_GWN()
+        d1 = get_GWN(self.gwn_std_dev)
         return r1 * (updated_Cp + d1) * (self.best_position - self.position)
 
     def get_social_velocity_part(self, swarm_best_position):
         updated_Cg = self.get_social_parameter()
         r2 = np.random.uniform(0, 1)
-        d2 = get_GWN()
+        d2 = get_GWN(self.gwn_std_dev)
         return r2 * (updated_Cg + d2) * (swarm_best_position - self.position)
 
     def update_particle_velocity(
@@ -145,6 +147,7 @@ class RPSO:
         w_max,
         threshold,
         function,
+        gwn_std_dev,
     ):
         self.num_particles = num_particles
         self.num_dimensions = num_dimensions
@@ -159,6 +162,7 @@ class RPSO:
         self.w_max = w_max
         self.threshold = threshold
         self.function = function
+        self.gwn_std_dev = gwn_std_dev
         self.swarm_best_fitness = float("inf")
         self.swarm_best_position = None
 
@@ -183,6 +187,7 @@ class RPSO:
                     self.num_dimensions,
                     self.position_bounds,
                     self.velocity_bounds,
+                    self.gwn_std_dev,
                 )
             )
 
@@ -192,7 +197,7 @@ class RPSO:
         return linear_regression(particle.position, X_test, y_test)
 
     def run_pso(self, model):
-        X_train, X_test, y_train, y_test = get_fingerprinted_data()
+        X_train, X_test, y_train, y_test, scaler = get_fingerprinted_data()
         for iter in range(self.iterations):
             for particle in self.particles:
                 fitness = self.function(particle.position, model, X_train, y_train)

@@ -37,8 +37,7 @@ def create_model():
         6,
     ]
     model = Sequential()
-    model.add(Dense(num_nodes_per_layer[0],
-              activation="relu", input_shape=(6,)))
+    model.add(Dense(num_nodes_per_layer[0], activation="relu", input_shape=(6,)))
 
     for nodes in num_nodes_per_layer[1:]:
         model.add(Dense(nodes, activation="relu"))
@@ -109,6 +108,7 @@ class Main:
                 options["w_max"],
                 options["threshold"],
                 options["function"],
+                options["gwn_std_dev"],
             )
             swarm.run_pso(model)
 
@@ -280,7 +280,7 @@ pso_functions = [
         "position_bounds": (-1.0, 1.0),
         "velocity_bounds": (-0.2, 0.2),
         "threshold": 1,
-        "num_particles": 3,
+        "num_particles": 6,
         "num_dimensions": total_number_of_values,
         "inertia": 0.9,
         "c1": 1.49445,
@@ -292,14 +292,15 @@ pso_functions = [
         "position_bounds": (-1.0, 1.0),
         "velocity_bounds": (-0.2, 0.2),
         "threshold": 1,
-        "num_particles": 5,
+        "num_particles": 6,
         "num_dimensions": total_number_of_values,
-        "Cp_min": 0.5,
+        "Cp_min": 0.3,
         "Cp_max": 2.5,
-        "Cg_min": 0.5,
+        "Cg_min": 0.3,
         "Cg_max": 2.5,
         "w_min": 0.4,
         "w_max": 0.9,
+        "gwn_std_dev": 0.07,
     },
 ]
 
@@ -308,7 +309,7 @@ def run_grid_search_batch(batch_params, pso_type, iterations, total_number_of_va
     best_results = []
 
     for params in batch_params:
-        Cp_min, Cp_max, Cg_min, Cg_max, w_min, w_max = params
+        Cp_min, Cp_max, Cg_min, Cg_max, w_min, w_max, gwn_std_dev = params
         main = Main(
             iterations,
             {
@@ -317,7 +318,7 @@ def run_grid_search_batch(batch_params, pso_type, iterations, total_number_of_va
                 "position_bounds": (-1.0, 1.0),
                 "velocity_bounds": (-0.2, 0.2),
                 "threshold": 1,
-                "num_particles": 30,
+                "num_particles": 6,
                 "num_dimensions": total_number_of_values,
                 "Cp_min": Cp_min,
                 "Cp_max": Cp_max,
@@ -325,6 +326,7 @@ def run_grid_search_batch(batch_params, pso_type, iterations, total_number_of_va
                 "Cg_max": Cg_max,
                 "w_min": w_min,
                 "w_max": w_max,
+                "gwn_std_dev": gwn_std_dev,
             },
         )
         (
@@ -342,7 +344,6 @@ def run_grid_search_batch(batch_params, pso_type, iterations, total_number_of_va
 def run_grid_search(params_range, pso_type, iterations, total_number_of_values):
     best_result = None
     best_fitness = float("inf")
-
     for params in params_range:
         Cp_min, Cp_max, Cg_min, Cg_max, w_min, w_max = params
         main = Main(
@@ -378,7 +379,7 @@ def run_grid_search(params_range, pso_type, iterations, total_number_of_values):
 
 
 # Common options for all PSO runs
-iterations = 10
+iterations = 50
 options = pso_functions[10]
 
 
@@ -418,33 +419,38 @@ if __name__ == "__main__":
         run_pso(0, PSO_TYPE)
 
     elif args.mode == "threaded":
-        pso_runs = 6
+        pso_runs = 75
         num_cores = multiprocessing.cpu_count()
-        run_pso_partial = partial(run_pso, pso_type=PSO_TYPE)
+        for _ in range(20):
+            run_pso_partial = partial(run_pso, pso_type=PSO_TYPE)
 
-        with multiprocessing.Pool(processes=num_cores - 1) as pool:
-            results = pool.map(run_pso_partial, range(pso_runs))
+            with multiprocessing.Pool(processes=num_cores - 1) as pool:
+                results = pool.map(run_pso_partial, range(pso_runs))
 
-        fitness_histories = [result[2] for result in results]
-        (
-            swarm_best_fitness,
-            swarm_best_position,
-            swarm_fitness_history,
-            swarm_position_history,
-        ) = zip(*results)
+            fitness_histories = [result[2] for result in results]
+            (
+                swarm_best_fitness,
+                swarm_best_position,
+                swarm_fitness_history,
+                swarm_position_history,
+            ) = zip(*results)
 
-        if fitness_histories:
-            handle_data(
-                fitness_histories, swarm_position_history, PSO_TYPE, pso_runs, options
+            if fitness_histories:
+                handle_data(
+                    fitness_histories,
+                    swarm_position_history,
+                    PSO_TYPE,
+                    pso_runs,
+                    options,
+                )
+
+            mean_best_fitness = np.mean(swarm_best_fitness)
+            min_best_fitness = np.min(swarm_best_fitness)
+            max_best_fitness = np.max(swarm_best_fitness)
+
+            sys.stdout.write(
+                f"Minimum fitness for {pso_runs} runs: {min_best_fitness}. Mean: {mean_best_fitness}. Max: {max_best_fitness}"
             )
-
-        mean_best_fitness = np.mean(swarm_best_fitness)
-        min_best_fitness = np.min(swarm_best_fitness)
-        max_best_fitness = np.max(swarm_best_fitness)
-
-        sys.stdout.write(
-            f"Minimum fitness for {pso_runs} runs: {min_best_fitness}. Mean: {mean_best_fitness}. Max: {max_best_fitness}"
-        )
     elif args.mode == "gridSearch":
         param_grid = {
             "Cp_min": [0.1, 0.3, 0.5],
@@ -480,16 +486,17 @@ if __name__ == "__main__":
         print("Best Parameters:", best_params)
         print("Best Fitness:", best_fitness)
 
-        comma_separated_string = ', '.join(map(str, best_swarm_position))
+        comma_separated_string = ", ".join(map(str, best_swarm_position))
         print("[" + comma_separated_string + "]")
     elif args.mode == "gridSearchBatch":
         param_grid = {
-            "Cp_min": [np.float32(0.1), np.float32(0.3)],
-            "Cp_max": [np.float32(1.0), np.float32(1.3)],
-            "Cg_min": [np.float32(0.1), np.float32(0.3)],
-            "Cg_max": [np.float32(1.0), np.float32(1.3)],
-            "w_min": np.arange(np.float32(0.1), np.float32(0.5), np.float32(0.2)),
-            "w_max": np.arange(np.float32(0.5), np.float32(2.0), np.float32(0.2)),
+            "Cp_min": [np.float32(0.3), np.float32(0.5)],
+            "Cp_max": [np.float32(2.0), np.float32(2.5)],
+            "Cg_min": [np.float32(0.3), np.float32(0.5)],
+            "Cg_max": [np.float32(2.0), np.float32(2.5)],
+            "w_min": [np.float32(0.1), np.float32(0.4)],
+            "w_max": [np.float32(0.4), np.float32(0.9)],
+            "gwn_std_dev": [np.float32(0.07), np.float32(1.0)],
         }
 
         # Create the parameter ranges array
@@ -498,10 +505,9 @@ if __name__ == "__main__":
         batch_size = 10
 
         param_ranges_batches = [
-            param_ranges[i: i + batch_size]
+            param_ranges[i : i + batch_size]
             for i in range(0, len(param_ranges), batch_size)
         ]
-        print("Number of batches", len(param_ranges_batches))
         run_grid_search_batch_partial = partial(
             run_grid_search_batch,
             pso_type=PSO_TYPE,
@@ -509,15 +515,17 @@ if __name__ == "__main__":
             total_number_of_values=total_number_of_values,
         )
 
-        num_processes = multiprocessing.cpu_count() - 2
+        num_processes = multiprocessing.cpu_count() - 1
 
         with multiprocessing.Pool(processes=num_processes) as pool:
             results_batches = pool.map(
-                run_grid_search_batch_partial, param_ranges_batches)
+                run_grid_search_batch_partial, param_ranges_batches
+            )
 
         # Flatten the results
         results = [
-            result for batch_results in results_batches for result in batch_results]
+            result for batch_results in results_batches for result in batch_results
+        ]
 
         # Find the best result across all simulations
         best_result = min(results, key=lambda x: x[0])
@@ -531,7 +539,7 @@ if __name__ == "__main__":
         # Access the best swarm position from the tuple
         best_swarm_position = best_result[2]
 
-        comma_separated_string = ', '.join(map(str, best_swarm_position))
+        comma_separated_string = ", ".join(map(str, best_swarm_position))
         print("[" + comma_separated_string + "]")
     else:
         print(
