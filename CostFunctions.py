@@ -1,3 +1,4 @@
+import os
 from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
@@ -13,6 +14,8 @@ import tensorflow as tf
 from mpl_toolkits.mplot3d import Axes3D
 import pyswarms as ps
 from pyswarms.utils.functions import single_obj as fx
+
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 
 model = keras.Sequential(
     [
@@ -81,7 +84,7 @@ def ann_node_count_fitness(num_nodes_per_layer):
     if len(num_nodes_per_layer) < 1:
         raise ValueError("Number of layers must be at least 1.")
 
-    X_train, X_test, y_train, y_test = get_fingerprinted_data()
+    X_train, X_test, y_train, y_test, scaler = get_fingerprinted_data()
 
     model = keras.Sequential(
         [
@@ -96,7 +99,7 @@ def ann_node_count_fitness(num_nodes_per_layer):
     model.add(keras.layers.Dense(2))
     model.compile(optimizer="adam", loss="mse")
 
-    model.fit(X_train, y_train, epochs=25, validation_data=(X_test, y_test), verbose=0)
+    model.fit(X_train, y_train, epochs=100, validation_data=(X_test, y_test), verbose=0)
     # losses = pd.DataFrame(model.history.history)
 
     # # Extract loss and validation loss columns
@@ -119,7 +122,7 @@ def ann_node_count_fitness(num_nodes_per_layer):
     # print("RMSE: ", np.sqrt(mean_squared_error(y_test, predictions)))
     # print("Explained variance score: ", explained_variance_score(y_test, predictions))
 
-    return np.sqrt(mean_squared_error(y_test, predictions))
+    return mean_squared_error(y_test, predictions)
 
 
 def linear_regression(particle_position, X_test, y_test):
@@ -156,7 +159,7 @@ def ann_weights_fitness_function(particle, model, X_train, y_train):
     evaluation_metrics = model.evaluate(X_train, y_train, verbose=0)
     # rmse = np.sqrt(evaluation_metrics)
 
-    return evaluation_metrics
+    return evaluation_metrics[0]
 
 
 def sphere(x):
@@ -198,3 +201,28 @@ def step(args, lower_bound=-5.0, upper_bound=5.0):
         if not (lower_bound <= x <= upper_bound):
             return 1
     return 0
+
+
+# ----- RPSO ----- #
+
+# 3 particles with 96 runs:
+# 10 iterations: 58 avg
+# 30 iterations: 38 avg
+# 60 iterations: 35 avg
+
+# 3 particles with 56 runs:
+# 50 iterations: 31 avg
+
+# 3 particles with 75 runs:
+# 50 iterations: 36 avg
+
+# 6 particles with 75 runs:
+# 50 iterations: 23 avg
+
+# ----- GBEST ----- #
+
+# 3 particles with 75 runs:
+# 50 iterations: 25 avg
+
+# 6 particles with 75 runs:
+# 50 iterations: 17 avg

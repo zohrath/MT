@@ -1,4 +1,5 @@
 from __future__ import division
+import csv
 import sys
 import numpy as np
 import multiprocessing
@@ -70,6 +71,7 @@ class Main:
         self.velocity_bounds = options["velocity_bounds"]
         self.threshold = options["threshold"]
         self.function = options["function"]
+        self.options = options
 
     def run_pso(self, pso_type):
         if pso_type == "gbest":
@@ -79,9 +81,9 @@ class Main:
                 self.num_dimensions,
                 self.position_bounds,
                 self.velocity_bounds,
-                options["inertia"],
-                options["c1"],
-                options["c2"],
+                self.options["inertia"],
+                self.options["c1"],
+                self.options["c2"],
                 self.threshold,
                 self.function,
             )
@@ -100,15 +102,15 @@ class Main:
                 self.num_dimensions,
                 self.position_bounds,
                 self.velocity_bounds,
-                options["Cp_min"],
-                options["Cp_max"],
-                options["Cg_min"],
-                options["Cg_max"],
-                options["w_min"],
-                options["w_max"],
-                options["threshold"],
-                options["function"],
-                options["gwn_std_dev"],
+                self.options["Cp_min"],
+                self.options["Cp_max"],
+                self.options["Cg_min"],
+                self.options["Cg_max"],
+                self.options["w_min"],
+                self.options["w_max"],
+                self.options["threshold"],
+                self.options["function"],
+                self.options["gwn_std_dev"],
             )
             swarm.run_pso(model)
 
@@ -305,82 +307,40 @@ pso_functions = [
 ]
 
 
-def run_grid_search_batch(batch_params, pso_type, iterations, total_number_of_values):
-    best_results = []
+def run_grid_search(params, pso_type, iterations, total_number_of_values):
+    Cp_min, Cp_max, Cg_min, Cg_max, w_min, w_max, gwn_std_dev = params
+    main = Main(
+        iterations,
+        {
+            "function": ann_weights_fitness_function,
+            "function_name": "ANN Node Count RPSO",
+            "position_bounds": (-1.0, 1.0),
+            "velocity_bounds": (-0.2, 0.2),
+            "threshold": 1,
+            "num_particles": 10,
+            "num_dimensions": total_number_of_values,
+            "Cp_min": Cp_min,
+            "Cp_max": Cp_max,
+            "Cg_min": Cg_min,
+            "Cg_max": Cg_max,
+            "w_min": w_min,
+            "w_max": w_max,
+            "gwn_std_dev": gwn_std_dev,
+        },
+    )
+    (
+        swarm_best_fitness,
+        swarm_best_position,
+        swarm_fitness_history,
+        swarm_position_history,
+    ) = main.run_pso(pso_type)
 
-    for params in batch_params:
-        Cp_min, Cp_max, Cg_min, Cg_max, w_min, w_max, gwn_std_dev = params
-        main = Main(
-            iterations,
-            {
-                "function": ann_weights_fitness_function,
-                "function_name": "ANN Node Count RPSO",
-                "position_bounds": (-1.0, 1.0),
-                "velocity_bounds": (-0.2, 0.2),
-                "threshold": 1,
-                "num_particles": 6,
-                "num_dimensions": total_number_of_values,
-                "Cp_min": Cp_min,
-                "Cp_max": Cp_max,
-                "Cg_min": Cg_min,
-                "Cg_max": Cg_max,
-                "w_min": w_min,
-                "w_max": w_max,
-                "gwn_std_dev": gwn_std_dev,
-            },
-        )
-        (
-            swarm_best_fitness,
-            swarm_best_position,
-            swarm_fitness_history,
-            swarm_position_history,
-        ) = main.run_pso(pso_type)
-
-        best_results.append((swarm_best_fitness, params, swarm_best_position))
-
-    return best_results
-
-
-def run_grid_search(params_range, pso_type, iterations, total_number_of_values):
-    best_result = None
-    best_fitness = float("inf")
-    for params in params_range:
-        Cp_min, Cp_max, Cg_min, Cg_max, w_min, w_max = params
-        main = Main(
-            iterations,
-            {
-                "function": ann_weights_fitness_function,
-                "function_name": "ANN Node Count RPSO",
-                "position_bounds": (-1.0, 1.0),
-                "velocity_bounds": (-0.2, 0.2),
-                "threshold": 1,
-                "num_particles": 30,
-                "num_dimensions": total_number_of_values,
-                "Cp_min": Cp_min,
-                "Cp_max": Cp_max,
-                "Cg_min": Cg_min,
-                "Cg_max": Cg_max,
-                "w_min": w_min,
-                "w_max": w_max,
-            },
-        )
-        (
-            swarm_best_fitness,
-            swarm_best_position,
-            swarm_fitness_history,
-            swarm_position_history,
-        ) = main.run_pso(pso_type)
-
-        if swarm_best_fitness < best_fitness:
-            best_fitness = swarm_best_fitness
-            best_result = (swarm_best_fitness, params)
-
-    return best_result, swarm_best_position
+    return swarm_best_fitness, params
 
 
 # Common options for all PSO runs
 iterations = 50
-options = pso_functions[10]
+options = pso_functions[9]
 
 
 def run_pso(_, pso_type):
@@ -409,7 +369,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "mode",
-        choices=["single", "threaded", "gridSearch", "gridSearchBatch"],
+        choices=["single", "threaded", "gridSearch"],
         help="Select execution mode: single or threaded",
     )
 
@@ -453,18 +413,23 @@ if __name__ == "__main__":
             )
     elif args.mode == "gridSearch":
         param_grid = {
-            "Cp_min": [0.1, 0.3, 0.5],
-            "Cp_max": [1.5, 2.5, 3.5],
-            "Cg_min": [0.1, 0.3],
-            "Cg_max": [1.5, 2.5],
-            "w_min": [0.1, 0.3],
-            "w_max": [0.8, 1.0],
+            "Cp_min": [0.1, 0.3, 0.5, 0.7, 0.9],
+            "Cp_max": [3.5, 3.0, 2.5, 2.0, 1.5],
+            "Cg_min": [0.1, 0.3, 0.5, 0.7, 0.9],
+            "Cg_max": [3.5, 3.0, 2.5, 2.0, 1.5],
+            "w_min": [0.05, 0.3, 0.8],
+            "w_max": [0.5, 0.9, 1.3, 1.7, 2.0],
+            "gwn_std_dev": [0.01, 0.07, 0.15, 0.2],
         }
 
         num_cores = multiprocessing.cpu_count() - 1
-        param_ranges = np.array_split(
-            list(itertools.product(*param_grid.values())), num_cores
-        )
+        combinations = list(itertools.product(*param_grid.values()))
+        print("combinations", len(combinations))
+        parameter_permutations_to_test_per_loop = 14
+        sub_lists = [
+            combinations[i : i + parameter_permutations_to_test_per_loop]
+            for i in range(0, len(combinations), num_cores)
+        ]
 
         run_grid_search_partial = partial(
             run_grid_search,
@@ -473,74 +438,38 @@ if __name__ == "__main__":
             total_number_of_values=total_number_of_values,
         )
 
-        with multiprocessing.Pool(processes=num_cores) as pool:
-            results = pool.map(run_grid_search_partial, param_ranges)
+        for sublist in sub_lists:
+            # This is where I call a method that takes in the 7 combos, and it activates threaded running
 
-        # Find the best result across all simulations
-        best_result, best_swarm_position = min(results, key=lambda x: x[0])
-        best_fitness = best_result[0]
-        best_params = best_result[1]
+            with multiprocessing.Pool(processes=num_cores) as pool:
+                results = pool.map(run_grid_search_partial, sublist)
 
-        # Print the best parameters
-        # print("Best position: ", best_swarm_position)
-        print("Best Parameters:", best_params)
-        print("Best Fitness:", best_fitness)
+            # Find the best result across all simulations
+            best_result, best_params = min(results, key=lambda x: x[0])
 
-        comma_separated_string = ", ".join(map(str, best_swarm_position))
-        print("[" + comma_separated_string + "]")
-    elif args.mode == "gridSearchBatch":
-        param_grid = {
-            "Cp_min": [np.float32(0.3), np.float32(0.5)],
-            "Cp_max": [np.float32(2.0), np.float32(2.5)],
-            "Cg_min": [np.float32(0.3), np.float32(0.5)],
-            "Cg_max": [np.float32(2.0), np.float32(2.5)],
-            "w_min": [np.float32(0.1), np.float32(0.4)],
-            "w_max": [np.float32(0.4), np.float32(0.9)],
-            "gwn_std_dev": [np.float32(0.07), np.float32(1.0)],
-        }
+            print("best_fitness, best_params", best_result, best_params)
 
-        # Create the parameter ranges array
-        param_ranges = list(itertools.product(*param_grid.values()))
-        # Split parameter ranges into batches
-        batch_size = 10
+            # Append best result to an existing CSV file or create a new one if it doesn't exist
+            csv_filename = "best_parameter_results.csv"
 
-        param_ranges_batches = [
-            param_ranges[i : i + batch_size]
-            for i in range(0, len(param_ranges), batch_size)
-        ]
-        run_grid_search_batch_partial = partial(
-            run_grid_search_batch,
-            pso_type=PSO_TYPE,
-            iterations=iterations,
-            total_number_of_values=total_number_of_values,
-        )
+            with open(csv_filename, mode="a", newline="") as csv_file:
+                csv_writer = csv.writer(csv_file)
+                if csv_file.tell() == 0:
+                    csv_writer.writerow(
+                        ["Best Fitness"]
+                        + ["Param" + str(i) for i in range(1, len(best_params) + 1)]
+                    )
+                csv_writer.writerow([best_result] + list(best_params))
 
-        num_processes = multiprocessing.cpu_count() - 1
+            print("Best result appended to", csv_filename)
+        # # Print the best parameters
+        # # print("Best position: ", best_swarm_position)
+        # print("Best Parameters:", best_params)
+        # print("Best Fitness:", best_fitness)
 
-        with multiprocessing.Pool(processes=num_processes) as pool:
-            results_batches = pool.map(
-                run_grid_search_batch_partial, param_ranges_batches
-            )
+        # comma_separated_string = ", ".join(map(str, best_swarm_position))
+        # print("[" + comma_separated_string + "]")
 
-        # Flatten the results
-        results = [
-            result for batch_results in results_batches for result in batch_results
-        ]
-
-        # Find the best result across all simulations
-        best_result = min(results, key=lambda x: x[0])
-        best_fitness = best_result[0]
-        best_params = best_result[1]
-
-        # Print the best parameters
-        print("Best Parameters:", best_params)
-        print("Best Fitness:", best_fitness)
-
-        # Access the best swarm position from the tuple
-        best_swarm_position = best_result[2]
-
-        comma_separated_string = ", ".join(map(str, best_swarm_position))
-        print("[" + comma_separated_string + "]")
     else:
         print(
             "Invalid mode. Please choose either 'single' or 'threaded' as the execution mode."

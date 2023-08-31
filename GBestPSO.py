@@ -47,7 +47,7 @@ class GBest_PSO:
         return particles
 
     def run_pso(self, model):
-        X_train, X_test, y_train, y_test = get_fingerprinted_data()
+        X_train, X_test, y_train, y_test, scaler = get_fingerprinted_data()
         for _ in range(self.iterations):
             for particle in self.particles:
                 fitness = self.function(particle.position, model, X_train, y_train)
