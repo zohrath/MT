@@ -99,7 +99,8 @@ def ann_node_count_fitness(num_nodes_per_layer):
     model.add(keras.layers.Dense(2))
     model.compile(optimizer="adam", loss="mse")
 
-    model.fit(X_train, y_train, epochs=100, validation_data=(X_test, y_test), verbose=0)
+    model.fit(X_train, y_train, epochs=100,
+              validation_data=(X_test, y_test), verbose=0)
     # losses = pd.DataFrame(model.history.history)
 
     # # Extract loss and validation loss columns
@@ -137,6 +138,7 @@ def linear_regression(particle_position, X_test, y_test):
 
 
 def ann_weights_fitness_function(particle, model, X_train, y_train):
+
     for layer in model.layers:
         weights = layer.get_weights()[0]
         biases = layer.get_weights()[1]
@@ -145,21 +147,22 @@ def ann_weights_fitness_function(particle, model, X_train, y_train):
 
         # Slice off values from the continuous_values array for weights and biases
         sliced_weights = particle[:num_weights]
-        sliced_biases = particle[num_weights : num_weights + num_biases]
+        sliced_biases = particle[num_weights: num_weights + num_biases]
 
         # Update the continuous_values array for the next iteration
-        particle = particle[num_weights + num_biases :]
+        particle = particle[num_weights + num_biases:]
 
         # Set the sliced weights and biases in the layer
         layer.set_weights(
-            [sliced_weights.reshape(weights.shape), sliced_biases.reshape(biases.shape)]
+            [sliced_weights.reshape(weights.shape),
+             sliced_biases.reshape(biases.shape)]
         )
-
+    model.compile(optimizer="adam", loss="mse")
     # Evaluate the model and get the evaluation metrics
     evaluation_metrics = model.evaluate(X_train, y_train, verbose=0)
     # rmse = np.sqrt(evaluation_metrics)
 
-    return evaluation_metrics[0]
+    return evaluation_metrics
 
 
 def sphere(x):
@@ -183,7 +186,8 @@ def schwefel(args):
 
 def griewank(args):
     term1 = sum(x**2 for x in args) / 4000
-    term2 = np.prod(list(np.cos(x / np.sqrt(i + 1)) for i, x in enumerate(args)))
+    term2 = np.prod(list(np.cos(x / np.sqrt(i + 1))
+                    for i, x in enumerate(args)))
     return term1 - term2 + 1
 
 

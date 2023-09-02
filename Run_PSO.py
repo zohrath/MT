@@ -1,5 +1,6 @@
 from __future__ import division
 import csv
+import datetime
 import sys
 import numpy as np
 import multiprocessing
@@ -8,6 +9,7 @@ import argparse
 import itertools
 from keras.layers import Dense
 from keras.models import Sequential
+import pandas as pd
 from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import MinMaxScaler
 from CostFunctions import (
@@ -38,7 +40,8 @@ def create_model():
         6,
     ]
     model = Sequential()
-    model.add(Dense(num_nodes_per_layer[0], activation="relu", input_shape=(6,)))
+    model.add(Dense(num_nodes_per_layer[0],
+              activation="relu", input_shape=(6,)))
 
     for nodes in num_nodes_per_layer[1:]:
         model.add(Dense(nodes, activation="relu"))
@@ -296,12 +299,12 @@ pso_functions = [
         "threshold": 1,
         "num_particles": 6,
         "num_dimensions": total_number_of_values,
-        "Cp_min": 0.3,
-        "Cp_max": 2.5,
-        "Cg_min": 0.3,
-        "Cg_max": 2.5,
-        "w_min": 0.4,
-        "w_max": 0.9,
+        "Cp_min": 0.1,
+        "Cp_max": 3.5,
+        "Cg_min": 0.9,
+        "Cg_max": 1.5,
+        "w_min": 0.8,
+        "w_max": 2.0,
         "gwn_std_dev": 0.07,
     },
 ]
@@ -339,8 +342,8 @@ def run_grid_search(params, pso_type, iterations, total_number_of_values):
 
 
 # Common options for all PSO runs
-iterations = 50
-options = pso_functions[9]
+iterations = 75
+options = pso_functions[10]
 
 
 def run_pso(_, pso_type):
@@ -381,7 +384,7 @@ if __name__ == "__main__":
     elif args.mode == "threaded":
         pso_runs = 75
         num_cores = multiprocessing.cpu_count()
-        for _ in range(20):
+        for _ in range(1):
             run_pso_partial = partial(run_pso, pso_type=PSO_TYPE)
 
             with multiprocessing.Pool(processes=num_cores - 1) as pool:
@@ -422,14 +425,37 @@ if __name__ == "__main__":
             "gwn_std_dev": [0.01, 0.07, 0.15, 0.2],
         }
 
-        num_cores = multiprocessing.cpu_count() - 1
         combinations = list(itertools.product(*param_grid.values()))
+
         print("combinations", len(combinations))
+
         parameter_permutations_to_test_per_loop = 14
+
+        num_processes = multiprocessing.cpu_count() - 1
         sub_lists = [
-            combinations[i : i + parameter_permutations_to_test_per_loop]
-            for i in range(0, len(combinations), num_cores)
+            combinations[i: i + parameter_permutations_to_test_per_loop]
+            for i in range(0, len(combinations), num_processes)
         ]
+
+        # Start process of filtering out already checked combinations in csv file
+        df = pd.read_csv("best_parameter_results.csv", delimiter=",")
+        df = df.drop(["Best Fitness"], axis=1)
+        list_of_tuples = [tuple(x) for x in df.to_records(index=False)]
+
+        # Flatten the list of lists combinations to make filtering more intuitive
+        def flatten(lst):
+            return [item for sublist in lst for item in sublist]
+        flat_sublists = flatten(sub_lists)
+
+        # Check for duplicates in list_of_tuples and remove them from flat_sublists
+        filtered_sublists = []
+        for tup in flat_sublists:
+            if tup not in list_of_tuples:
+                filtered_sublists.append(tup)
+
+        # Divide the filtered_sublists into sub-lists again
+        filtered_sublists_divided = [filtered_sublists[i:i + parameter_permutations_to_test_per_loop]
+                                     for i in range(0, len(filtered_sublists), parameter_permutations_to_test_per_loop)]
 
         run_grid_search_partial = partial(
             run_grid_search,
@@ -438,16 +464,12 @@ if __name__ == "__main__":
             total_number_of_values=total_number_of_values,
         )
 
-        for sublist in sub_lists:
-            # This is where I call a method that takes in the 7 combos, and it activates threaded running
-
-            with multiprocessing.Pool(processes=num_cores) as pool:
+        for sublist in filtered_sublists_divided:
+            with multiprocessing.Pool(processes=num_processes) as pool:
                 results = pool.map(run_grid_search_partial, sublist)
 
             # Find the best result across all simulations
             best_result, best_params = min(results, key=lambda x: x[0])
-
-            print("best_fitness, best_params", best_result, best_params)
 
             # Append best result to an existing CSV file or create a new one if it doesn't exist
             csv_filename = "best_parameter_results.csv"
@@ -457,11 +479,12 @@ if __name__ == "__main__":
                 if csv_file.tell() == 0:
                     csv_writer.writerow(
                         ["Best Fitness"]
-                        + ["Param" + str(i) for i in range(1, len(best_params) + 1)]
+                        + ["Param" + str(i)
+                           for i in range(1, len(best_params) + 1)]
                     )
                 csv_writer.writerow([best_result] + list(best_params))
 
-            print("Best result appended to", csv_filename)
+            print("Best result appended at ", datetime.datetime.now())
         # # Print the best parameters
         # # print("Best position: ", best_swarm_position)
         # print("Best Parameters:", best_params)
