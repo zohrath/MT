@@ -50,7 +50,8 @@ class GBest_PSO:
         X_train, X_test, y_train, y_test, scaler = get_fingerprinted_data()
         for _ in range(self.iterations):
             for particle in self.particles:
-                fitness = self.function(particle.position, model, X_train, y_train)
+                fitness = self.function(particle.position)
+                # fitness = self.function(particle.position, model, X_train, y_train)
                 # fitness = ann_node_count_fitness(particle.position)
                 if fitness < particle.best_fitness:
                     particle.best_fitness = fitness
@@ -74,5 +75,6 @@ class GBest_PSO:
                     particle.position, particle.velocity
                 )
             self.swarm_fitness_history.append(self.swarm_best_fitness)
-            swarm_positions = [particle.position for particle in self.particles]
+            swarm_positions = [
+                particle.position for particle in self.particles]
             self.swarm_position_history.append(swarm_positions)

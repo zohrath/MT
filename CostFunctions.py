@@ -50,7 +50,7 @@ def get_regression_data():
 
 def get_fingerprinted_data():
     df = pd.read_csv("fingerprints.csv", delimiter=",")
-
+    df = df[(df['X'] % 2 == 0) | (df['Y'] % 2 == 0)]
     df = df.drop(
         [
             "AP1_dev",
@@ -66,7 +66,6 @@ def get_fingerprinted_data():
     free_variables = df.drop(["X", "Y"], axis=1).values
     dependent_variables = df[["X", "Y"]].values
 
-    # Split
     X_train, X_test, y_train, y_test = train_test_split(
         free_variables, dependent_variables, test_size=0.2, random_state=42
     )
