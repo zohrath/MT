@@ -3,3 +3,6 @@ report.log
 *.png
 .vscode
 history_data.npy
+gbest_stats
+gbest_optimized_adam_ann_stats
+RSS.csv
