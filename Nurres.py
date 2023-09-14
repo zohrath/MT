@@ -19,7 +19,7 @@ from tensorflow.keras.layers import Dense, Activation, Dropout
 def generate_x_coord_model():
     # df['Coordinates'] = (df['X'].astype(str) + '.' + df['Y'].astype(str)).astype(float)
     df = pd.read_csv("fingerprints.csv", delimiter=",")
-    df = df[(df['X'] % 2 == 0) | (df['Y'] % 2 == 0)]
+    df = df[(df["X"] % 2 == 0) | (df["Y"] % 2 == 0)]
     df = df.drop(
         [
             "AP1_dev",
@@ -62,6 +62,12 @@ def generate_x_coord_model():
         patience=500,           # Number of epochs with no improvement after which training will stop
         restore_best_weights=True
     )
+    # # Define the EarlyStopping callback
+    # early_stopping = tf.keras.callbacks.EarlyStopping(
+    #     monitor="val_loss",  # Metric to monitor (usually validation loss)
+    #     patience=50,  # Number of epochs with no improvement after which training will stop
+    #     restore_best_weights=True,
+    # )
 
     model.compile(optimizer=adam_optimizer, loss="mse")
 

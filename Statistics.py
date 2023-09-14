@@ -1,3 +1,4 @@
+import json
 import os
 import time
 import numpy as np
@@ -200,6 +201,18 @@ def plot_average_total_distance(swarm_position_histories, pso_type, save_image=T
         file_name = os.path.join(sub_folder, f"average_distance_plot_{timestamp}.png")
         plt.savefig(file_name)
 
+        # Save results in a JSON file
+        json_data = {
+            "pso_type": pso_type,
+            "total_distances": total_distances,
+            "average_distances": average_distances.tolist(),
+        }
+        json_file_name = f"average_distance_{timestamp}.json"
+        json_file_path = os.path.join(sub_folder, json_file_name)
+
+        with open(json_file_path, "w") as json_file:
+            json.dump(json_data, json_file, indent=4)
+
 
 def plot_averages_fitness_histories(fitness_histories, pso_type, pso_runs):
     """
@@ -246,6 +259,19 @@ def plot_averages_fitness_histories(fitness_histories, pso_type, pso_runs):
     file_name = os.path.join(sub_folder, f"average_fitness_histories_{timestamp}.png")
     plt.savefig(file_name)
 
+    # Save results in a JSON file
+    json_data = {
+        "pso_type": pso_type,
+        "pso_runs": pso_runs,
+        "fitness_histories": fitness_histories,
+        "averages": averages.tolist(),
+    }
+    json_file_name = f"average_fitness_histories_{timestamp}.json"
+    json_file_path = os.path.join(sub_folder, json_file_name)
+
+    with open(json_file_path, "w") as json_file:
+        json.dump(json_data, json_file, indent=4)
+
 
 def plot_all_fitness_histories(fitness_histories, options, pso_type, pso_runs):
     plt.figure(figsize=(10, 6))
@@ -266,6 +292,13 @@ def plot_all_fitness_histories(fitness_histories, options, pso_type, pso_runs):
     mean_fitness = np.mean(fitness_values)
     max_fitness = np.max(fitness_values)
     std_fitness = np.std(fitness_values)
+
+    statistics = {
+        "min_fitness": min_fitness,
+        "mean_fitness": mean_fitness,
+        "max_fitness": max_fitness,
+        "std_fitness": std_fitness,
+    }
 
     statistics_table = (
         "Fitness Statistics:\n"
@@ -293,6 +326,20 @@ def plot_all_fitness_histories(fitness_histories, options, pso_type, pso_runs):
     timestamp = time.strftime("%Y-%m-%d_%H-%M-%S")
     file_name = os.path.join(sub_folder, f"fitness_histories_plot_{timestamp}.png")
     plt.savefig(file_name)
+
+    # Save results in a JSON file
+    json_data = {
+        "pso_type": pso_type,
+        "pso_runs": pso_runs,
+        "function_name": options["function_name"],
+        "fitness_histories": fitness_histories,
+        "statistics": statistics,
+    }
+    json_file_name = f"fitness_histories_{timestamp}.json"
+    json_file_path = os.path.join(sub_folder, json_file_name)
+
+    with open(json_file_path, "w") as json_file:
+        json.dump(json_data, json_file, indent=4)
 
 
 def get_particle_dimension_history(
@@ -342,6 +389,14 @@ def get_particle_dimension_history(
 
         particle_position_history.append(run_positions)
 
+    # Save results in a JSON file
+    json_data = {"particle_dimension_history": particle_position_history}
+    timestamp = time.strftime("%Y-%m-%d_%H-%M-%S")
+    json_file_name = f"particle_dimension_history_{timestamp}.json"
+
+    with open(json_file_name, "w") as json_file:
+        json.dump(json_data, json_file, indent=4)
+
     return particle_position_history
 
 
@@ -379,4 +434,4 @@ def handle_data(
     plot_average_total_distance(swarm_position_histories, PSO_TYPE)
     plot_averages_fitness_histories(fitness_histories, PSO_TYPE, pso_runs)
     plot_all_fitness_histories(fitness_histories, options, PSO_TYPE, pso_runs)
-    plot_particle_positions(swarm_position_histories, 0, 0, 1, 2)
+    # plot_particle_positions(swarm_position_histories, 0, 0, 1, 2)

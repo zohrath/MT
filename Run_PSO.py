@@ -17,18 +17,11 @@ from RPSO import RPSO
 from Statistics import handle_data
 from pso_options import create_model, pso_options
 
-PSO_TYPE = "rpso"
+PSO_TYPE = "gbest"
 
 
 class PSO:
-    def __init__(
-        self,
-        iterations,
-        options,
-        num_dimensions,
-        model
-
-    ):
+    def __init__(self, iterations, options, num_dimensions, model):
         self.iterations = iterations
         self.num_particles = options["num_particles"]
         self.num_dimensions = num_dimensions
@@ -111,7 +104,7 @@ def run_grid_search(params, pso_type, iterations):
             "gwn_std_dev": gwn_std_dev,
         },
         num_dimensions,
-        model
+        model,
     )
     (
         swarm_best_fitness,
@@ -162,20 +155,19 @@ if __name__ == "__main__":
         options = pso_options[10]
         print(options)
         run_pso(0, PSO_TYPE, iterations=75, options=options)
-        print("Done")
 
     elif args.mode == "threaded":
         pso_runs = 75
-        options = pso_options[10]
+        options = pso_options[9]
 
         for _ in range(1):
             run_pso_partial = partial(
-                run_pso,
-                pso_type=PSO_TYPE,
-                iterations=75,
-                options=options)
+                run_pso, pso_type=PSO_TYPE, iterations=75, options=options
+            )
 
-            with multiprocessing.Pool(processes=multiprocessing.cpu_count() - 1) as pool:
+            with multiprocessing.Pool(
+                processes=multiprocessing.cpu_count() - 1
+            ) as pool:
                 results = pool.map(run_pso_partial, range(pso_runs))
 
             fitness_histories = [result[2] for result in results]
@@ -218,7 +210,7 @@ if __name__ == "__main__":
 
         num_processes = multiprocessing.cpu_count() - 1
         sub_lists = [
-            combinations[i: i + parameter_permutations_to_test_per_loop]
+            combinations[i : i + parameter_permutations_to_test_per_loop]
             for i in range(0, len(combinations), num_processes)
         ]
 
@@ -229,6 +221,7 @@ if __name__ == "__main__":
 
         def flatten(lst):
             return [item for sublist in lst for item in sublist]
+
         flat_sublists = flatten(sub_lists)
 
         # Check for duplicates in list_of_tuples and remove them from flat_sublists
@@ -238,11 +231,14 @@ if __name__ == "__main__":
                 filtered_sublists.append(tup)
 
         # Divide the filtered_sublists into sub-lists again
-        filtered_sublists_divided = [filtered_sublists[i:i + parameter_permutations_to_test_per_loop]
-                                     for i in range(0, len(filtered_sublists), parameter_permutations_to_test_per_loop)]
+        filtered_sublists_divided = [
+            filtered_sublists[i : i + parameter_permutations_to_test_per_loop]
+            for i in range(
+                0, len(filtered_sublists), parameter_permutations_to_test_per_loop
+            )
+        ]
 
-        print("Remaining combinations to check: ",
-              len(filtered_sublists_divided))
+        print("Remaining combinations to check: ", len(filtered_sublists_divided))
 
         run_grid_search_partial = partial(
             run_grid_search,
@@ -264,8 +260,7 @@ if __name__ == "__main__":
                 if csv_file.tell() == 0:
                     csv_writer.writerow(
                         ["Best Fitness"]
-                        + ["Param" + str(i)
-                           for i in range(1, len(best_params) + 1)]
+                        + ["Param" + str(i) for i in range(1, len(best_params) + 1)]
                     )
                 csv_writer.writerow([best_result] + list(best_params))
 

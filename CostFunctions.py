@@ -78,6 +78,45 @@ def get_fingerprinted_data():
     return X_train, X_test, y_train, y_test, scaler
 
 
+def get_log_distance_path_loss_data():
+    df = pd.read_csv("fingerprints.csv", delimiter=",")
+
+    ref_x = 7.5
+    ref_y = -1
+    df["AP1_distance_ref"] = ((df["X"] - ref_x) ** 2 + (df["Y"] - ref_y) ** 2) ** 0.5
+
+    df = df.drop(
+        [
+            "AP1_dev",
+            "AP2_dev",
+            "AP3_dev",
+            "AP1_dist",
+            "AP2_dist",
+            "AP3_dist",
+            "AP1_dist_dev",
+            "AP2_dist_dev",
+            "AP3_dist_dev",
+            "X",
+            "Y",
+        ],
+        axis=1,
+    )
+    print(df.head())
+    # Reference coordinates
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        df["AP1_rss"], df["AP1_distance_ref"], test_size=0.2, random_state=42
+    )
+
+    scaler = MinMaxScaler()
+    X_train = X_train.values.reshape(-1, 1)
+    X_test = X_test.values.reshape(-1, 1)
+    X_train = scaler.fit_transform(X_train)
+    X_test = scaler.transform(X_test)
+
+    return X_train, X_test, y_train, y_test, scaler
+
+
 def ann_node_count_fitness(num_nodes_per_layer):
     num_nodes_per_layer = np.round(num_nodes_per_layer)
     if len(num_nodes_per_layer) < 1:
@@ -98,8 +137,7 @@ def ann_node_count_fitness(num_nodes_per_layer):
     model.add(keras.layers.Dense(2))
     model.compile(optimizer="adam", loss="mse")
 
-    model.fit(X_train, y_train, epochs=100,
-              validation_data=(X_test, y_test), verbose=0)
+    model.fit(X_train, y_train, epochs=100, validation_data=(X_test, y_test), verbose=0)
     # losses = pd.DataFrame(model.history.history)
 
     # # Extract loss and validation loss columns
@@ -137,7 +175,6 @@ def linear_regression(particle_position, X_test, y_test):
 
 
 def ann_weights_fitness_function(particle, model, X_train, y_train):
-
     for layer in model.layers:
         weights = layer.get_weights()[0]
         biases = layer.get_weights()[1]
@@ -146,15 +183,14 @@ def ann_weights_fitness_function(particle, model, X_train, y_train):
 
         # Slice off values from the continuous_values array for weights and biases
         sliced_weights = particle[:num_weights]
-        sliced_biases = particle[num_weights: num_weights + num_biases]
+        sliced_biases = particle[num_weights : num_weights + num_biases]
 
         # Update the continuous_values array for the next iteration
-        particle = particle[num_weights + num_biases:]
+        particle = particle[num_weights + num_biases :]
 
         # Set the sliced weights and biases in the layer
         layer.set_weights(
-            [sliced_weights.reshape(weights.shape),
-             sliced_biases.reshape(biases.shape)]
+            [sliced_weights.reshape(weights.shape), sliced_biases.reshape(biases.shape)]
         )
     model.compile(optimizer="adam", loss="mse")
     # Evaluate the model and get the evaluation metrics
@@ -162,6 +198,19 @@ def ann_weights_fitness_function(particle, model, X_train, y_train):
     # rmse = np.sqrt(evaluation_metrics)
 
     return evaluation_metrics
+
+
+def log_path_loss_model_fitness_function(particle, X_train, y_train):
+    A = particle[0]
+    n = particle[1]
+
+    # Predict distances using the path loss model
+    predicted_distances = 10 ** ((X_train - A) / (10 * n))
+
+    # Calculate RMSE between predicted and actual distances for the AP's dataset
+    rmse = np.sqrt(mean_squared_error(y_train, predicted_distances))
+
+    return rmse
 
 
 def sphere(x):
@@ -185,8 +234,7 @@ def schwefel(args):
 
 def griewank(args):
     term1 = sum(x**2 for x in args) / 4000
-    term2 = np.prod(list(np.cos(x / np.sqrt(i + 1))
-                    for i, x in enumerate(args)))
+    term2 = np.prod(list(np.cos(x / np.sqrt(i + 1)) for i, x in enumerate(args)))
     return term1 - term2 + 1
 
 
@@ -204,28 +252,3 @@ def step(args, lower_bound=-5.0, upper_bound=5.0):
         if not (lower_bound <= x <= upper_bound):
             return 1
     return 0
-
-
-# ----- RPSO ----- #
-
-# 3 particles with 96 runs:
-# 10 iterations: 58 avg
-# 30 iterations: 38 avg
-# 60 iterations: 35 avg
-
-# 3 particles with 56 runs:
-# 50 iterations: 31 avg
-
-# 3 particles with 75 runs:
-# 50 iterations: 36 avg
-
-# 6 particles with 75 runs:
-# 50 iterations: 23 avg
-
-# ----- GBEST ----- #
-
-# 3 particles with 75 runs:
-# 50 iterations: 25 avg
-
-# 6 particles with 75 runs:
-# 50 iterations: 17 avg
