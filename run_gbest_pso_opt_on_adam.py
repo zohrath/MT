@@ -3,17 +3,14 @@ import multiprocessing
 import sys
 import numpy as np
 import tensorflow as tf
+import time
 from CostFunctions import get_fingerprinted_data
 from GBestPSO import GBest_PSO
-from Statistics import (
-    get_swarm_total_particle_distance,
-    plot_all_fitness_histories,
-    plot_average_total_distance,
-    plot_averages_fitness_histories,
-)
+from Statistics import create_pso_run_stats
 from pso_options import create_model
 
 
+# STATISTIKEN BEHÖVER FAKTISKT INKLUDERA DE BÄSTA VÄRDENA
 def fitness_function(particle):
     learning_rate, beta_1, beta_2 = particle
 
@@ -39,7 +36,7 @@ def fitness_function(particle):
     model.fit(
         X_train,
         y_train,
-        epochs=250,
+        epochs=25,
         batch_size=32,
         validation_data=(X_test, y_test),
         verbose=0,
@@ -51,26 +48,29 @@ def fitness_function(particle):
     if np.isnan(loss):
         loss = float("inf")
 
-    return loss
+    return np.sqrt(loss)
+
+
+model, _ = create_model()
+iterations = 10
+num_particles = 10
+num_dimensions = 3
+position_bounds = [(0.001, 0.1), (0.5, 0.999999999), (0.5, 0.99999999)]
+velocity_bounds = [
+    (-0.03, 0.03),
+    (-0.2, 0.2),
+    (-0.2, 0.2),
+]
+inertia = 0.8
+c1 = 2.0
+c2 = 2.0
+threshold = 1
+function = fitness_function
 
 
 def run_pso(thread_id):
-    print("Starting thread ", thread_id)
-    model, _ = create_model()
-    iterations = 5
-    num_particles = 3
-    num_dimensions = 3
-    position_bounds = [(0.001, 0.1), (0.5, 0.999999999), (0.5, 0.99999999)]
-    velocity_bounds = [
-        (-0.03, 0.03),
-        (-0.2, 0.2),
-        (-0.2, 0.2),
-    ]
-    inertia = 0.9
-    c1 = 1.49445
-    c2 = 1.49445
-    threshold = 1
-    function = fitness_function
+    print("Starting job", thread_id)
+
     swarm = GBest_PSO(
         iterations,
         num_particles,
@@ -97,30 +97,96 @@ def run_pso(thread_id):
 if __name__ == "__main__":
     run_fitness_threaded = partial(run_pso)
     total_pso_runs = 7
-    with multiprocessing.Pool(processes=multiprocessing.cpu_count() - 1) as pool:
-        results = pool.map(run_fitness_threaded, range(total_pso_runs))
+    for iter in [10, 20, 30, 40, 50, 60]:
+        iterations = iter
+        for _ in range(10):
+            start_time = time.time()
+            with multiprocessing.Pool(
+                processes=multiprocessing.cpu_count() - 1
+            ) as pool:
+                results = pool.map(run_fitness_threaded, range(total_pso_runs))
+            end_time = time.time()
+            elapsed_time = end_time - start_time
+            # LÄGG TILL OM ADAM ÄR OPTIMERAD ELLER INTE I STATISTIK
+            (
+                swarm_best_fitness,
+                swarm_best_position,
+                swarm_fitness_history,
+                swarm_position_history,
+            ) = zip(*results)
 
-    (
-        swarm_best_fitness,
-        swarm_best_position,
-        swarm_fitness_history,
-        swarm_position_history,
-    ) = zip(*results)
-    mean_best_fitness = np.mean(swarm_best_fitness)
-    min_best_fitness = np.min(swarm_best_fitness)
-    max_best_fitness = np.max(swarm_best_fitness)
-    best_swarm_fitness_index = np.where(swarm_best_fitness == min_best_fitness)
-    best_swarm_position = swarm_best_position[best_swarm_fitness_index[0][0]]
+            mean_best_fitness = np.mean(swarm_best_fitness)
+            min_best_fitness = np.min(swarm_best_fitness)
+            max_best_fitness = np.max(swarm_best_fitness)
+            best_swarm_fitness_index = np.where(swarm_best_fitness == min_best_fitness)
+            best_swarm_position = swarm_best_position[best_swarm_fitness_index[0][0]]
 
-    sys.stdout.write(
-        f"Minimum fitness for {total_pso_runs} runs: {min_best_fitness}. Mean: {mean_best_fitness}. Max: {max_best_fitness}. Best value: {best_swarm_position}"
-    )
-    plot_all_fitness_histories(
-        swarm_fitness_history,
-        {"function_name": "optimize adam"},
-        "gbest",
-        total_pso_runs,
-    )
-    plot_averages_fitness_histories(swarm_fitness_history, "GBest", total_pso_runs)
-    plot_average_total_distance(swarm_position_history, "GBest")
-    get_swarm_total_particle_distance(swarm_position_history)
+            sys.stdout.write(
+                f"Minimum fitness for {total_pso_runs} runs: {min_best_fitness}. Mean: {mean_best_fitness}. Max: {max_best_fitness}. Best value: {best_swarm_position}\n"
+            )
+
+            create_pso_run_stats(
+                swarm_position_history,
+                swarm_fitness_history,
+                {"function_name": "optimize adam parameters"},
+                "gbest",
+                total_pso_runs,
+                best_swarm_position,
+                iterations,
+                num_particles,
+                num_dimensions,
+                position_bounds,
+                velocity_bounds,
+                inertia,
+                c1,
+                c2,
+                threshold,
+                elapsed_time,
+            )
+    iterations = 10
+    for particles in [10, 20, 30, 40, 50, 60]:
+        num_particles = particles
+        for _ in range(10):
+            start_time = time.time()
+            with multiprocessing.Pool(
+                processes=multiprocessing.cpu_count() - 1
+            ) as pool:
+                results = pool.map(run_fitness_threaded, range(total_pso_runs))
+            end_time = time.time()
+            elapsed_time = end_time - start_time
+            # LÄGG TILL OM ADAM ÄR OPTIMERAD ELLER INTE I STATISTIK
+            (
+                swarm_best_fitness,
+                swarm_best_position,
+                swarm_fitness_history,
+                swarm_position_history,
+            ) = zip(*results)
+
+            mean_best_fitness = np.mean(swarm_best_fitness)
+            min_best_fitness = np.min(swarm_best_fitness)
+            max_best_fitness = np.max(swarm_best_fitness)
+            best_swarm_fitness_index = np.where(swarm_best_fitness == min_best_fitness)
+            best_swarm_position = swarm_best_position[best_swarm_fitness_index[0][0]]
+
+            sys.stdout.write(
+                f"Minimum fitness for {total_pso_runs} runs: {min_best_fitness}. Mean: {mean_best_fitness}. Max: {max_best_fitness}. Best value: {best_swarm_position}\n"
+            )
+
+            create_pso_run_stats(
+                swarm_position_history,
+                swarm_fitness_history,
+                {"function_name": "optimize adam parameters"},
+                "gbest",
+                total_pso_runs,
+                best_swarm_position,
+                iterations,
+                num_particles,
+                num_dimensions,
+                position_bounds,
+                velocity_bounds,
+                inertia,
+                c1,
+                c2,
+                threshold,
+                elapsed_time,
+            )
