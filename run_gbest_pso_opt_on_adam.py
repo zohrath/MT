@@ -12,43 +12,50 @@ from pso_options import create_model
 
 # STATISTIKEN BEHÖVER FAKTISKT INKLUDERA DE BÄSTA VÄRDENA
 def fitness_function(particle):
-    learning_rate, beta_1, beta_2 = particle
+    try:
+        learning_rate, beta_1, beta_2 = particle
 
-    adam_optimizer = tf.keras.optimizers.Adam(
-        learning_rate=learning_rate,
-        beta_1=beta_1,
-        beta_2=beta_2,
-        # epsilon=particle[3]  # Custom value for epsilon
-    )
+        adam_optimizer = tf.keras.optimizers.legacy.Adam(
+            learning_rate=learning_rate,
+            beta_1=beta_1,
+            beta_2=beta_2,
+            # epsilon=particle[3]  # Custom value for epsilon
+        )
 
-    model, _ = create_model()
-    model.compile(optimizer=adam_optimizer, loss="mse", metrics=["accuracy"])
+        model, _ = create_model()
+        model.compile(optimizer=adam_optimizer,
+                      loss="mse", metrics=["accuracy"])
 
-    X_train, X_test, y_train, y_test, scaler = get_fingerprinted_data()
+        X_train, X_test, y_train, y_test, scaler = get_fingerprinted_data()
 
-    # Define the EarlyStopping callback
-    early_stopping = tf.keras.callbacks.EarlyStopping(
-        monitor="val_loss",  # Metric to monitor (usually validation loss)
-        patience=100,  # Number of epochs with no improvement after which training will stop
-        restore_best_weights=True,
-    )
+        # Define the EarlyStopping callback
+        early_stopping = tf.keras.callbacks.EarlyStopping(
+            monitor="val_loss",  # Metric to monitor (usually validation loss)
+            patience=100,  # Number of epochs with no improvement after which training will stop
+            restore_best_weights=True,
+        )
 
-    model.fit(
-        X_train,
-        y_train,
-        epochs=25,
-        batch_size=32,
-        validation_data=(X_test, y_test),
-        verbose=0,
-        callbacks=[early_stopping],
-    )
+        model.fit(
+            X_train,
+            y_train,
+            epochs=250,
+            batch_size=32,
+            validation_data=(X_test, y_test),
+            verbose=0,
+            callbacks=[early_stopping],
+        )
 
-    loss, accuracy = model.evaluate(X_test, y_test, verbose=0)
+        loss, accuracy = model.evaluate(X_test, y_test, verbose=0)
 
-    if np.isnan(loss):
-        loss = float("inf")
+        if np.isnan(loss):
+            loss = float("inf")
 
-    return np.sqrt(loss)
+        return np.sqrt(loss)
+    except tf.errors.InvalidArgumentError as e:
+        # Handle the specific exception here
+        print("Caught an InvalidArgumentError:", e)
+        # You can choose to return a specific value or take other actions
+        return float("inf")  # For example, return infinity in case of an error
 
 
 model, _ = create_model()
@@ -118,7 +125,8 @@ if __name__ == "__main__":
             mean_best_fitness = np.mean(swarm_best_fitness)
             min_best_fitness = np.min(swarm_best_fitness)
             max_best_fitness = np.max(swarm_best_fitness)
-            best_swarm_fitness_index = np.where(swarm_best_fitness == min_best_fitness)
+            best_swarm_fitness_index = np.where(
+                swarm_best_fitness == min_best_fitness)
             best_swarm_position = swarm_best_position[best_swarm_fitness_index[0][0]]
 
             sys.stdout.write(
@@ -165,7 +173,8 @@ if __name__ == "__main__":
             mean_best_fitness = np.mean(swarm_best_fitness)
             min_best_fitness = np.min(swarm_best_fitness)
             max_best_fitness = np.max(swarm_best_fitness)
-            best_swarm_fitness_index = np.where(swarm_best_fitness == min_best_fitness)
+            best_swarm_fitness_index = np.where(
+                swarm_best_fitness == min_best_fitness)
             best_swarm_position = swarm_best_position[best_swarm_fitness_index[0][0]]
 
             sys.stdout.write(
