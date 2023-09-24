@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 from CostFunctions import get_fingerprinted_data
 
 
-def run_ann_fitting(_, learning_rate, beta_1, beta_2):
+def run_ann_fitting(id, learning_rate, beta_1, beta_2):
     model = Sequential()
     model.add(Dense(6, activation="relu"))
     model.add(Dense(6, activation="relu"))
@@ -31,24 +31,38 @@ def run_ann_fitting(_, learning_rate, beta_1, beta_2):
     # Define the EarlyStopping callback
     early_stopping = tf.keras.callbacks.EarlyStopping(
         monitor="val_loss",
-        patience=200,
+        patience=500,
     )
 
-    model.compile(optimizer=adam_optimizer, loss="mse")
+    # Define the ModelCheckpoint callback
+    checkpoint = tf.keras.callbacks.ModelCheckpoint(
+        # Filepath to save the best model weights
+        filepath=f'best_model_{id}.h5',
+        # Metric to monitor for improvement (e.g., validation loss)
+        monitor='val_loss',
+        save_best_only=True,      # Save only the best model
+        save_weights_only=False,   # Save only the model's weights, not the entire model
+        mode='auto',               # 'min' for loss, 'max' for accuracy, 'auto' to infer
+        verbose=0                # Verbosity mode (1 shows progress)
+    )
+
+    model.compile(optimizer="adam", loss="mse")
     model.fit(
         X_train,
         y_train,
         epochs=500,
         validation_data=(X_test, y_test),
-        callbacks=[early_stopping],
-        verbose=0,
+        callbacks=[early_stopping, checkpoint],
+        verbose=1,
     )
 
-    y_pred = model.predict(X_test)
+    best_model = tf.keras.models.load_model(f'best_model_{id}.h5')
+
+    y_pred = best_model.predict(X_test)
 
     mse = mean_squared_error(y_test, y_pred)
 
-    return mse, model
+    return np.sqrt(mse), best_model
 
 
 def save_json_results(
@@ -89,13 +103,26 @@ def save_model(sub_dir, best_model):
     return model_filename  # Return the filename for inclusion in JSON
 
 
-def generate_box_plot(sub_dir, losses):
-    plt.figure(figsize=(10, 4))
+def generate_box_plot(sub_dir, losses, learning_rate, beta_1, beta_2):
+    plt.figure(figsize=(10, 3))
     plt.boxplot(losses, vert=False, sym="")
     plt.title("Box Plot of Loss Values")
     plt.xlabel("Loss")
-    plt.xlim(0, 10)
-    plt.xticks(range(0, 10, 1))
+    plt.xlim(0, 5)
+    plt.xticks(range(0, 5, 1))
+
+    # Calculate statistics
+    min_loss = min(losses)
+    mean_loss = np.mean(losses)
+    max_loss = max(losses)
+    std_dev = np.std(losses)  # Calculate standard deviation
+
+    # # Create a legend with the statistics
+    # legend_text = f"Min: {min_loss:.2f}\nMean: {mean_loss:.2f}\nMax: {max_loss:.2f}\nStd Dev: {std_dev:.2f}\nLearning Rate: {learning_rate}\nBeta_1: {beta_1}\nBeta_2: {beta_2}"
+
+    # # Add the legend to the plot
+    # plt.text(0.5, 0, legend_text, transform=plt.gca().transAxes,
+    #          bbox=dict(facecolor='white', edgecolor='black', boxstyle='round'))
 
     timestamp = datetime.now().strftime("%Y%m%d%H%M")
     box_plot_filename = os.path.join(sub_dir, f"box_plot_{timestamp}.png")
@@ -106,32 +133,27 @@ def generate_box_plot(sub_dir, losses):
 
 
 if __name__ == "__main__":
-    learning_rate = 0.08763297274684727
-    beta_1 = 0.5351799417510288
-    beta_2 = 0.8821722454935323
-
-    run_ann = partial(
-        run_ann_fitting, learning_rate=learning_rate, beta_1=beta_1, beta_2=beta_2
-    )
-    total_runs = 21
-    with multiprocessing.Pool(processes=multiprocessing.cpu_count() - 1) as pool:
-        results = pool.map(run_ann, range(total_runs))
-
-    # Extract the test RMSE scores and best models from the results
-    mse_scores = [result[0] for result in results]
-    best_model = results[np.argmin(mse_scores)][1]
-
+    learning_rate = 0.01
+    beta_1 = 0.9
+    beta_2 = 0.999
+    rmse_results = []
+    for run_id in range(10):
+        rmse, best_model = run_ann_fitting(
+            run_id, learning_rate, beta_1, beta_2)
+        rmse_results.append(rmse)
+    print("Res", rmse_results)
     sub_dir = "gbest_optimized_adam_ann_stats"
     os.makedirs(sub_dir, exist_ok=True)
 
-    box_plot_filename = generate_box_plot(sub_dir, mse_scores)
+    box_plot_filename = generate_box_plot(
+        sub_dir, rmse_results, learning_rate, beta_1, beta_2)
 
     best_model_filename = save_model(sub_dir, best_model)
 
     save_json_results(
         sub_dir,
         {"learning_rate": learning_rate, "beta_1": beta_1, "beta_2": beta_2},
-        mse_scores,
+        rmse_results,
         best_model_filename=best_model_filename,
         box_plot_filename=box_plot_filename,
     )

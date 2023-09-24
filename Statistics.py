@@ -18,14 +18,15 @@ def get_final_model(model, particle):
 
         # Slice off values from the continuous_values array for weights and biases
         sliced_weights = particle[:num_weights]
-        sliced_biases = particle[num_weights : num_weights + num_biases]
+        sliced_biases = particle[num_weights: num_weights + num_biases]
 
         # Update the continuous_values array for the next iteration
-        particle = particle[num_weights + num_biases :]
+        particle = particle[num_weights + num_biases:]
 
         # Set the sliced weights and biases in the layer
         layer.set_weights(
-            [sliced_weights.reshape(weights.shape), sliced_biases.reshape(biases.shape)]
+            [sliced_weights.reshape(weights.shape),
+             sliced_biases.reshape(biases.shape)]
         )
     return model
 
@@ -36,8 +37,10 @@ def make_coordinate_prediction_with_ann_model(model, swarm_best_position):
     predictions = finalModel.predict(X_test)
     print(explained_variance_score(y_test, predictions))
 
-    some_position = [[75, 87, 80, 6920, 17112, 17286]]  # this should produce (1, 0)
-    some_position_2 = [[72, 78, 81, 8503, 8420, 8924]]  # this should produce (8,6)
+    # this should produce (1, 0)
+    some_position = [[75, 87, 80, 6920, 17112, 17286]]
+    # this should produce (8,6)
+    some_position_2 = [[72, 78, 81, 8503, 8420, 8924]]
 
     scaler = MinMaxScaler()
     scaler.fit(X_train)
@@ -185,7 +188,8 @@ def plot_average_total_distance(swarm_position_histories, pso_type, save_image=T
         where each run is represented as a list of iterations, and each iteration is a list
         containing the particle positions for that specific iteration.
     """
-    total_distances = get_swarm_total_particle_distance(swarm_position_histories)
+    total_distances = get_swarm_total_particle_distance(
+        swarm_position_histories)
     average_distances = np.mean(total_distances, axis=0)
     plt.plot(average_distances, label="Average Total Distance")
 
@@ -198,7 +202,8 @@ def plot_average_total_distance(swarm_position_histories, pso_type, save_image=T
         plt.ylabel("Total Particle Distance")
         plt.title("Average Total Particle Distance over Iterations")
         plt.legend()
-        file_name = os.path.join(sub_folder, f"average_distance_plot_{timestamp}.png")
+        file_name = os.path.join(
+            sub_folder, f"average_distance_plot_{timestamp}.png")
         plt.savefig(file_name)
 
         # Save results in a JSON file
@@ -212,6 +217,50 @@ def plot_average_total_distance(swarm_position_histories, pso_type, save_image=T
 
         with open(json_file_path, "w") as json_file:
             json.dump(json_data, json_file, indent=4)
+
+
+def save_opt_ann_rpso_stats(fitness_histories, pso_type, pso_runs, position_bounds,
+                            velocity_bounds, fitness_threshold, num_particles,
+                            Cp_min, Cp_max, Cg_min, Cg_max, w_min, w_max,
+                            gwn_std_dev, iterations, elapsed_time,
+                            min_best_fitness, mean_best_fitness, max_best_fitness, best_weights):
+    averages = np.mean(fitness_histories, axis=0)
+
+    sub_folder = f"opt_ann_{pso_type}_stats"
+    if not os.path.exists(sub_folder):
+        os.makedirs(sub_folder)
+
+    timestamp = time.strftime("%Y-%m-%d_%H-%M-%S")
+
+    # Save results in a JSON file
+    json_data = {
+        "pso_type": pso_type,
+        "pso_runs": pso_runs,
+        "min_best_fitness": min_best_fitness,
+        "mean_best_fitness": mean_best_fitness,
+        "max_best_fitness": max_best_fitness,
+        "averages": averages.tolist(),
+        "position_bounds": position_bounds,
+        "velocity_bounds": velocity_bounds,
+        "fitness_threshold": fitness_threshold,
+        "num_particles": num_particles,
+        "Cp_min": Cp_min,
+        "Cp_max": Cp_max,
+        "Cg_min": Cg_min,
+        "Cg_max": Cg_max,
+        "w_min": w_min,
+        "w_max": w_max,
+        "gwn_std_dev": gwn_std_dev,
+        "iterations": iterations,
+        "elapsed_time": elapsed_time,
+        "best_weights": best_weights,
+        "fitness_histories": fitness_histories,
+    }
+    json_file_name = f"stats_{timestamp}.json"
+    json_file_path = os.path.join(sub_folder, json_file_name)
+
+    with open(json_file_path, "w") as json_file:
+        json.dump(json_data, json_file, indent=4)
 
 
 def plot_averages_fitness_histories(fitness_histories, pso_type, pso_runs):
@@ -256,7 +305,8 @@ def plot_averages_fitness_histories(fitness_histories, pso_type, pso_runs):
         os.makedirs(sub_folder)
 
     timestamp = time.strftime("%Y-%m-%d_%H-%M-%S")
-    file_name = os.path.join(sub_folder, f"average_fitness_histories_{timestamp}.png")
+    file_name = os.path.join(
+        sub_folder, f"average_fitness_histories_{timestamp}.png")
     plt.savefig(file_name)
 
     # Save results in a JSON file
@@ -441,7 +491,8 @@ def plot_particle_positions(swarm_position_histories, particle_index, *dimension
         # Add labels and title
         plt.xlabel("Iteration number")
         plt.ylabel("Position value")
-        plt.title(f"Particle X's position in {len(run_positions)} different dimensions")
+        plt.title(
+            f"Particle X's position in {len(run_positions)} different dimensions")
         plt.legend()
         # Show the plot
         plt.show()
