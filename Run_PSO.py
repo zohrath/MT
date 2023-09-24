@@ -17,7 +17,7 @@ from RPSO import RPSO
 from Statistics import handle_data
 from pso_options import create_model, pso_options
 
-PSO_TYPE = "gbest"
+PSO_TYPE = "rpso"
 
 
 class PSO:
@@ -154,7 +154,9 @@ if __name__ == "__main__":
     if args.mode == "single":
         options = pso_options[10]
         print(options)
-        run_pso(0, PSO_TYPE, iterations=75, options=options)
+        swarm_best_fitness, swarm_best_position, swarm_fitness_history, swarm_position_history = run_pso(
+            0, PSO_TYPE, iterations=500, options=options)
+        print("Best fitness", swarm_best_fitness)
 
     elif args.mode == "threaded":
         pso_runs = 75
@@ -210,7 +212,7 @@ if __name__ == "__main__":
 
         num_processes = multiprocessing.cpu_count() - 1
         sub_lists = [
-            combinations[i : i + parameter_permutations_to_test_per_loop]
+            combinations[i: i + parameter_permutations_to_test_per_loop]
             for i in range(0, len(combinations), num_processes)
         ]
 
@@ -232,13 +234,14 @@ if __name__ == "__main__":
 
         # Divide the filtered_sublists into sub-lists again
         filtered_sublists_divided = [
-            filtered_sublists[i : i + parameter_permutations_to_test_per_loop]
+            filtered_sublists[i: i + parameter_permutations_to_test_per_loop]
             for i in range(
                 0, len(filtered_sublists), parameter_permutations_to_test_per_loop
             )
         ]
 
-        print("Remaining combinations to check: ", len(filtered_sublists_divided))
+        print("Remaining combinations to check: ",
+              len(filtered_sublists_divided))
 
         run_grid_search_partial = partial(
             run_grid_search,
@@ -260,7 +263,8 @@ if __name__ == "__main__":
                 if csv_file.tell() == 0:
                     csv_writer.writerow(
                         ["Best Fitness"]
-                        + ["Param" + str(i) for i in range(1, len(best_params) + 1)]
+                        + ["Param" + str(i)
+                           for i in range(1, len(best_params) + 1)]
                     )
                 csv_writer.writerow([best_result] + list(best_params))
 

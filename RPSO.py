@@ -93,13 +93,13 @@ class RPSOParticle:
     def get_cognitive_velocity_part(self):
         updated_Cp = self.get_cognitive_parameter()
         r1 = np.random.uniform(0, 1)
-        d1 = get_GWN(self.gwn_std_dev)
+        d1 = get_GWN(0, self.gwn_std_dev)
         return r1 * (updated_Cp + d1) * (self.best_position - self.position)
 
     def get_social_velocity_part(self, swarm_best_position):
         updated_Cg = self.get_social_parameter()
         r2 = np.random.uniform(0, 1)
-        d2 = get_GWN(self.gwn_std_dev)
+        d2 = get_GWN(0, self.gwn_std_dev)
         return r2 * (updated_Cg + d2) * (swarm_best_position - self.position)
 
     def update_particle_velocity(
@@ -170,6 +170,8 @@ class RPSO:
 
         self.swarm_position_history = []
         self.swarm_fitness_history = []
+        self.early_stopping_criteria = 100
+        self.iterations_since_improved = 0
 
     def initialize_particles(self):
         particles = []
@@ -197,10 +199,11 @@ class RPSO:
         return linear_regression(particle.position, X_test, y_test)
 
     def run_pso(self, model):
-        X_train, X_test, y_train, y_test, scaler = get_fingerprinted_data()
         for iter in range(self.iterations):
+            print("ITER", iter)
             for particle in self.particles:
-                fitness = self.function(particle.position, model, X_train, y_train)
+                fitness = self.function(
+                    particle.position, model)
                 # fitness = ann_node_count_fitness(particle.position)
                 if fitness < particle.best_fitness:
                     particle.best_fitness = fitness
@@ -208,8 +211,12 @@ class RPSO:
                 if fitness < self.swarm_best_fitness:
                     self.swarm_best_fitness = fitness
                     self.swarm_best_position = particle.position
+                    self.iterations_since_improved = 0
             # Check if fitness threshold has been reached
             if fitness <= self.threshold:
+                break
+            self.iterations_since_improved += 1
+            if self.iterations_since_improved >= self.early_stopping_criteria:
                 break
             for particle in self.particles:
                 particle.update_particle_velocity(
