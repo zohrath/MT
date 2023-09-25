@@ -97,14 +97,14 @@ if __name__ == "__main__":
     velocity_bounds = (-0.2, 0.2)
     fitness_threshold = 1
     num_particles = 60
-    Cp_min = 0.5
-    Cp_max = 2.5
-    Cg_min = 0.5
-    Cg_max = 2.5
-    w_min = 0.4
-    w_max = 0.9
-    gwn_std_dev = 0.07
-    iterations = 500
+    Cp_min = 0.1
+    Cp_max = 3.5
+    Cg_min = 0.9
+    Cg_max = 3.0
+    w_min = 0.3
+    w_max = 1.7
+    gwn_std_dev = 0.17651345
+    iterations = 134
 
     run_pso_partial = partial(run_pso,
                               iterations=iterations,

@@ -133,15 +133,15 @@ def generate_box_plot(sub_dir, losses, learning_rate, beta_1, beta_2):
 
 
 if __name__ == "__main__":
-    learning_rate = 0.01
-    beta_1 = 0.9
-    beta_2 = 0.999
+    learning_rate = 0.030392908665314005
+    beta_1 = 0.8271286015602193
+    beta_2 = 0.8022505128809415
     rmse_results = []
     for run_id in range(10):
         rmse, best_model = run_ann_fitting(
             run_id, learning_rate, beta_1, beta_2)
         rmse_results.append(rmse)
-    print("Res", rmse_results)
+
     sub_dir = "gbest_optimized_adam_ann_stats"
     os.makedirs(sub_dir, exist_ok=True)
 
