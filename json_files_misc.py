@@ -221,7 +221,7 @@ def plot_fitness_histories(file_path):
     plt.show()
 
 
-def opt_ann_gbest_box_plot(file_path):
+def gbest_box_plot(file_path):
     # Load the JSON data from the file
     with open(file_path, 'r') as json_file:
         data = json.load(json_file)
@@ -299,7 +299,7 @@ def opt_ann_gbest_box_plot(file_path):
 
 # RPSO usage
 # Example usage:
-file_path = './opt_ann_rpso_stats/gwn_random_search_res/stats_2023-09-24_04-45-48.json'
-# plot_rpso_averages(file_path)
-# plot_rpso_fitness_histories(file_path)
+file_path = './opt_adam_params_with_rpso_stats/500_iterations_during_training/optimize_ann_optimizer_params_2023-09-24_23-27-33.json'
+plot_rpso_averages(file_path)
+plot_rpso_fitness_histories(file_path)
 rpso_box_plot(file_path)
