@@ -46,7 +46,7 @@ def run_ann_fitting(id, learning_rate, beta_1, beta_2):
         verbose=0                # Verbosity mode (1 shows progress)
     )
 
-    model.compile(optimizer="adam", loss="mse")
+    model.compile(optimizer=adam_optimizer, loss="mse")
     model.fit(
         X_train,
         y_train,
@@ -133,9 +133,9 @@ def generate_box_plot(sub_dir, losses, learning_rate, beta_1, beta_2):
 
 
 if __name__ == "__main__":
-    learning_rate = 0.030392908665314005
-    beta_1 = 0.8271286015602193
-    beta_2 = 0.8022505128809415
+    learning_rate = 0.05006745245356894
+    beta_1 = 0.5499297111400641
+    beta_2 = 0.7633985547636576
     rmse_results = []
     for run_id in range(10):
         rmse, best_model = run_ann_fitting(
