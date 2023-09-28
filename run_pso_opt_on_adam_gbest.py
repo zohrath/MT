@@ -4,7 +4,7 @@ import sys
 import numpy as np
 import tensorflow as tf
 import time
-from CostFunctions import get_fingerprinted_data
+from CostFunctions import get_fingerprinted_data, get_fingerprinted_data_noisy
 from GBestPSO import GBest_PSO
 from Statistics import create_pso_run_stats
 from pso_options import create_model
@@ -26,7 +26,7 @@ def fitness_function(particle):
         model.compile(optimizer=adam_optimizer,
                       loss="mse", metrics=["accuracy"])
 
-        X_train, X_test, y_train, y_test, scaler = get_fingerprinted_data()
+        X_train, X_test, y_train, y_test, scaler = get_fingerprinted_data_noisy()
 
         # Define the EarlyStopping callback
         early_stopping = tf.keras.callbacks.EarlyStopping(
@@ -119,8 +119,22 @@ param_sets = [
 ]
 
 
-def run_pso(thread_id, iterations, num_particles):
-    print("Starting job", iterations, num_particles)
+def run_pso(thread_id, iterations, num_particles, num_dimensions,
+            position_bounds,
+            velocity_bounds,
+            inertia,
+            c1,
+            c2,
+            threshold,
+            function,):
+    print("Starting job", iterations, num_particles, num_dimensions,
+          position_bounds,
+          velocity_bounds,
+          inertia,
+          c1,
+          c2,
+          threshold,
+          function,)
 
     swarm = GBest_PSO(
         iterations,

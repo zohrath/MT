@@ -506,6 +506,7 @@ def create_pso_run_stats_rpso(
         w_max,
         threshold,
         elapsed_time,
+        gwn_std_dev
     ) = pso_params_used
     best_params = []
     for param in best_swarm_position:
@@ -532,6 +533,7 @@ def create_pso_run_stats_rpso(
         "Cg_max": Cg_max,
         "w_min": w_min,
         "w_max": w_max,
+        "gwn_std_dev": gwn_std_dev,
         "threshold": threshold,
         "fitness_histories": fitness_histories,
         "position_histories": output_data,
