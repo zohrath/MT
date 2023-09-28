@@ -28,12 +28,12 @@ def fitness_function(particle):
         model, _ = create_model()
         model.compile(optimizer=adam_optimizer, loss="mse")
 
-        X_train, X_test, y_train, y_test, scaler = get_fingerprinted_data_noisy()
+        X_train, X_test, y_train, y_test, scaler = get_fingerprinted_data()
 
         # Define the EarlyStopping callback
         early_stopping = tf.keras.callbacks.EarlyStopping(
             monitor="val_loss",  # Metric to monitor (usually validation loss)
-            patience=500,  # Number of epochs with no improvement after which training will stop
+            patience=50,  # Number of epochs with no improvement after which training will stop
             restore_best_weights=True,
         )
 
@@ -163,17 +163,6 @@ def run_pso(thread_id, iterations, num_particles, position_bounds,
             threshold,
             function,
             gwn_std_dev):
-    print("Starting job", iterations, num_particles, position_bounds,
-          velocity_bounds,
-          Cp_min,
-          Cp_max,
-          Cg_min,
-          Cg_max,
-          w_min,
-          w_max,
-          threshold,
-          function,
-          gwn_std_dev)
 
     swarm = RPSO(
         iterations,
