@@ -263,6 +263,45 @@ def save_opt_ann_rpso_stats(fitness_histories, pso_type, pso_runs, position_boun
         json.dump(json_data, json_file, indent=4)
 
 
+def save_opt_ann_gbest_stats(fitness_histories, pso_type, pso_runs, position_bounds,
+                             velocity_bounds, fitness_threshold, num_particles,
+                             c1, c2, inertia, iterations, elapsed_time,
+                             min_best_fitness, mean_best_fitness, max_best_fitness, best_weights):
+    averages = np.mean(fitness_histories, axis=0)
+
+    sub_folder = f"opt_ann_{pso_type}_stats"
+    if not os.path.exists(sub_folder):
+        os.makedirs(sub_folder)
+
+    timestamp = time.strftime("%Y-%m-%d_%H-%M-%S")
+
+    # Save results in a JSON file
+    json_data = {
+        "pso_type": pso_type,
+        "pso_runs": pso_runs,
+        "min_best_fitness": min_best_fitness,
+        "mean_best_fitness": mean_best_fitness,
+        "max_best_fitness": max_best_fitness,
+        "averages": averages.tolist(),
+        "position_bounds": position_bounds,
+        "velocity_bounds": velocity_bounds,
+        "fitness_threshold": fitness_threshold,
+        "num_particles": num_particles,
+        "c1": c1,
+        "c2": c2,
+        "w": inertia,
+        "iterations": iterations,
+        "elapsed_time": elapsed_time,
+        "best_weights": best_weights,
+        "fitness_histories": fitness_histories,
+    }
+    json_file_name = f"stats_{timestamp}.json"
+    json_file_path = os.path.join(sub_folder, json_file_name)
+
+    with open(json_file_path, "w") as json_file:
+        json.dump(json_data, json_file, indent=4)
+
+
 def plot_averages_fitness_histories(fitness_histories, pso_type, pso_runs):
     """
     Saves an image with a history of the average fitness values of multiple PSO runs
@@ -332,7 +371,7 @@ def create_pso_run_stats(
     best_swarm_position,
     *pso_params_used,
 ):
-    sub_folder = f"{pso_type}_stats"
+    sub_folder = f"opt_adam_params_with_gbest_stats"
 
     # Create a new structure for the desired output
     output_data = []
@@ -399,6 +438,102 @@ def create_pso_run_stats(
         "inertia": inertia,
         "c1": c1,
         "c2": c2,
+        "threshold": threshold,
+        "fitness_histories": fitness_histories,
+        "position_histories": output_data,
+        "elapsed_time": elapsed_time,
+    }
+    json_file_name = f"optimize_ann_optimizer_params_{timestamp}.json"
+    json_file_path = os.path.join(sub_folder, json_file_name)
+
+    with open(json_file_path, "w") as json_file:
+        json.dump(json_data, json_file, indent=4)
+
+
+def create_pso_run_stats_rpso(
+    swarm_position_history,
+    fitness_histories,
+    options,
+    pso_type,
+    pso_runs,
+    best_swarm_position,
+    *pso_params_used,
+):
+    sub_folder = f"opt_adam_params_with_rpso_stats"
+
+    # Create a new structure for the desired output
+    output_data = []
+
+    # Define a run number counter
+    run_number = 0
+
+    for run in swarm_position_history:
+        run_data = []
+        for iteration in run:
+            particle_data = {}
+            for i, particle in enumerate(iteration):
+                particle_key = f"p{i}"
+                particle_data[particle_key] = particle.tolist()
+            run_data.append(particle_data)
+        output_data.append({"run" + str(run_number): run_data})
+        run_number += 1
+
+    if not os.path.exists(sub_folder):
+        os.makedirs(sub_folder)
+
+    timestamp = time.strftime("%Y-%m-%d_%H-%M-%S")
+
+    # Get the final fitness values from each PSO run
+    fitness_values = np.array(
+        [fitness_history[-1] for fitness_history in fitness_histories]
+    )
+    min_fitness = np.min(fitness_values)
+    mean_fitness = np.mean(fitness_values)
+    max_fitness = np.max(fitness_values)
+    std_dev_fitness = np.std(fitness_values)
+
+    (
+        iterations,
+        num_particles,
+        num_dimensions,
+        position_bounds,
+        velocity_bounds,
+        Cp_min,
+        Cp_max,
+        Cg_min,
+        Cg_max,
+        w_min,
+        w_max,
+        threshold,
+        elapsed_time,
+        gwn_std_dev
+    ) = pso_params_used
+    best_params = []
+    for param in best_swarm_position:
+        best_params.append(param)
+    json_data = {
+        "pso_type": pso_type,
+        "pso_runs": pso_runs,
+        "best_swarm_position": best_params,
+        "statistics": {
+            "min_fitness": min_fitness,
+            "mean_fitness": mean_fitness,
+            "max_fitness": max_fitness,
+            "std_dev_fitness": std_dev_fitness,
+        },
+        "function_name": options["function_name"],
+        "iterations": iterations,
+        "num_particles": num_particles,
+        "num_dimensions": num_dimensions,
+        "position_bounds": position_bounds,
+        "velocity_bounds": velocity_bounds,
+        "Cp_min": Cp_min,
+        "Cp_max": Cp_max,
+        "Cg_min": Cg_min,
+        "Cg_max": Cg_max,
+        "w_min": w_min,
+        "w_max": w_max,
+        "gwn_std_dev": gwn_std_dev,
         "threshold": threshold,
         "fitness_histories": fitness_histories,
         "position_histories": output_data,

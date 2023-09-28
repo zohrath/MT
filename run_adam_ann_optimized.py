@@ -46,7 +46,7 @@ def run_ann_fitting(id, learning_rate, beta_1, beta_2):
         verbose=0                # Verbosity mode (1 shows progress)
     )
 
-    model.compile(optimizer="adam", loss="mse")
+    model.compile(optimizer=adam_optimizer, loss="mse")
     model.fit(
         X_train,
         y_train,
@@ -106,7 +106,7 @@ def save_model(sub_dir, best_model):
 def generate_box_plot(sub_dir, losses, learning_rate, beta_1, beta_2):
     plt.figure(figsize=(10, 3))
     plt.boxplot(losses, vert=False, sym="")
-    plt.title("Box Plot of Loss Values")
+    plt.title("Unoptimized Adam ANN optimization")
     plt.xlabel("Loss")
     plt.xlim(0, 5)
     plt.xticks(range(0, 5, 1))
@@ -117,12 +117,21 @@ def generate_box_plot(sub_dir, losses, learning_rate, beta_1, beta_2):
     max_loss = max(losses)
     std_dev = np.std(losses)  # Calculate standard deviation
 
+    # Adjust the horizontal positions for the "Best" and "Worst" labels
+    offset = 0.1  # Vertical offset for text labels
+    best_x = min_loss + 0.03  # Slightly to the right
+    worst_x = max_loss - 0.03  # Slightly to the left
+    plt.text(best_x, 1 + offset, f'Best: {min_loss:.3f}',
+             horizontalalignment='left', verticalalignment='center')
+    plt.text(worst_x, 1 + offset, f'Worst: {max_loss:.3f}',
+             horizontalalignment='right', verticalalignment='center')
+
     # # Create a legend with the statistics
-    # legend_text = f"Min: {min_loss:.2f}\nMean: {mean_loss:.2f}\nMax: {max_loss:.2f}\nStd Dev: {std_dev:.2f}\nLearning Rate: {learning_rate}\nBeta_1: {beta_1}\nBeta_2: {beta_2}"
+    legend_text = f"Min: {min_loss:.2f}\nMean: {mean_loss:.2f}\nMax: {max_loss:.2f}\nStd Dev: {std_dev:.2f}\nLearning Rate: {learning_rate}\nBeta_1: {beta_1}\nBeta_2: {beta_2}"
 
     # # Add the legend to the plot
-    # plt.text(0.5, 0, legend_text, transform=plt.gca().transAxes,
-    #          bbox=dict(facecolor='white', edgecolor='black', boxstyle='round'))
+    plt.text(0.8, 0.5, legend_text, transform=plt.gca().transAxes,
+             bbox=dict(facecolor='white', edgecolor='black', boxstyle='round'))
 
     timestamp = datetime.now().strftime("%Y%m%d%H%M")
     box_plot_filename = os.path.join(sub_dir, f"box_plot_{timestamp}.png")
@@ -133,7 +142,7 @@ def generate_box_plot(sub_dir, losses, learning_rate, beta_1, beta_2):
 
 
 if __name__ == "__main__":
-    learning_rate = 0.01
+    learning_rate = 0.001
     beta_1 = 0.9
     beta_2 = 0.999
     rmse_results = []
@@ -141,8 +150,8 @@ if __name__ == "__main__":
         rmse, best_model = run_ann_fitting(
             run_id, learning_rate, beta_1, beta_2)
         rmse_results.append(rmse)
-    print("Res", rmse_results)
-    sub_dir = "gbest_optimized_adam_ann_stats"
+
+    sub_dir = "unoptimized_adam_ann_stats"
     os.makedirs(sub_dir, exist_ok=True)
 
     box_plot_filename = generate_box_plot(

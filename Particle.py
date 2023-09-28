@@ -68,4 +68,5 @@ class Particle:
                 new_position[i], self.position_bounds[i][0], self.position_bounds[i][1])
 
         self.position_history.append(new_position)
+
         return new_position

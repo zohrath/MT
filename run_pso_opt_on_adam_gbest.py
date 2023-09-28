@@ -4,7 +4,7 @@ import sys
 import numpy as np
 import tensorflow as tf
 import time
-from CostFunctions import get_fingerprinted_data
+from CostFunctions import get_fingerprinted_data, get_fingerprinted_data_noisy
 from GBestPSO import GBest_PSO
 from Statistics import create_pso_run_stats
 from pso_options import create_model
@@ -26,7 +26,7 @@ def fitness_function(particle):
         model.compile(optimizer=adam_optimizer,
                       loss="mse", metrics=["accuracy"])
 
-        X_train, X_test, y_train, y_test, scaler = get_fingerprinted_data()
+        X_train, X_test, y_train, y_test, scaler = get_fingerprinted_data_noisy()
 
         # Define the EarlyStopping callback
         early_stopping = tf.keras.callbacks.EarlyStopping(
@@ -38,7 +38,7 @@ def fitness_function(particle):
         model.fit(
             X_train,
             y_train,
-            epochs=100,
+            epochs=500,
             batch_size=32,
             validation_data=(X_test, y_test),
             verbose=0,
@@ -59,8 +59,8 @@ def fitness_function(particle):
 
 
 model, _ = create_model()
-iterations = 10
-num_particles = 10
+iterations = 20
+num_particles = 20
 num_dimensions = 3
 position_bounds = [(0.001, 0.1), (0.5, 0.999999999), (0.5, 0.99999999)]
 velocity_bounds = [
@@ -68,15 +68,73 @@ velocity_bounds = [
     (-0.2, 0.2),
     (-0.2, 0.2),
 ]
-inertia = 0.729
-c1 = 1.8663
-c2 = 1.49445
-threshold = 1
+c1 = 2.0
+c2 = 2.0
+inertia = 0.8
+threshold = 0.1
 function = fitness_function
 
+param_sets = [
+    {
+        "model": model,
+        "iterations": iterations,
+        "num_particles": num_particles,
+        "num_dimensions": num_dimensions,
+        "position_bounds": position_bounds,
+        "velocity_bounds": velocity_bounds,
+        "inertia": inertia,
+        "c1": c1,
+        "c2": c2,
+        "threshold": threshold,
+        "function": function
+    },
+    {
 
-def run_pso(thread_id, iterations, num_particles):
-    print("Starting job", iterations, num_particles)
+        "model": model,
+        "iterations": iterations,
+        "num_particles": num_particles,
+        "num_dimensions": num_dimensions,
+        "position_bounds": position_bounds,
+        "velocity_bounds": velocity_bounds,
+        "inertia": 0.729,
+        "c1": 1.49445,
+        "c2": 1.49445,
+        "threshold": threshold,
+        "function": function
+    },
+    {
+
+        "model": model,
+        "iterations": iterations,
+        "num_particles": num_particles,
+        "num_dimensions": num_dimensions,
+        "position_bounds": position_bounds,
+        "velocity_bounds": velocity_bounds,
+        "inertia": 0.8,
+        "c1": 1.8663,
+        "c2": 1.94016,
+        "threshold": threshold,
+        "function": function
+    }
+]
+
+
+def run_pso(thread_id, iterations, num_particles, num_dimensions,
+            position_bounds,
+            velocity_bounds,
+            inertia,
+            c1,
+            c2,
+            threshold,
+            function,):
+    print("Starting job", iterations, num_particles, num_dimensions,
+          position_bounds,
+          velocity_bounds,
+          inertia,
+          c1,
+          c2,
+          threshold,
+          function,)
 
     swarm = GBest_PSO(
         iterations,
@@ -100,31 +158,20 @@ def run_pso(thread_id, iterations, num_particles):
         swarm.swarm_position_history,
     )
 
-# A test run for some given c1, c2, w parameters of GBest PSO.
-# The goal is to do enough total runs of a given param combination to get a feel for the results those are going for, kind of like a limit
-# The combination of PSO iterations and particles will be this:
-# 10 iterations and 10 particles
-# 20 iterations and 10 particles
-# 10 iterations and 20 particles
-# 20 iterations and 20 particles
-# The ANN optimizer runs for 100 epochs, and has an early stopping based on validation fitness, with a patience of 50 epochs
 
-# Run this for the two paper-based PSO params:
+# Run this for the three GBest params, 500 iterations for the ANN training, 20 PSO iterations and particles
 # c1, c2 = 1.49445, w = 0.729
 # c1, c2 = 2.0, w = 0.8
-# Run this for random search values of c1, c2, w
+# c1 = 1.8663, c2 = 1.94016, w = 0.8
 
 
 if __name__ == "__main__":
     total_pso_runs = multiprocessing.cpu_count() - 1
-    c1 = 1.8663
-    c2 = 1.94016
-    inertia = 0.8
-    # _, _, w_vals = get_vals_pso_opt_adam_params()
-    # for w_val in w_vals:
-    # inertia = w_val
-    for iterPart in [(10, 10), (20, 10), (10, 20), (20, 20)]:
-        iterations, num_particles = iterPart
+    for params in param_sets:
+        model, iterations, num_particles,\
+            num_dimensions, position_bounds,\
+            velocity_bounds, c1, c2, inertia, \
+            threshold, function = params.values()
 
         run_fitness_threaded = partial(
             run_pso, iterations=iterations, num_particles=num_particles)
