@@ -26,7 +26,7 @@ def fitness_function(particle):
         model.compile(optimizer=adam_optimizer,
                       loss="mse", metrics=["accuracy"])
 
-        X_train, X_test, y_train, y_test, scaler = get_fingerprinted_data_noisy()
+        X_train, X_test, y_train, y_test, scaler = get_fingerprinted_data()
 
         # Define the EarlyStopping callback
         early_stopping = tf.keras.callbacks.EarlyStopping(
@@ -127,14 +127,6 @@ def run_pso(thread_id, iterations, num_particles, num_dimensions,
             c2,
             threshold,
             function,):
-    print("Starting job", iterations, num_particles, num_dimensions,
-          position_bounds,
-          velocity_bounds,
-          inertia,
-          c1,
-          c2,
-          threshold,
-          function,)
 
     swarm = GBest_PSO(
         iterations,
@@ -170,11 +162,14 @@ if __name__ == "__main__":
     for params in param_sets:
         model, iterations, num_particles,\
             num_dimensions, position_bounds,\
-            velocity_bounds, c1, c2, inertia, \
+            velocity_bounds, inertia, c1, c2,  \
             threshold, function = params.values()
 
         run_fitness_threaded = partial(
-            run_pso, iterations=iterations, num_particles=num_particles)
+            run_pso, iterations=iterations, num_particles=num_particles,
+            num_dimensions=num_dimensions, position_bounds=position_bounds, velocity_bounds=velocity_bounds,
+            inertia=inertia, c1=c1, c2=c2, threshold=threshold, function=function
+        )
         start_time = time.time()
         with multiprocessing.Pool(
             processes=multiprocessing.cpu_count() - 1
