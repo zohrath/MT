@@ -7,14 +7,14 @@ import multiprocessing
 from functools import partial
 import pandas as pd
 import tensorflow as tf
-from CostFunctions import get_fingerprinted_data
+from CostFunctions import get_fingerprinted_data, get_fingerprinted_data_noisy
 
 from GBestPSO import GBest_PSO
 from Statistics import save_opt_ann_gbest_stats, save_opt_ann_rpso_stats
 from pso_options import create_model
 
 
-X_train, _, y_train, _, _ = get_fingerprinted_data()
+X_train, _, y_train, _, _ = get_fingerprinted_data_noisy()
 model, num_dimensions = create_model()
 
 
@@ -42,7 +42,7 @@ def ann_weights_fitness_function(particle, model):
         model.compile(optimizer="adam", loss="mse")
 
         # Evaluate the model and get the evaluation metrics
-        evaluation_metrics = model.evaluate(X_train, y_train, verbose=1)
+        evaluation_metrics = model.evaluate(X_train, y_train, verbose=0)
         rmse = np.sqrt(evaluation_metrics)
 
         return rmse
@@ -92,7 +92,7 @@ if __name__ == "__main__":
     # ---- GBest options ----
     position_bounds = [(-1.0, 1.0)] * num_dimensions
     velocity_bounds = [(-0.2, 0.2)] * num_dimensions
-    fitness_threshold = 1
+    fitness_threshold = 0.1
     num_particles = 60
     c1 = 1.8663
     c2 = 1.94016

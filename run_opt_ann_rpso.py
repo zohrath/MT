@@ -7,14 +7,15 @@ import multiprocessing
 from functools import partial
 import pandas as pd
 import tensorflow as tf
-from CostFunctions import get_fingerprinted_data
+from CostFunctions import get_fingerprinted_data, get_fingerprinted_data_noisy
 
 from RPSO import RPSO
 from Statistics import save_opt_ann_rpso_stats
 from pso_options import create_model
 
 
-X_train, _, y_train, _, _ = get_fingerprinted_data()
+X_train, _, y_train, _, _ = get_fingerprinted_data_noisy()
+model, num_dimensions = create_model()
 
 
 def ann_weights_fitness_function(particle, model):
@@ -62,8 +63,6 @@ def ann_weights_fitness_function(particle, model):
 def run_pso(_, iterations, position_bounds, velocity_bounds, fitness_threshold, num_particles,
             Cp_min, Cp_max, Cg_min, Cg_max, w_min, w_max, gwn_std_dev):
 
-    model, num_dimensions = create_model()
-
     swarm = RPSO(
         iterations,
         num_particles,
@@ -93,17 +92,17 @@ def run_pso(_, iterations, position_bounds, velocity_bounds, fitness_threshold, 
 
 if __name__ == "__main__":
     # ---- RSPO options ----
-    position_bounds = (-1.0, 1.0)
-    velocity_bounds = (-0.2, 0.2)
+    position_bounds = [(-1.0, 1.0)] * num_dimensions
+    velocity_bounds = [(-0.2, 0.2)] * num_dimensions
     fitness_threshold = 1
     num_particles = 60
-    Cp_min = 0.1
-    Cp_max = 3.5
-    Cg_min = 0.9
-    Cg_max = 3.0
-    w_min = 0.3
-    w_max = 1.7
-    gwn_std_dev = 0.17651345
+    Cp_min = 0.5
+    Cp_max = 2.5
+    Cg_min = 0.5
+    Cg_max = 2.5
+    w_min = 0.4
+    w_max = 0.9
+    gwn_std_dev = 0.07
     iterations = 134
 
     run_pso_partial = partial(run_pso,
@@ -120,7 +119,7 @@ if __name__ == "__main__":
                               w_max=w_max,
                               gwn_std_dev=gwn_std_dev)
 
-    pso_runs = 1
+    pso_runs = multiprocessing.cpu_count() - 1
 
     start_time = time.time()
     with multiprocessing.Pool(
