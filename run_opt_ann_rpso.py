@@ -27,15 +27,14 @@ def ann_weights_fitness_function(particle, model):
 
         # Slice off values from the continuous_values array for weights and biases
         sliced_weights = particle[:num_weights]
-        sliced_biases = particle[num_weights: num_weights + num_biases]
+        sliced_biases = particle[num_weights : num_weights + num_biases]
 
         # Update the continuous_values array for the next iteration
-        particle = particle[num_weights + num_biases:]
+        particle = particle[num_weights + num_biases :]
 
         # Set the sliced weights and biases in the layer
         layer.set_weights(
-            [sliced_weights.reshape(weights.shape),
-             sliced_biases.reshape(biases.shape)]
+            [sliced_weights.reshape(weights.shape), sliced_biases.reshape(biases.shape)]
         )
     try:
         model.compile(optimizer="adam", loss="mse")
@@ -60,9 +59,21 @@ def ann_weights_fitness_function(particle, model):
         return float("inf")  # For example, return infinity in case of an error
 
 
-def run_pso(_, iterations, position_bounds, velocity_bounds, fitness_threshold, num_particles,
-            Cp_min, Cp_max, Cg_min, Cg_max, w_min, w_max, gwn_std_dev):
-
+def run_pso(
+    _,
+    iterations,
+    position_bounds,
+    velocity_bounds,
+    fitness_threshold,
+    num_particles,
+    Cp_min,
+    Cp_max,
+    Cg_min,
+    Cg_max,
+    w_min,
+    w_max,
+    gwn_std_dev,
+):
     swarm = RPSO(
         iterations,
         num_particles,
@@ -77,7 +88,7 @@ def run_pso(_, iterations, position_bounds, velocity_bounds, fitness_threshold, 
         w_max,
         fitness_threshold,
         ann_weights_fitness_function,
-        gwn_std_dev
+        gwn_std_dev,
     )
 
     swarm.run_pso(model)
@@ -94,37 +105,37 @@ if __name__ == "__main__":
     # ---- RSPO options ----
     position_bounds = [(-1.0, 1.0)] * num_dimensions
     velocity_bounds = [(-0.2, 0.2)] * num_dimensions
-    fitness_threshold = 1
+    fitness_threshold = 0.1
     num_particles = 60
-    Cp_min = 0.5
-    Cp_max = 2.5
-    Cg_min = 0.5
-    Cg_max = 2.5
-    w_min = 0.4
-    w_max = 0.9
-    gwn_std_dev = 0.07
-    iterations = 134
+    Cp_min = 0.1
+    Cp_max = 3.5
+    Cg_min = 0.9
+    Cg_max = 3.0
+    w_min = 0.3
+    w_max = 1.7
+    gwn_std_dev = 0.15
+    iterations = 100
 
-    run_pso_partial = partial(run_pso,
-                              iterations=iterations,
-                              position_bounds=position_bounds,
-                              velocity_bounds=velocity_bounds,
-                              fitness_threshold=fitness_threshold,
-                              num_particles=num_particles,
-                              Cp_min=Cp_min,
-                              Cp_max=Cp_max,
-                              Cg_min=Cg_min,
-                              Cg_max=Cg_max,
-                              w_min=w_min,
-                              w_max=w_max,
-                              gwn_std_dev=gwn_std_dev)
+    run_pso_partial = partial(
+        run_pso,
+        iterations=iterations,
+        position_bounds=position_bounds,
+        velocity_bounds=velocity_bounds,
+        fitness_threshold=fitness_threshold,
+        num_particles=num_particles,
+        Cp_min=Cp_min,
+        Cp_max=Cp_max,
+        Cg_min=Cg_min,
+        Cg_max=Cg_max,
+        w_min=w_min,
+        w_max=w_max,
+        gwn_std_dev=gwn_std_dev,
+    )
 
     pso_runs = multiprocessing.cpu_count() - 1
 
     start_time = time.time()
-    with multiprocessing.Pool(
-        processes=multiprocessing.cpu_count() - 1
-    ) as pool:
+    with multiprocessing.Pool(processes=multiprocessing.cpu_count() - 1) as pool:
         results = pool.map(run_pso_partial, range(pso_runs))
     end_time = time.time()
     elapsed_time = end_time - start_time
@@ -134,8 +145,7 @@ if __name__ == "__main__":
         swarm_best_fitness,
         swarm_best_position,
         swarm_fitness_history,
-        swarm_position_history
-
+        swarm_position_history,
     ) = zip(*results)
     mean_best_fitness = np.mean(swarm_best_fitness)
     min_best_fitness = np.min(swarm_best_fitness)
@@ -148,7 +158,25 @@ if __name__ == "__main__":
         f"Minimum fitness for {pso_runs} runs: {min_best_fitness}. Mean: {mean_best_fitness}. Max: {max_best_fitness}"
     )
 
-    save_opt_ann_rpso_stats(fitness_histories, "rpso", pso_runs, position_bounds, velocity_bounds,
-                            fitness_threshold, num_particles, Cp_min, Cp_max, Cg_min, Cg_max,
-                            w_min, w_max, gwn_std_dev, iterations, elapsed_time,
-                            min_best_fitness, mean_best_fitness, max_best_fitness, best_weights)
+    save_opt_ann_rpso_stats(
+        fitness_histories,
+        "rpso",
+        pso_runs,
+        position_bounds,
+        velocity_bounds,
+        fitness_threshold,
+        num_particles,
+        Cp_min,
+        Cp_max,
+        Cg_min,
+        Cg_max,
+        w_min,
+        w_max,
+        gwn_std_dev,
+        iterations,
+        elapsed_time,
+        min_best_fitness,
+        mean_best_fitness,
+        max_best_fitness,
+        best_weights,
+    )
