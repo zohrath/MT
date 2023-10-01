@@ -1,4 +1,4 @@
-# Run the RPSO to optimize the weights and biases of an ANN
+# Run the GBest to optimize the weights and biases of an ANN
 from __future__ import division
 import sys
 import time

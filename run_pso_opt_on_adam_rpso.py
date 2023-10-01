@@ -28,7 +28,7 @@ def fitness_function(particle):
         model, _ = create_model()
         model.compile(optimizer=adam_optimizer, loss="mse")
 
-        X_train, X_test, y_train, y_test, scaler = get_fingerprinted_data()
+        X_train, X_test, y_train, y_test, scaler = get_fingerprinted_data_noisy()
 
         # Define the EarlyStopping callback
         early_stopping = tf.keras.callbacks.EarlyStopping(

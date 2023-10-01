@@ -4,7 +4,82 @@ import numpy as np
 import os
 
 
-def plot_rpso_averages(file_path):
+import json
+import os
+import matplotlib.pyplot as plt
+
+
+def plot_pso_averages_on_test_functions(file_path_gbest, file_path_rpso, start_iteration=100):
+    # Load the JSON data from the file
+    with open(file_path_gbest, 'r') as json_file:
+        data_gbest = json.load(json_file)
+    with open(file_path_rpso, 'r') as json_file:
+        data_rpso = json.load(json_file)
+
+    # Extract relevant data
+    gbest_averages = data_gbest.get('averages', [])
+    rpso_averages = data_rpso.get('averages', [])
+    function_name = data_gbest.get('function_name')
+
+    if not gbest_averages:
+        print("No data for averages found in the GBest JSON file.")
+        return
+
+    if not rpso_averages:
+        print("No data for averages found in the RPSO JSON file.")
+        return
+
+    # Slice the averages array to start from the specified iteration
+    sliced_averages_gbest = gbest_averages[start_iteration - 1:]
+    sliced_averages_rpso = rpso_averages[start_iteration - 1:]
+
+    # Create a figure for the averages plot
+    plt.figure(figsize=(10, 6))
+
+    # Plot GBest data with a blue line and label
+    gbest_line, = plt.plot(sliced_averages_gbest,
+                           label='GBest Averages', color='blue')
+
+    # Plot RPSO data with a red line and label
+    rpso_line, = plt.plot(sliced_averages_rpso,
+                          label='RPSO Averages', color='red')
+
+    plt.title('Averages Plot for GBest and RPSO')
+    plt.xlabel('Iteration')
+    plt.ylabel('Average Value')
+    plt.grid()
+
+    # Extract the fitness values from data_gbest and data_rpso
+    gbest_min_fitness = data_gbest.get('min_best_fitness')
+    gbest_mean_fitness = data_gbest.get('mean_best_fitness')
+    gbest_max_fitness = data_gbest.get('max_best_fitness')
+
+    rpso_min_fitness = data_rpso.get('min_best_fitness')
+    rpso_mean_fitness = data_rpso.get('mean_best_fitness')
+    rpso_max_fitness = data_rpso.get('max_best_fitness')
+
+    # Add fitness values to the legend
+    legend_labels = [
+        f'GBest \nMin: {gbest_min_fitness:.5f}\nMean: {gbest_mean_fitness:.5f}\nMax: {gbest_max_fitness:.5f}',
+        f'RPSO \nMin: {rpso_min_fitness:.5f}\nMean: {rpso_mean_fitness:.5f}\nMax: {rpso_max_fitness:.5f}'
+    ]
+
+    # Create a custom legend
+    plt.legend(handles=[gbest_line, rpso_line], labels=legend_labels)
+
+    # Save the plot with a fixed filename
+    json_folder = os.path.dirname(file_path_gbest)
+    plot_filename = f'stats_{function_name}.png'
+    plot_filepath = os.path.join(json_folder, plot_filename)
+
+    # bbox_inches='tight' ensures that the legend is not cut off
+    plt.savefig(plot_filepath, bbox_inches='tight')
+
+    # Show the plot
+    plt.show()
+
+
+def plot_rpso_averages(file_path, start_iteration=0):
     # Load the JSON data from the file
     with open(file_path, 'r') as json_file:
         data = json.load(json_file)
@@ -17,9 +92,12 @@ def plot_rpso_averages(file_path):
         print("No data for averages found in the JSON file.")
         return
 
+    # Slice the averages array to start from the specified iteration
+    sliced_averages = averages[start_iteration - 1:]
+
     # Create a figure for the averages plot
     plt.figure(figsize=(10, 6))
-    plt.plot(averages, label='Averages', color='blue')
+    plt.plot(sliced_averages, label='Averages', color='blue')
 
     plt.title(f'Averages Plot for {rpso_type}')
     plt.xlabel('Iteration')
@@ -299,7 +377,8 @@ def gbest_box_plot(file_path):
 
 # RPSO usage
 # Example usage:
-file_path = './opt_adam_params_with_rpso_stats/500_iterations_during_training/optimize_ann_optimizer_params_2023-09-24_23-27-33.json'
-plot_rpso_averages(file_path)
-plot_rpso_fitness_histories(file_path)
-rpso_box_plot(file_path)
+file_path_gbest = './test_func_stats/stats_gbest_Schwefel_2023-10-01_15-54-45.json'
+file_path_rpso = './test_func_stats/stats_rpso_Schwefel_2023-10-01_11-35-13.json'
+plot_pso_averages_on_test_functions(file_path_gbest, file_path_rpso, 1)
+# plot_rpso_fitness_histories(file_path)
+# rpso_box_plot(file_path)

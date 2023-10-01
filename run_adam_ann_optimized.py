@@ -10,7 +10,7 @@ from tensorflow.keras.layers import Dense
 from datetime import datetime
 import matplotlib.pyplot as plt
 
-from CostFunctions import get_fingerprinted_data
+from CostFunctions import get_fingerprinted_data, get_fingerprinted_data_noisy
 
 
 def run_ann_fitting(id, learning_rate, beta_1, beta_2):
@@ -26,7 +26,7 @@ def run_ann_fitting(id, learning_rate, beta_1, beta_2):
         beta_2=beta_2,
     )
 
-    X_train, X_test, y_train, y_test, scaler = get_fingerprinted_data()
+    X_train, X_test, y_train, y_test, scaler = get_fingerprinted_data_noisy()
 
     # Define the EarlyStopping callback
     early_stopping = tf.keras.callbacks.EarlyStopping(
