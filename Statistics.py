@@ -641,7 +641,7 @@ def create_pso_run_stats(
     best_swarm_position,
     *pso_params_used,
 ):
-    sub_folder = f"opt_adam_params_with_gbest_stats"
+    sub_folder = f"opt_sgd_params_with_rpso_stats"
 
     # Create a new structure for the desired output
     output_data = []
@@ -729,7 +729,7 @@ def create_pso_run_stats_rpso(
     best_swarm_position,
     *pso_params_used,
 ):
-    sub_folder = f"opt_adam_params_with_rpso_stats"
+    sub_folder = f"opt_sgd_params_with_rpso_stats"
 
     # Create a new structure for the desired output
     output_data = []
