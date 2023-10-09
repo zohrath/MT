@@ -1,0 +1,54 @@
+{
+  "calm": {
+    "stats": [
+      {
+        "function_name": "unoptimized_adam_ann_stats",
+        "timestamp": "202309271801",
+        "parameters": {
+          "learning_rate": 0.001,
+          "beta_1": 0.9,
+          "beta_2": 0.999
+        },
+        "results": {
+          "loss": [
+            1.4029434319123404, 1.6601474938123078, 1.5770931060188087,
+            3.9791744772733653, 1.5729359147039543, 1.5072154318056863,
+            1.4615279526575722, 1.4418395760334215, 4.054335584194197,
+            1.3579653198074013
+          ],
+          "best_model_filename": "optimized_ann_gbest_202309271801.h5",
+          "min_loss": 1.3579653198074013,
+          "mean_loss": 2.0015178288219055,
+          "max_loss": 4.054335584194197,
+          "box_plot_filename": "unoptimized_adam_ann_stats/box_plot_202309271801.png"
+        }
+      }
+    ]
+  },
+  "noisy": {
+    "stats": [
+      {
+        "function_name": "unoptimized_adam_ann_stats",
+        "timestamp": "202309291032",
+        "parameters": {
+          "learning_rate": 0.001,
+          "beta_1": 0.9,
+          "beta_2": 0.999
+        },
+        "results": {
+          "loss": [
+            1.555939468809561, 3.564057806054974, 1.3183742390305546,
+            1.5338767796612334, 1.6446667072795427, 1.2537732689583034,
+            1.6137897957935317, 3.5594746241666138, 1.6081028057666533,
+            1.5053993955610891
+          ],
+          "best_model_filename": "optimized_ann_gbest_202309291032.h5",
+          "min_loss": 1.2537732689583034,
+          "mean_loss": 1.9157454891082053,
+          "max_loss": 3.564057806054974,
+          "box_plot_filename": "unoptimized_adam_ann_stats/box_plot_202309291032.png"
+        }
+      }
+    ]
+  }
+}

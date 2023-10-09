@@ -49,13 +49,13 @@ class GBest_PSO:
     def run_pso(self, model):
         X_train, X_test, y_train, y_test, scaler = get_fingerprinted_data()
         for iter in range(self.iterations):
-            # print("ITERATION", iter)
+            print("ITERATION", iter)
             for particle in self.particles:
                 # Run this for parameter optimization of ANN optimizer
-                fitness = self.function(particle.position)
+                # fitness = self.function(particle.position)
 
                 # Run this for optimizing ANN weights and biases directly
-                # fitness = self.function(particle.position, model)
+                fitness = self.function(particle.position, model)
 
                 if fitness < particle.best_fitness:
                     particle.best_fitness = fitness

@@ -4,7 +4,7 @@ import sys
 import numpy as np
 import tensorflow as tf
 import time
-from CostFunctions import get_fingerprinted_data, get_fingerprinted_data_noisy
+from CostFunctions import get_fingerprinted_data, get_fingerprinted_data_noisy, get_fingerprinted_random_points_calm_data
 from GBestPSO import GBest_PSO
 from Statistics import create_pso_run_stats
 from pso_options import create_model
@@ -26,12 +26,12 @@ def fitness_function(particle):
         model.compile(optimizer=adam_optimizer,
                       loss="mse", metrics=["accuracy"])
 
-        X_train, X_test, y_train, y_test, scaler = get_fingerprinted_data_noisy()
+        X_train, X_test, y_train, y_test, scaler = get_fingerprinted_random_points_calm_data()
 
         # Define the EarlyStopping callback
         early_stopping = tf.keras.callbacks.EarlyStopping(
             monitor="val_loss",  # Metric to monitor (usually validation loss)
-            patience=50,  # Number of epochs with no improvement after which training will stop
+            patience=500,  # Number of epochs with no improvement after which training will stop
             restore_best_weights=True,
         )
 
@@ -88,34 +88,34 @@ param_sets = [
         "threshold": threshold,
         "function": function
     },
-    # {
+    {
 
-    #     "model": model,
-    #     "iterations": iterations,
-    #     "num_particles": num_particles,
-    #     "num_dimensions": num_dimensions,
-    #     "position_bounds": position_bounds,
-    #     "velocity_bounds": velocity_bounds,
-    #     "inertia": 0.729,
-    #     "c1": 1.49445,
-    #     "c2": 1.49445,
-    #     "threshold": threshold,
-    #     "function": function
-    # },
-    # {
+        "model": model,
+        "iterations": iterations,
+        "num_particles": num_particles,
+        "num_dimensions": num_dimensions,
+        "position_bounds": position_bounds,
+        "velocity_bounds": velocity_bounds,
+        "inertia": 0.729,
+        "c1": 1.49445,
+        "c2": 1.49445,
+        "threshold": threshold,
+        "function": function
+    },
+    {
 
-    #     "model": model,
-    #     "iterations": iterations,
-    #     "num_particles": num_particles,
-    #     "num_dimensions": num_dimensions,
-    #     "position_bounds": position_bounds,
-    #     "velocity_bounds": velocity_bounds,
-    #     "inertia": 0.8,
-    #     "c1": 1.8663,
-    #     "c2": 1.94016,
-    #     "threshold": threshold,
-    #     "function": function
-    # }
+        "model": model,
+        "iterations": iterations,
+        "num_particles": num_particles,
+        "num_dimensions": num_dimensions,
+        "position_bounds": position_bounds,
+        "velocity_bounds": velocity_bounds,
+        "inertia": 0.8,
+        "c1": 1.8663,
+        "c2": 1.94016,
+        "threshold": threshold,
+        "function": function
+    }
 ]
 
 

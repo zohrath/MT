@@ -196,9 +196,9 @@ class RPSO:
         for iter in range(self.iterations):
             print("ITER", iter)
             for particle in self.particles:
-                fitness = self.function(particle.position)
-                # fitness = self.function(
-                #     particle.position, model)
+                # fitness = self.function(particle.position)
+                fitness = self.function(
+                    particle.position, model)
                 # fitness = ann_node_count_fitness(particle.position)
                 if fitness < particle.best_fitness:
                     particle.best_fitness = fitness
