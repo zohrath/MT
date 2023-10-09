@@ -10,7 +10,7 @@ from tensorflow.keras.layers import Dense
 from datetime import datetime
 import matplotlib.pyplot as plt
 
-from CostFunctions import get_fingerprinted_data
+from CostFunctions import get_fingerprinted_data, get_fingerprinted_data_noisy, get_fingerprinted_random_points_calm_data, get_fingerprinted_random_points_noisy_data
 
 
 def run_ann_fitting(id, learning_rate, beta_1, beta_2):
@@ -26,7 +26,7 @@ def run_ann_fitting(id, learning_rate, beta_1, beta_2):
         beta_2=beta_2,
     )
 
-    X_train, X_test, y_train, y_test, scaler = get_fingerprinted_data()
+    X_train, X_test, y_train, y_test, scaler = get_fingerprinted_random_points_calm_data()
 
     # Define the EarlyStopping callback
     early_stopping = tf.keras.callbacks.EarlyStopping(
@@ -142,6 +142,9 @@ def generate_box_plot(sub_dir, losses, learning_rate, beta_1, beta_2):
 
 
 if __name__ == "__main__":
+    # learning_rate = 0.05677689792466579
+    # beta_1 = 0.6751472722094489
+    # beta_2 = 0.848038363244917
     learning_rate = 0.001
     beta_1 = 0.9
     beta_2 = 0.999
@@ -150,19 +153,19 @@ if __name__ == "__main__":
         rmse, best_model = run_ann_fitting(
             run_id, learning_rate, beta_1, beta_2)
         rmse_results.append(rmse)
+    print(np.mean(rmse_results))
+    # sub_dir = "unoptimized_adam_ann_stats"
+    # os.makedirs(sub_dir, exist_ok=True)
 
-    sub_dir = "unoptimized_adam_ann_stats"
-    os.makedirs(sub_dir, exist_ok=True)
+    # box_plot_filename = generate_box_plot(
+    #     sub_dir, rmse_results, learning_rate, beta_1, beta_2)
 
-    box_plot_filename = generate_box_plot(
-        sub_dir, rmse_results, learning_rate, beta_1, beta_2)
+    # best_model_filename = save_model(sub_dir, best_model)
 
-    best_model_filename = save_model(sub_dir, best_model)
-
-    save_json_results(
-        sub_dir,
-        {"learning_rate": learning_rate, "beta_1": beta_1, "beta_2": beta_2},
-        rmse_results,
-        best_model_filename=best_model_filename,
-        box_plot_filename=box_plot_filename,
-    )
+    # save_json_results(
+    #     sub_dir,
+    #     {"learning_rate": learning_rate, "beta_1": beta_1, "beta_2": beta_2},
+    #     rmse_results,
+    #     best_model_filename=best_model_filename,
+    #     box_plot_filename=box_plot_filename,
+    # )

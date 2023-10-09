@@ -1,66 +1,97 @@
-import os
 import json
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Directory containing the JSON files
-dir_path = 'gbest_stats/c-20-w08'
 
-# Get a list of all JSON files in the directory
-json_files = [f for f in os.listdir(dir_path) if f.endswith('.json')]
+def get_vals_from_stats(data):
+    all_best_positions = []
+    last_fitness_values_dict = {}
 
-# Create a subplot grid based on the number of JSON files
-num_files = len(json_files)
-num_cols = 3  # Number of columns in the subplot grid
-num_rows = (num_files + num_cols - 1) // num_cols
+    for index, pso_run_data in enumerate(data["calm"]["stats"]):
+        last_fitness_values = []
+        if pso_run_data:
+            all_best_positions.append(pso_run_data["best_swarm_position"])
+            for fitness_history in pso_run_data["fitness_histories"]:
+                last_fitness_values.append(fitness_history[-1])
+        last_fitness_values_dict[index] = last_fitness_values
 
-# Create a figure and subplots
-fig, axes = plt.subplots(num_rows, num_cols, figsize=(15, 5*num_rows))
-axes = axes.flatten()
+    return all_best_positions, last_fitness_values_dict
 
-# Loop through JSON files and plot fitness histories
-for i, json_file in enumerate(json_files):
-    json_path = os.path.join(dir_path, json_file)
 
-    with open(json_path, 'r') as file:
-        data = json.load(file)
+def open_json_file(json_file_path):
+    try:
+        with open(json_file_path, 'r') as json_file:
+            data = json.load(json_file)
+            return get_vals_from_stats(data)
 
-    fitness_histories = data['fitness_histories']
-    num_runs = len(fitness_histories)
-    iterations = data['iterations']
-    num_particles = data['num_particles']
+    except FileNotFoundError:
+        print(f"The file '{json_file_path}' does not exist.")
+    except json.JSONDecodeError as e:
+        print(f"Error decoding JSON: {e}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    return None
 
-    # Plot fitness histories
-    for run_index, run_fitness in enumerate(fitness_histories):
-        ax = axes[i]
-        ax.plot(range(len(run_fitness)), run_fitness, label=f'Run {run_index}')
-        ax.set_title(
-            f'Iterations: {iterations}, Num Particles: {num_particles}')
-        ax.set_xlabel('Iteration')
-        ax.set_ylabel('Fitness')
-        ax.legend()
 
-    # Extract statistics
-    statistics = data['statistics']
-    min_fitness = statistics['min_fitness']
-    mean_fitness = statistics['mean_fitness']
-    max_fitness = statistics['max_fitness']
-    std_dev_fitness = statistics['std_dev_fitness']
+def create_combined_box_plots(data_dict1, data_dict2=None):
+    fig, axes = plt.subplots(1, 2, figsize=(14, 6))
 
-    # Create a separate sub-plot for the box plots
-    ax2 = axes[i + num_files]
+    # Create a list to hold the data for all box plots
+    all_data1, all_data2 = [], []
 
-    # Create box plots for statistics
-    box_plot_data = [min_fitness, mean_fitness, max_fitness, std_dev_fitness]
-    labels = ['Min', 'Mean', 'Max', 'Std Dev']
-    ax2.boxplot([box_plot_data], vert=False, labels=labels)
-    ax2.set_title(
-        f'Statistics (Iterations: {iterations}, Num Particles: {num_particles})')
+    # Create and add box plots for each key (index) in the first dictionary
+    for index, values in data_dict1.items():
+        box_plot = axes[0].boxplot(
+            values, vert=False, positions=[index], widths=0.6)
+        all_data1.append(box_plot)
 
-# Remove any empty subplots
-for i in range(len(json_files), num_cols * num_rows):
-    fig.delaxes(axes[i])
+    # Customize the plot labels and appearance for the first subplot
+    axes[0].set_title("Calm data set")
+    axes[0].set_xlabel("Fitness Values")
+    axes[0].set_ylabel("Index")
+    axes[0].set_yticks(list(data_dict1.keys()))
+    axes[0].set_yticklabels([f"Index {index}" for index in data_dict1.keys()])
 
-# Adjust layout
-plt.tight_layout()
-plt.show()
+    if data_dict2 is not None:
+        # Create and add box plots for each key (index) in the second dictionary
+        for index, values in data_dict2.items():
+            box_plot = axes[1].boxplot(
+                values, vert=False, positions=[index], widths=0.6)
+            all_data2.append(box_plot)
+
+        # Customize the plot labels and appearance for the second subplot
+        axes[1].set_title("Noisy data set")
+        axes[1].set_xlabel("Fitness Values")
+        axes[1].set_ylabel("Index")
+        axes[1].set_yticks(list(data_dict2.keys()))
+        axes[1].set_yticklabels(
+            [f"Index {index}" for index in data_dict2.keys()])
+    fig.suptitle("Optimizing Adam parameters using GBest")
+    # Show all the box plots in the same figure
+    plt.tight_layout()
+    plt.show()
+
+
+def main():
+    # Specify the path to your JSON file
+    json_file_path_gbest = 'opt_adam_params_with_gbest_stats/combined_stats.json'
+    json_file_path_rpso = 'opt_adam_params_with_rpso_stats/combined_stats.json'
+
+    best_swarm_positios, last_fitness_values_gbest = open_json_file(
+        json_file_path_gbest)
+
+    best_swarm_positios, last_fitness_values_rpso = open_json_file(
+        json_file_path_rpso)
+
+    # print("Last fitness values:", last_fitness_values)
+    # Example data for the two horizontal box plots
+    data1 = np.random.normal(0, 1, 50)
+    data2 = np.random.normal(1, 1, 50)
+
+    # Call the function to create and display the double horizontal box plot
+    create_combined_box_plots(
+        last_fitness_values_gbest, last_fitness_values_rpso)
+
+
+if __name__ == "__main__":
+    main()

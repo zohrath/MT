@@ -4,7 +4,7 @@ import sys
 import numpy as np
 import tensorflow as tf
 import time
-from CostFunctions import get_fingerprinted_data, get_fingerprinted_data_noisy
+from CostFunctions import get_fingerprinted_data, get_fingerprinted_data_noisy, get_fingerprinted_random_points_calm_data
 from GBestPSO import GBest_PSO
 from Statistics import create_pso_run_stats
 from pso_options import create_model
@@ -30,7 +30,7 @@ def fitness_function(particle):
         # Define the EarlyStopping callback
         early_stopping = tf.keras.callbacks.EarlyStopping(
             monitor="val_loss",  # Metric to monitor (usually validation loss)
-            patience=50,  # Number of epochs with no improvement after which training will stop
+            patience=500,  # Number of epochs with no improvement after which training will stop
             restore_best_weights=True,
         )
 

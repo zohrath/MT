@@ -18,14 +18,15 @@ def get_final_model(model, particle):
 
         # Slice off values from the continuous_values array for weights and biases
         sliced_weights = particle[:num_weights]
-        sliced_biases = particle[num_weights : num_weights + num_biases]
+        sliced_biases = particle[num_weights: num_weights + num_biases]
 
         # Update the continuous_values array for the next iteration
-        particle = particle[num_weights + num_biases :]
+        particle = particle[num_weights + num_biases:]
 
         # Set the sliced weights and biases in the layer
         layer.set_weights(
-            [sliced_weights.reshape(weights.shape), sliced_biases.reshape(biases.shape)]
+            [sliced_weights.reshape(weights.shape),
+             sliced_biases.reshape(biases.shape)]
         )
     return model
 
@@ -187,7 +188,8 @@ def plot_average_total_distance(swarm_position_histories, pso_type, save_image=T
         where each run is represented as a list of iterations, and each iteration is a list
         containing the particle positions for that specific iteration.
     """
-    total_distances = get_swarm_total_particle_distance(swarm_position_histories)
+    total_distances = get_swarm_total_particle_distance(
+        swarm_position_histories)
     average_distances = np.mean(total_distances, axis=0)
     plt.plot(average_distances, label="Average Total Distance")
 
@@ -200,7 +202,8 @@ def plot_average_total_distance(swarm_position_histories, pso_type, save_image=T
         plt.ylabel("Total Particle Distance")
         plt.title("Average Total Particle Distance over Iterations")
         plt.legend()
-        file_name = os.path.join(sub_folder, f"average_distance_plot_{timestamp}.png")
+        file_name = os.path.join(
+            sub_folder, f"average_distance_plot_{timestamp}.png")
         plt.savefig(file_name)
 
         # Save results in a JSON file
@@ -214,6 +217,146 @@ def plot_average_total_distance(swarm_position_histories, pso_type, save_image=T
 
         with open(json_file_path, "w") as json_file:
             json.dump(json_data, json_file, indent=4)
+
+
+def save_test_func_rpso_stats(
+    fitness_histories,
+    pso_type,
+    pso_runs,
+    position_bounds,
+    velocity_bounds,
+    fitness_threshold,
+    num_particles,
+    Cp_min,
+    Cp_max,
+    Cg_min,
+    Cg_max,
+    w_min,
+    w_max,
+    gwn_std_dev,
+    iterations,
+    elapsed_time,
+    min_best_fitness,
+    mean_best_fitness,
+    max_best_fitness,
+    best_weights,
+    function_name
+):
+    # Find the maximum length of the inner lists
+    max_length = max(len(seq) for seq in fitness_histories)
+
+    # Pad shorter lists with NaN values to make them the same length
+    padded_fitness_histories = [
+        seq + [np.nan] * (max_length - len(seq)) for seq in fitness_histories]
+
+    # Convert the list of lists to a NumPy array
+    array_fitness_histories = np.array(padded_fitness_histories)
+
+    # Calculate the mean along axis=0, ignoring NaN values
+    averages = np.nanmean(array_fitness_histories, axis=0)
+
+    sub_folder = f"test_func_stats"
+    if not os.path.exists(sub_folder):
+        os.makedirs(sub_folder)
+
+    timestamp = time.strftime("%Y-%m-%d_%H-%M-%S")
+
+    # Save results in a JSON file
+    json_data = {
+        "pso_type": pso_type,
+        "function_name": function_name,
+        "pso_runs": pso_runs,
+        "min_best_fitness": min_best_fitness,
+        "mean_best_fitness": mean_best_fitness,
+        "max_best_fitness": max_best_fitness,
+        "averages": averages.tolist(),
+        "position_bounds": position_bounds,
+        "velocity_bounds": velocity_bounds,
+        "fitness_threshold": fitness_threshold,
+        "num_particles": num_particles,
+        "Cp_min": Cp_min,
+        "Cp_max": Cp_max,
+        "Cg_min": Cg_min,
+        "Cg_max": Cg_max,
+        "w_min": w_min,
+        "w_max": w_max,
+        "gwn_std_dev": gwn_std_dev,
+        "iterations": iterations,
+        "elapsed_time": elapsed_time,
+        "best_weights": best_weights,
+        "fitness_histories": fitness_histories,
+    }
+    json_file_name = f"stats_{pso_type}_{function_name}_{timestamp}.json"
+    json_file_path = os.path.join(sub_folder, json_file_name)
+
+    with open(json_file_path, "w") as json_file:
+        json.dump(json_data, json_file, indent=4)
+
+
+def save_test_func_gbest_stats(
+    fitness_histories,
+    pso_type,
+    pso_runs,
+    position_bounds,
+    velocity_bounds,
+    fitness_threshold,
+    num_particles,
+    c1,
+    c2,
+    inertia,
+    iterations,
+    elapsed_time,
+    min_best_fitness,
+    mean_best_fitness,
+    max_best_fitness,
+    best_weights,
+    function_name
+):
+    # Find the maximum length of the inner lists
+    max_length = max(len(seq) for seq in fitness_histories)
+
+    # Pad shorter lists with NaN values to make them the same length
+    padded_fitness_histories = [
+        seq + [np.nan] * (max_length - len(seq)) for seq in fitness_histories]
+
+    # Convert the list of lists to a NumPy array
+    array_fitness_histories = np.array(padded_fitness_histories)
+
+    # Calculate the mean along axis=0, ignoring NaN values
+    averages = np.nanmean(array_fitness_histories, axis=0)
+
+    sub_folder = f"test_func_stats"
+    if not os.path.exists(sub_folder):
+        os.makedirs(sub_folder)
+
+    timestamp = time.strftime("%Y-%m-%d_%H-%M-%S")
+
+    # Save results in a JSON file
+    json_data = {
+        "pso_type": pso_type,
+        "function_name": function_name,
+        "pso_runs": pso_runs,
+        "min_best_fitness": min_best_fitness,
+        "mean_best_fitness": mean_best_fitness,
+        "max_best_fitness": max_best_fitness,
+        "averages": averages.tolist(),
+        "position_bounds": position_bounds,
+        "velocity_bounds": velocity_bounds,
+        "fitness_threshold": fitness_threshold,
+        "num_particles": num_particles,
+        "c1": c1,
+        "c2": c2,
+        "w": inertia,
+        "iterations": iterations,
+        "elapsed_time": elapsed_time,
+        "best_weights": best_weights,
+        "fitness_histories": fitness_histories,
+    }
+    json_file_name = f"stats_{pso_type}_{function_name}_{timestamp}.json"
+    json_file_path = os.path.join(sub_folder, json_file_name)
+
+    with open(json_file_path, "w") as json_file:
+        json.dump(json_data, json_file, indent=4)
 
 
 def save_opt_ann_rpso_stats(
@@ -295,7 +438,18 @@ def save_opt_ann_gbest_stats(
     max_best_fitness,
     best_weights,
 ):
-    averages = np.mean(fitness_histories, axis=0)
+    # Find the maximum length of the inner lists
+    max_length = max(len(seq) for seq in fitness_histories)
+
+    # Pad shorter lists with NaN values to make them the same length
+    padded_fitness_histories = [
+        seq + [np.nan] * (max_length - len(seq)) for seq in fitness_histories]
+
+    # Convert the list of lists to a NumPy array
+    array_fitness_histories = np.array(padded_fitness_histories)
+
+    # Calculate the mean along axis=0, ignoring NaN values
+    averages = np.nanmean(array_fitness_histories, axis=0)
 
     sub_folder = f"opt_ann_{pso_type}_stats"
     if not os.path.exists(sub_folder):
@@ -372,7 +526,8 @@ def plot_averages_fitness_histories(fitness_histories, pso_type, pso_runs):
         os.makedirs(sub_folder)
 
     timestamp = time.strftime("%Y-%m-%d_%H-%M-%S")
-    file_name = os.path.join(sub_folder, f"average_fitness_histories_{timestamp}.png")
+    file_name = os.path.join(
+        sub_folder, f"average_fitness_histories_{timestamp}.png")
     plt.savefig(file_name)
 
     # Save results in a JSON file
@@ -574,7 +729,7 @@ def create_pso_run_stats_rpso(
     best_swarm_position,
     *pso_params_used,
 ):
-    sub_folder = f"opt_adam_params_with_rpso_stats"
+    sub_folder = f"opt_sgd_params_with_rpso_stats"
 
     # Create a new structure for the desired output
     output_data = []
@@ -741,7 +896,8 @@ def plot_particle_positions(swarm_position_histories, particle_index, *dimension
         # Add labels and title
         plt.xlabel("Iteration number")
         plt.ylabel("Position value")
-        plt.title(f"Particle X's position in {len(run_positions)} different dimensions")
+        plt.title(
+            f"Particle X's position in {len(run_positions)} different dimensions")
         plt.legend()
         # Show the plot
         plt.show()
