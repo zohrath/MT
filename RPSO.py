@@ -60,10 +60,14 @@ class RPSOParticle:
         return np.random.normal(loc=mean, scale=std_dev, size=1)
 
     def initialize_particle_position(self):
-        return np.array([np.random.uniform(p_min, p_max) for p_min, p_max in self.position_bounds])
+        return np.array(
+            [np.random.uniform(p_min, p_max) for p_min, p_max in self.position_bounds]
+        )
 
     def initialize_particle_velocity(self):
-        return np.array([np.random.uniform(v_min, v_max) for v_min, v_max in self.velocity_bounds])
+        return np.array(
+            [np.random.uniform(v_min, v_max) for v_min, v_max in self.velocity_bounds]
+        )
 
     def get_inertia_weight_parameter(self):
         return self.w_max - (self.w_max - self.w_min) * (
@@ -106,8 +110,9 @@ class RPSOParticle:
         updated_velocity = inertia_param + cognitive_param + social_param
 
         updated_velocity = np.clip(
-            updated_velocity, [v_min for v_min, _ in self.velocity_bounds], [
-                v_max for _, v_max in self.velocity_bounds]
+            updated_velocity,
+            [v_min for v_min, _ in self.velocity_bounds],
+            [v_max for _, v_max in self.velocity_bounds],
         )
 
         self.velocity = updated_velocity
@@ -196,9 +201,8 @@ class RPSO:
         for iter in range(self.iterations):
             print("ITER", iter)
             for particle in self.particles:
-                fitness = self.function(particle.position)
-                # fitness = self.function(
-                #     particle.position, model)
+                # fitness = self.function(particle.position)
+                fitness = self.function(particle.position, model)
                 # fitness = ann_node_count_fitness(particle.position)
                 if fitness < particle.best_fitness:
                     particle.best_fitness = fitness

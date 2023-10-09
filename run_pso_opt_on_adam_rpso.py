@@ -96,7 +96,7 @@ param_sets = [
         "w_max": w_max,
         "gwn_std_dev": gwn_std_dev,
         "threshold": threshold,
-        "function": function
+        "function": function,
     },
     {
         "model": model,
@@ -113,7 +113,7 @@ param_sets = [
         "w_max": 0.9,
         "gwn_std_dev": 0.07,
         "threshold": threshold,
-        "function": function
+        "function": function,
     },
     {
         "model": model,
@@ -130,7 +130,7 @@ param_sets = [
         "w_max": w_max,
         "gwn_std_dev": 0.17651345,
         "threshold": threshold,
-        "function": function
+        "function": function,
     },
     {
         "model": model,
@@ -147,23 +147,27 @@ param_sets = [
         "w_max": w_max,
         "gwn_std_dev": 0,
         "threshold": threshold,
-        "function": function
+        "function": function,
     },
 ]
 
 
-def run_pso(thread_id, iterations, num_particles, position_bounds,
-            velocity_bounds,
-            Cp_min,
-            Cp_max,
-            Cg_min,
-            Cg_max,
-            w_min,
-            w_max,
-            threshold,
-            function,
-            gwn_std_dev):
-
+def run_pso(
+    thread_id,
+    iterations,
+    num_particles,
+    position_bounds,
+    velocity_bounds,
+    Cp_min,
+    Cp_max,
+    Cg_min,
+    Cg_max,
+    w_min,
+    w_max,
+    threshold,
+    function,
+    gwn_std_dev,
+):
     swarm = RPSO(
         iterations,
         num_particles,
@@ -178,7 +182,7 @@ def run_pso(thread_id, iterations, num_particles, position_bounds,
         w_max,
         threshold,
         function,
-        gwn_std_dev
+        gwn_std_dev,
     )
 
     swarm.run_pso(model)
@@ -189,6 +193,7 @@ def run_pso(thread_id, iterations, num_particles, position_bounds,
         swarm.swarm_fitness_history,
         swarm.swarm_position_history,
     )
+
 
 # Run this for the four rpso params, 500 iterations for the ANN training, 20 PSO iterations and particles
 # GridSearch values
@@ -201,13 +206,29 @@ if __name__ == "__main__":
     total_pso_runs = multiprocessing.cpu_count() - 1
 
     for params in param_sets:
-        model, iterations, num_particles,\
-            num_dimensions, position_bounds,\
-            velocity_bounds, Cp_min, Cp_max, Cg_min, Cg_max, w_min, w_max, gwn_std_dev, \
-            threshold, function = params.values()
+        (
+            model,
+            iterations,
+            num_particles,
+            num_dimensions,
+            position_bounds,
+            velocity_bounds,
+            Cp_min,
+            Cp_max,
+            Cg_min,
+            Cg_max,
+            w_min,
+            w_max,
+            gwn_std_dev,
+            threshold,
+            function,
+        ) = params.values()
 
         run_fitness_threaded = partial(
-            run_pso, iterations=iterations, num_particles=num_particles, position_bounds=position_bounds,
+            run_pso,
+            iterations=iterations,
+            num_particles=num_particles,
+            position_bounds=position_bounds,
             velocity_bounds=velocity_bounds,
             Cp_min=Cp_min,
             Cp_max=Cp_max,
@@ -217,11 +238,10 @@ if __name__ == "__main__":
             w_max=w_max,
             threshold=threshold,
             function=function,
-            gwn_std_dev=gwn_std_dev)
+            gwn_std_dev=gwn_std_dev,
+        )
         start_time = time.time()
-        with multiprocessing.Pool(
-            processes=multiprocessing.cpu_count() - 1
-        ) as pool:
+        with multiprocessing.Pool(processes=multiprocessing.cpu_count() - 1) as pool:
             results = pool.map(run_fitness_threaded, range(total_pso_runs))
         end_time = time.time()
         elapsed_time = end_time - start_time
@@ -236,8 +256,7 @@ if __name__ == "__main__":
         mean_best_fitness = np.mean(swarm_best_fitness)
         min_best_fitness = np.min(swarm_best_fitness)
         max_best_fitness = np.max(swarm_best_fitness)
-        best_swarm_fitness_index = np.where(
-            swarm_best_fitness == min_best_fitness)
+        best_swarm_fitness_index = np.where(swarm_best_fitness == min_best_fitness)
         best_swarm_position = swarm_best_position[best_swarm_fitness_index[0][0]]
 
         sys.stdout.write(
@@ -264,5 +283,5 @@ if __name__ == "__main__":
             w_max,
             threshold,
             elapsed_time,
-            gwn_std_dev
+            gwn_std_dev,
         )

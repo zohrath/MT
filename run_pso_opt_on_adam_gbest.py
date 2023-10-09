@@ -23,10 +23,9 @@ def fitness_function(particle):
         )
 
         model, _ = create_model()
-        model.compile(optimizer=adam_optimizer,
-                      loss="mse", metrics=["accuracy"])
+        model.compile(optimizer=adam_optimizer, loss="mse", metrics=["accuracy"])
 
-        X_train, X_test, y_train, y_test, scaler = get_fingerprinted_data()
+        X_train, X_test, y_train, y_test, scaler = get_fingerprinted_data_noisy()
 
         # Define the EarlyStopping callback
         early_stopping = tf.keras.callbacks.EarlyStopping(
@@ -86,10 +85,9 @@ param_sets = [
         "c1": c1,
         "c2": c2,
         "threshold": threshold,
-        "function": function
+        "function": function,
     },
     {
-
         "model": model,
         "iterations": iterations,
         "num_particles": num_particles,
@@ -100,10 +98,9 @@ param_sets = [
         "c1": 1.49445,
         "c2": 1.49445,
         "threshold": threshold,
-        "function": function
+        "function": function,
     },
     {
-
         "model": model,
         "iterations": iterations,
         "num_particles": num_particles,
@@ -114,20 +111,24 @@ param_sets = [
         "c1": 1.8663,
         "c2": 1.94016,
         "threshold": threshold,
-        "function": function
-    }
+        "function": function,
+    },
 ]
 
 
-def run_pso(thread_id, iterations, num_particles, num_dimensions,
-            position_bounds,
-            velocity_bounds,
-            inertia,
-            c1,
-            c2,
-            threshold,
-            function,):
-
+def run_pso(
+    thread_id,
+    iterations,
+    num_particles,
+    num_dimensions,
+    position_bounds,
+    velocity_bounds,
+    inertia,
+    c1,
+    c2,
+    threshold,
+    function,
+):
     swarm = GBest_PSO(
         iterations,
         num_particles,
@@ -158,22 +159,37 @@ def run_pso(thread_id, iterations, num_particles, num_dimensions,
 
 
 if __name__ == "__main__":
-    total_pso_runs = multiprocessing.cpu_count() - 1
+    total_pso_runs = 9
     for params in param_sets:
-        model, iterations, num_particles,\
-            num_dimensions, position_bounds,\
-            velocity_bounds, inertia, c1, c2,  \
-            threshold, function = params.values()
+        (
+            model,
+            iterations,
+            num_particles,
+            num_dimensions,
+            position_bounds,
+            velocity_bounds,
+            inertia,
+            c1,
+            c2,
+            threshold,
+            function,
+        ) = params.values()
 
         run_fitness_threaded = partial(
-            run_pso, iterations=iterations, num_particles=num_particles,
-            num_dimensions=num_dimensions, position_bounds=position_bounds, velocity_bounds=velocity_bounds,
-            inertia=inertia, c1=c1, c2=c2, threshold=threshold, function=function
+            run_pso,
+            iterations=iterations,
+            num_particles=num_particles,
+            num_dimensions=num_dimensions,
+            position_bounds=position_bounds,
+            velocity_bounds=velocity_bounds,
+            inertia=inertia,
+            c1=c1,
+            c2=c2,
+            threshold=threshold,
+            function=function,
         )
         start_time = time.time()
-        with multiprocessing.Pool(
-            processes=multiprocessing.cpu_count() - 1
-        ) as pool:
+        with multiprocessing.Pool(processes=multiprocessing.cpu_count() - 1) as pool:
             results = pool.map(run_fitness_threaded, range(total_pso_runs))
         end_time = time.time()
         elapsed_time = end_time - start_time
@@ -188,8 +204,7 @@ if __name__ == "__main__":
         mean_best_fitness = np.mean(swarm_best_fitness)
         min_best_fitness = np.min(swarm_best_fitness)
         max_best_fitness = np.max(swarm_best_fitness)
-        best_swarm_fitness_index = np.where(
-            swarm_best_fitness == min_best_fitness)
+        best_swarm_fitness_index = np.where(swarm_best_fitness == min_best_fitness)
         best_swarm_position = swarm_best_position[best_swarm_fitness_index[0][0]]
 
         sys.stdout.write(
