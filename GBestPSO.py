@@ -28,6 +28,7 @@ class GBest_PSO:
         self.function = function
         self.swarm_best_fitness = float("inf")
         self.swarm_best_position = None
+        self.swarm_best_model_weights = []
 
         self.particles = self.initialize_particles()
 
@@ -52,10 +53,10 @@ class GBest_PSO:
             print("ITERATION", iter)
             for particle in self.particles:
                 # Run this for parameter optimization of ANN optimizer
-                # fitness = self.function(particle.position)
+                fitness, weights = self.function(particle.position)
 
                 # Run this for optimizing ANN weights and biases directly
-                fitness = self.function(particle.position, model)
+                # fitness = self.function(particle.position, model)
 
                 if fitness < particle.best_fitness:
                     particle.best_fitness = fitness
@@ -63,6 +64,7 @@ class GBest_PSO:
                 if fitness < self.swarm_best_fitness:
                     self.swarm_best_fitness = fitness
                     self.swarm_best_position = particle.position
+                    self.swarm_best_model_weights = weights
             if fitness <= self.threshold:
                 break
             for particle in self.particles:

@@ -685,6 +685,7 @@ def create_pso_run_stats(
         c2,
         threshold,
         elapsed_time,
+        best_swarm_weights
     ) = pso_params_used
     best_params = []
     for param in best_swarm_position:
@@ -703,6 +704,7 @@ def create_pso_run_stats(
         "iterations": iterations,
         "num_particles": num_particles,
         "num_dimensions": num_dimensions,
+        "best_swarm_weights":best_swarm_weights,
         "position_bounds": position_bounds,
         "velocity_bounds": velocity_bounds,
         "inertia": inertia,
@@ -777,6 +779,7 @@ def create_pso_run_stats_rpso(
         threshold,
         elapsed_time,
         gwn_std_dev,
+        best_swarm_weights
     ) = pso_params_used
     best_params = []
     for param in best_swarm_position:
@@ -795,6 +798,7 @@ def create_pso_run_stats_rpso(
         "iterations": iterations,
         "num_particles": num_particles,
         "num_dimensions": num_dimensions,
+        "best_swarm_weights": best_swarm_weights,
         "position_bounds": position_bounds,
         "velocity_bounds": velocity_bounds,
         "Cp_min": Cp_min,

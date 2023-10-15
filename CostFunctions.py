@@ -98,17 +98,13 @@ def get_fingerprinted_random_points_noisy_data():
 
     free_variables = df.drop(["X", "Y"], axis=1).values
     dependent_variables = df[["X", "Y"]].values
-
-    X_train, X_test, y_train, y_test = train_test_split(
-        free_variables, dependent_variables, test_size=0.2, random_state=42
-    )
-
+    
     scaler = MinMaxScaler()
 
-    X_train = scaler.fit_transform(X_train)
-    X_test = scaler.transform(X_test)
 
-    return X_train, X_test, y_train, y_test, scaler
+    free_variables = scaler.fit_transform(free_variables)
+
+    return free_variables, dependent_variables
 
 
 def get_fingerprinted_random_points_calm_data():
@@ -129,17 +125,13 @@ def get_fingerprinted_random_points_calm_data():
 
     free_variables = df.drop(["X", "Y"], axis=1).values
     dependent_variables = df[["X", "Y"]].values
-
-    X_train, X_test, y_train, y_test = train_test_split(
-        free_variables, dependent_variables, test_size=0.2, random_state=42
-    )
-
+    
     scaler = MinMaxScaler()
 
-    X_train = scaler.fit_transform(X_train)
-    X_test = scaler.transform(X_test)
 
-    return X_train, X_test, y_train, y_test, scaler
+    free_variables = scaler.fit_transform(free_variables)
+
+    return free_variables, dependent_variables
 
 
 def get_fingerprinted_data():

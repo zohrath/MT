@@ -164,6 +164,7 @@ class RPSO:
         self.gwn_std_dev = gwn_std_dev
         self.swarm_best_fitness = float("inf")
         self.swarm_best_position = None
+        self.swarm_best_model_weights = []
 
         self.particles = self.initialize_particles()
 
@@ -201,8 +202,8 @@ class RPSO:
         for iter in range(self.iterations):
             print("ITER", iter)
             for particle in self.particles:
-                # fitness = self.function(particle.position)
-                fitness = self.function(particle.position, model)
+                fitness, weights = self.function(particle.position)
+                # fitness = self.function(particle.position, model)
                 # fitness = ann_node_count_fitness(particle.position)
                 if fitness < particle.best_fitness:
                     particle.best_fitness = fitness
@@ -211,6 +212,7 @@ class RPSO:
                     self.swarm_best_fitness = fitness
                     self.swarm_best_position = particle.position
                     self.iterations_since_improved = 0
+                    self.swarm_best_model_weights = weights
             # Check if fitness threshold has been reached
             if fitness <= self.threshold:
                 break

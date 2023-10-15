@@ -1,0 +1,391 @@
+{
+    "verification_stats": [
+        {
+            "File Name": "opt_ann_gbest_stats_calm_data_set_c120w08",
+            "MAE": 1.6530690909393373,
+            "MSE": 4.462892325819952,
+            "RMSE": 2.1125558751947726,
+            "MedAE": 1.5814790725708008,
+            "Min Error": 0.01771533489227295,
+            "Max Error": 6.192243576049805
+        },
+        {
+            "File Name": "opt_ann_gbest_stats_calm_data_set_c1c2149445w0729",
+            "MAE": 1.7069996528087124,
+            "MSE": 4.4382862805742365,
+            "RMSE": 2.1067240637003786,
+            "MedAE": 1.5560178756713867,
+            "Min Error": 0.008113861083984375,
+            "Max Error": 5.940913200378418
+        },
+        {
+            "File Name": "opt_ann_gbest_stats_calm_data_set_extra_long_single_run",
+            "MAE": 1.6842702684863922,
+            "MSE": 4.375196668043305,
+            "RMSE": 2.0916970784612445,
+            "MedAE": 1.2992920875549316,
+            "Min Error": 0.024957656860351562,
+            "Max Error": 5.125856876373291
+        },
+        {
+            "File Name": "opt_ann_gbest_stats_calm_data_set_random_search_params",
+            "MAE": 1.4814211822325183,
+            "MSE": 3.9551412537749053,
+            "RMSE": 1.9887536935917693,
+            "MedAE": 1.129561424255371,
+            "Min Error": 0.010996341705322266,
+            "Max Error": 5.570411682128906
+        },
+        {
+            "File Name": "opt_ann_gbest_stats_noisy_data_set_c120w08",
+            "MAE": 1.8970416399740404,
+            "MSE": 5.755858864078543,
+            "RMSE": 2.3991371082284028,
+            "MedAE": 1.7595596313476562,
+            "Min Error": 0.06737709045410156,
+            "Max Error": 7.641956329345703
+        },
+        {
+            "File Name": "opt_ann_gbest_stats_noisy_data_set_c1c2149445w0729",
+            "MAE": 1.5573527486093584,
+            "MSE": 3.663448371727754,
+            "RMSE": 1.9140136811757,
+            "MedAE": 1.3355259895324707,
+            "Min Error": 0.00996255874633789,
+            "Max Error": 5.1031036376953125
+        },
+        {
+            "File Name": "opt_ann_gbest_stats_noisy_data_set_extra_long_single_run",
+            "MAE": 1.463823672263853,
+            "MSE": 3.2933723813963285,
+            "RMSE": 1.8147651036418815,
+            "MedAE": 1.2779998779296875,
+            "Min Error": 0.016269207000732422,
+            "Max Error": 5.356550216674805
+        },
+        {
+            "File Name": "opt_ann_gbest_stats_noisy_data_set_random_search_params",
+            "MAE": 1.7892067874631574,
+            "MSE": 4.827299834910631,
+            "RMSE": 2.1971117028750795,
+            "MedAE": 1.432013988494873,
+            "Min Error": 0.028413772583007812,
+            "Max Error": 6.662629127502441
+        },
+        {
+            "File Name": "opt_ann_rpso_stats_calm_data_set_default_rpso_params_res",
+            "MAE": 1.8489863795618857,
+            "MSE": 5.064323586521369,
+            "RMSE": 2.2504052049622905,
+            "MedAE": 1.7819886207580566,
+            "Min Error": 0.037982940673828125,
+            "Max Error": 5.574850082397461
+        },
+        {
+            "File Name": "opt_ann_rpso_stats_calm_data_set_extra_long_single_run_grid_search_params",
+            "MAE": 1.620939093251382,
+            "MSE": 3.9396348652458038,
+            "RMSE": 1.984851345881047,
+            "MedAE": 1.375049114227295,
+            "Min Error": 0.05657672882080078,
+            "Max Error": 4.727583885192871
+        },
+        {
+            "File Name": "opt_ann_rpso_stats_calm_data_set_extra_long_single_run_random_search_params",
+            "MAE": 1.6744439678807412,
+            "MSE": 4.2784046946487555,
+            "RMSE": 2.068430490649554,
+            "MedAE": 1.3773627281188965,
+            "Min Error": 0.0438385009765625,
+            "Max Error": 4.916172027587891
+        },
+        {
+            "File Name": "opt_ann_rpso_stats_calm_data_set_extra_long_single_run_standard_params",
+            "MAE": 1.938695188491575,
+            "MSE": 7.201881944923986,
+            "RMSE": 2.6836322298191284,
+            "MedAE": 1.2104687690734863,
+            "Min Error": 0.038799285888671875,
+            "Max Error": 8.90667200088501
+        },
+        {
+            "File Name": "opt_ann_rpso_stats_calm_data_set_gwn_random_search_res",
+            "MAE": 1.8333690599087746,
+            "MSE": 5.284437005959626,
+            "RMSE": 2.298790335363281,
+            "MedAE": 1.5121560096740723,
+            "Min Error": 0.003932952880859375,
+            "Max Error": 5.899700164794922
+        },
+        {
+            "File Name": "opt_ann_rpso_stats_calm_data_set_no_gwn_val_res",
+            "MAE": 1.9593600111622964,
+            "MSE": 7.286813330396357,
+            "RMSE": 2.699409811495164,
+            "MedAE": 1.4768047332763672,
+            "Min Error": 0.025313377380371094,
+            "Max Error": 8.96238899230957
+        },
+        {
+            "File Name": "opt_ann_rpso_stats_calm_data_set_no_gwn_val_res",
+            "MAE": 1.7785181518523925,
+            "MSE": 5.677846650890852,
+            "RMSE": 2.3828232521298873,
+            "MedAE": 1.3554279804229736,
+            "Min Error": 7.343292236328125e-05,
+            "Max Error": 7.930023193359375
+        },
+        {
+            "File Name": "opt_ann_rpso_stats_noisy_data_set_default_rpso_params",
+            "MAE": 2.0501076925185417,
+            "MSE": 6.189657005462624,
+            "RMSE": 2.4879021293979036,
+            "MedAE": 1.7680625915527344,
+            "Min Error": 0.10470962524414062,
+            "Max Error": 5.519664764404297
+        },
+        {
+            "File Name": "opt_ann_rpso_stats_noisy_data_set_extra_long_single_run_default_params",
+            "MAE": 1.989372495682009,
+            "MSE": 5.857644918419355,
+            "RMSE": 2.4202572008816245,
+            "MedAE": 1.6099958419799805,
+            "Min Error": 0.05297994613647461,
+            "Max Error": 4.527909278869629
+        },
+        {
+            "File Name": "opt_ann_rpso_stats_noisy_data_set_grid_search_params",
+            "MAE": 1.5025345260097134,
+            "MSE": 3.5389806313201344,
+            "RMSE": 1.8812178585480561,
+            "MedAE": 1.216360330581665,
+            "Min Error": 0.06612968444824219,
+            "Max Error": 5.659029006958008
+        },
+        {
+            "File Name": "opt_ann_rpso_stats_noisy_data_set_gwn_random_search",
+            "MAE": 1.566036758884307,
+            "MSE": 4.034479191453623,
+            "RMSE": 2.0086013022632496,
+            "MedAE": 1.3583050966262817,
+            "Min Error": 0.0049152374267578125,
+            "Max Error": 5.643219947814941
+        },
+        {
+            "File Name": "opt_ann_rpso_stats_noisy_data_set_no_gwn_val",
+            "MAE": 1.8318744705569359,
+            "MSE": 4.9560054021728845,
+            "RMSE": 2.2262087508077233,
+            "MedAE": 1.6337933540344238,
+            "Min Error": 0.05866813659667969,
+            "Max Error": 6.282737731933594
+        },
+        {
+            "File Name": "opt_ann_rpso_stats_noisy_data_set_no_gwn_val",
+            "MAE": 1.8646624549742667,
+            "MSE": 4.790443374333722,
+            "RMSE": 2.18870815193203,
+            "MedAE": 1.6947965621948242,
+            "Min Error": 0.08981704711914062,
+            "Max Error": 4.347119331359863
+        },
+        {
+            "File Name": "opt_adam_params_with_gbest_stats_calm_data_set_500_iterations_during_training_c149445w0729",
+            "MAE": 1.40347386848542,
+            "MSE": 3.018526744791782,
+            "RMSE": 1.7373907864357352,
+            "MedAE": 1.1021332740783691,
+            "Min Error": 0.031414031982421875,
+            "Max Error": 5.293693542480469
+        },
+        {
+            "File Name": "opt_adam_params_with_gbest_stats_calm_data_set_500_iterations_during_training_c20w08",
+            "MAE": 1.2630537469540872,
+            "MSE": 3.01629311083843,
+            "RMSE": 1.7367478547096094,
+            "MedAE": 0.9262204170227051,
+            "Min Error": 0.01116943359375,
+            "Max Error": 7.043596267700195
+        },
+        {
+            "File Name": "opt_adam_params_with_gbest_stats_calm_data_set_500_iterations_during_training_random_search_params",
+            "MAE": 1.2531853837351645,
+            "MSE": 3.473911001134408,
+            "RMSE": 1.8638430730977347,
+            "MedAE": 0.843414306640625,
+            "Min Error": 0.01893138885498047,
+            "Max Error": 8.92579984664917
+        },
+        {
+            "File Name": "opt_adam_params_with_gbest_stats_noisy_data_set_500_iterations_during_training_c149445w0729",
+            "MAE": 1.4641743513845629,
+            "MSE": 3.5768959771362736,
+            "RMSE": 1.891268351434104,
+            "MedAE": 1.177389919757843,
+            "Min Error": 0.06982421875,
+            "Max Error": 5.333791732788086
+        },
+        {
+            "File Name": "opt_adam_params_with_gbest_stats_noisy_data_set_500_iterations_during_training_c20w08",
+            "MAE": 1.4917567814550092,
+            "MSE": 4.049511357222707,
+            "RMSE": 2.0123397718135743,
+            "MedAE": 1.2804968357086182,
+            "Min Error": 0.13167381286621094,
+            "Max Error": 7.598836898803711
+        },
+        {
+            "File Name": "opt_adam_params_with_gbest_stats_noisy_data_set_500_iterations_during_training_random_search_params",
+            "MAE": 1.769234957233552,
+            "MSE": 5.27078698088114,
+            "RMSE": 2.295819457379247,
+            "MedAE": 1.418363332748413,
+            "Min Error": 0.19053936004638672,
+            "Max Error": 8.13972282409668
+        },
+        {
+            "File Name": "opt_adam_params_with_rpso_stats_calm_data_set_500_iterations_during_training_default_params",
+            "MAE": 1.361886711851243,
+            "MSE": 3.2592834987621777,
+            "RMSE": 1.8053485809566467,
+            "MedAE": 1.158712387084961,
+            "Min Error": 0.004233360290527344,
+            "Max Error": 5.190652847290039
+        },
+        {
+            "File Name": "opt_adam_params_with_rpso_stats_calm_data_set_500_iterations_during_training_grid_search_params",
+            "MAE": 1.129413233649346,
+            "MSE": 2.3453088060809133,
+            "RMSE": 1.531440108551723,
+            "MedAE": 0.7760825157165527,
+            "Min Error": 0.0021562576293945312,
+            "Max Error": 4.527997970581055
+        },
+        {
+            "File Name": "opt_adam_params_with_rpso_stats_calm_data_set_500_iterations_during_training_no_gwn_val",
+            "MAE": 1.2122409362946787,
+            "MSE": 2.77483014796483,
+            "RMSE": 1.6657821430081516,
+            "MedAE": 0.8025414943695068,
+            "Min Error": 0.023708343505859375,
+            "Max Error": 6.25642204284668
+        },
+        {
+            "File Name": "opt_adam_params_with_rpso_stats_calm_data_set_500_iterations_during_training_random_search_params",
+            "MAE": 1.350447634535451,
+            "MSE": 3.0709324762561363,
+            "RMSE": 1.7524076227453864,
+            "MedAE": 1.2517632246017456,
+            "Min Error": 0.012368857860565186,
+            "Max Error": 5.078796863555908
+        },
+        {
+            "File Name": "opt_adam_params_with_rpso_stats_noisy_data_set_gridSearch_params",
+            "MAE": 1.3119662596333412,
+            "MSE": 2.7831339065820933,
+            "RMSE": 1.668272731474711,
+            "MedAE": 1.0020537376403809,
+            "Min Error": 0.01479959487915039,
+            "Max Error": 4.363903999328613
+        },
+        {
+            "File Name": "opt_adam_params_with_rpso_stats_noisy_data_set_no_gwn_val",
+            "MAE": 1.5240663616887984,
+            "MSE": 4.4609746115805144,
+            "RMSE": 2.1121019415692306,
+            "MedAE": 1.0194641947746277,
+            "Min Error": 0.05088329315185547,
+            "Max Error": 7.204876899719238
+        },
+        {
+            "File Name": "opt_adam_params_with_rpso_stats_noisy_data_set_random_search_params",
+            "MAE": 1.7710618011413082,
+            "MSE": 5.14234030338287,
+            "RMSE": 2.2676728827992076,
+            "MedAE": 1.2766526341438293,
+            "Min Error": 0.020320892333984375,
+            "Max Error": 6.473372936248779
+        },
+        {
+            "File Name": "opt_adam_params_with_rpso_stats_noisy_data_set_standard_params",
+            "MAE": 1.5728081455153804,
+            "MSE": 3.940949298640487,
+            "RMSE": 1.9851824345990186,
+            "MedAE": 1.2216117680072784,
+            "Min Error": 0.08025741577148438,
+            "Max Error": 5.63095760345459
+        },
+        {
+            "File Name": "opt_sgd_params_with_gbest_stats_calm_data_set",
+            "MAE": 1.2675210727799324,
+            "MSE": 2.943607792511975,
+            "RMSE": 1.7156945510527142,
+            "MedAE": 1.085519790649414,
+            "Min Error": 0.014715194702148438,
+            "Max Error": 6.330258846282959
+        },
+        {
+            "File Name": "opt_sgd_params_with_gbest_stats_calm_data_set",
+            "MAE": 1.399831268095201,
+            "MSE": 3.261003792737307,
+            "RMSE": 1.8058249618214128,
+            "MedAE": 1.0491626262664795,
+            "Min Error": 0.0277254581451416,
+            "Max Error": 5.417476654052734
+        },
+        {
+            "File Name": "opt_sgd_params_with_gbest_stats_calm_data_set",
+            "MAE": 1.4082359652365408,
+            "MSE": 3.010363893100605,
+            "RMSE": 1.7350400263684422,
+            "MedAE": 1.1158299446105957,
+            "Min Error": 0.09079170227050781,
+            "Max Error": 4.6139116287231445
+        },
+        {
+            "File Name": "opt_sgd_params_with_gbest_stats_noisy_data_set",
+            "MAE": 1.5315091129272216,
+            "MSE": 3.6760528887306583,
+            "RMSE": 1.917303546319846,
+            "MedAE": 1.2672414779663086,
+            "Min Error": 0.23707818984985352,
+            "Max Error": 4.7188615798950195
+        },
+        {
+            "File Name": "opt_sgd_params_with_gbest_stats_noisy_data_set",
+            "MAE": 1.529535807909504,
+            "MSE": 4.199128223661488,
+            "RMSE": 2.0491774505058094,
+            "MedAE": 1.1748369932174683,
+            "Min Error": 0.007136821746826172,
+            "Max Error": 7.0522356033325195
+        },
+        {
+            "File Name": "opt_sgd_params_with_gbest_stats_noisy_data_set",
+            "MAE": 1.456519269174145,
+            "MSE": 3.9826644651817817,
+            "RMSE": 1.9956614104556367,
+            "MedAE": 1.0930335521697998,
+            "Min Error": 0.05622291564941406,
+            "Max Error": 8.177143096923828
+        },
+        {
+            "File Name": "opt_ann_gbest_uniform_distribution_search_calm_data_set_100_runs",
+            "MAE": 1.7787921601726162,
+            "MSE": 5.202921865939233,
+            "RMSE": 2.280991421715398,
+            "MedAE": 1.388570785522461,
+            "Min Error": 0.07222867012023926,
+            "Max Error": 7.430402755737305
+        },
+        {
+            "File Name": "opt_ann_rpso_uniform_distribution_search_100_runs",
+            "MAE": 1.3046840333169507,
+            "MSE": 2.829205893505276,
+            "RMSE": 1.6820243439098246,
+            "MedAE": 1.0727152824401855,
+            "Min Error": 0.00225067138671875,
+            "Max Error": 5.1903228759765625
+        }
+    ]
+}

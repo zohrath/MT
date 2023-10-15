@@ -1,4 +1,5 @@
 from functools import partial
+import itertools
 import multiprocessing
 import sys
 import numpy as np
@@ -10,12 +11,21 @@ from Statistics import create_pso_run_stats
 from pso_options import create_model
 from random_search_values import get_vals_pso_opt_adam_params
 
+def numpy_to_list(obj):
+    if isinstance(obj, np.ndarray):
+        return obj.tolist()
+    elif isinstance(obj, list):
+        return [numpy_to_list(item) for item in obj]
+    elif isinstance(obj, dict):
+        return {key: numpy_to_list(value) for key, value in obj.items()}
+    else:
+        return obj
 
 def fitness_function(particle):
     try:
         learning_rate, beta_1, beta_2 = particle
 
-        adam_optimizer = tf.keras.optimizers.legacy.Adam(
+        adam_optimizer = tf.keras.optimizers.Adam(
             learning_rate=learning_rate,
             beta_1=beta_1,
             beta_2=beta_2,
@@ -30,7 +40,7 @@ def fitness_function(particle):
         # Define the EarlyStopping callback
         early_stopping = tf.keras.callbacks.EarlyStopping(
             monitor="val_loss",  # Metric to monitor (usually validation loss)
-            patience=500,  # Number of epochs with no improvement after which training will stop
+            patience=50,  # Number of epochs with no improvement after which training will stop
             restore_best_weights=True,
         )
 
@@ -49,7 +59,7 @@ def fitness_function(particle):
         if np.isnan(loss):
             loss = float("inf")
 
-        return np.sqrt(loss)
+        return np.sqrt(loss), model.get_weights()
     except tf.errors.InvalidArgumentError as e:
         # Handle the specific exception here
         print("Caught an InvalidArgumentError:", e)
@@ -149,6 +159,7 @@ def run_pso(
         swarm.swarm_best_position,
         swarm.swarm_fitness_history,
         swarm.swarm_position_history,
+        swarm.swarm_best_model_weights
     )
 
 
@@ -199,6 +210,7 @@ if __name__ == "__main__":
             swarm_best_position,
             swarm_fitness_history,
             swarm_position_history,
+            swarm_best_model_weights
         ) = zip(*results)
 
         mean_best_fitness = np.mean(swarm_best_fitness)
@@ -206,6 +218,10 @@ if __name__ == "__main__":
         max_best_fitness = np.max(swarm_best_fitness)
         best_swarm_fitness_index = np.where(swarm_best_fitness == min_best_fitness)
         best_swarm_position = swarm_best_position[best_swarm_fitness_index[0][0]]
+
+        best_swarm_weights = swarm_best_model_weights[best_swarm_fitness_index[0][0]]
+        best_swarm_weights = numpy_to_list(best_swarm_weights)
+        best_swarm_weights = list(itertools.chain(*best_swarm_weights))
 
         sys.stdout.write(
             f"Minimum fitness for {total_pso_runs} runs: {min_best_fitness}. Mean: {mean_best_fitness}. Max: {max_best_fitness}. Best value: {best_swarm_position}\n"
@@ -228,4 +244,5 @@ if __name__ == "__main__":
             c2,
             threshold,
             elapsed_time,
+            best_swarm_weights
         )

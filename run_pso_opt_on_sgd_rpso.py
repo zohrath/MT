@@ -1,5 +1,6 @@
 # Run RPSO to optimize the params of the adam optimizer here
 from functools import partial
+import itertools
 import multiprocessing
 import sys
 import numpy as np
@@ -11,24 +12,32 @@ from Statistics import create_pso_run_stats_rpso
 from pso_options import create_model
 from random_search_values import get_vals_pso_opt_adam_params
 
-# Do the same type of random search for params with this as done with gbest, but group cp and cg together
+def numpy_to_list(obj):
+    if isinstance(obj, np.ndarray):
+        return obj.tolist()
+    elif isinstance(obj, list):
+        return [numpy_to_list(item) for item in obj]
+    elif isinstance(obj, dict):
+        return {key: numpy_to_list(value) for key, value in obj.items()}
+    else:
+        return obj
 
 
 def fitness_function(particle):
     try:
         learning_rate, momentum, weight_decay = particle
 
-        sgd_optimizer = tf.keras.optimizers.legacy.SGD(
+        sgd_optimizer = tf.keras.optimizers.SGD(
             learning_rate=learning_rate,
             momentum=momentum,
-            decay=weight_decay,
+            weight_decay=weight_decay,
             nesterov=False,  # Set to True if you want to enable Nesterov momentum
         )
 
         model, _ = create_model()
         model.compile(optimizer=sgd_optimizer, loss="mse")
 
-        X_train, X_test, y_train, y_test, scaler = get_fingerprinted_data()
+        X_train, X_test, y_train, y_test, scaler = get_fingerprinted_data_noisy()
 
         # Define the EarlyStopping callback
         early_stopping = tf.keras.callbacks.EarlyStopping(
@@ -52,7 +61,7 @@ def fitness_function(particle):
         if np.isnan(loss):
             loss = float("inf")
 
-        return np.sqrt(loss)
+        return np.sqrt(loss), model.get_weights()
     except tf.errors.InvalidArgumentError as e:
         # Handle the specific exception here
         print("Caught an InvalidArgumentError:", e)
@@ -132,23 +141,6 @@ param_sets = [
         "threshold": threshold,
         "function": function
     },
-    {
-        "model": model,
-        "iterations": iterations,
-        "num_particles": num_particles,
-        "num_dimensions": num_dimensions,
-        "position_bounds": position_bounds,
-        "velocity_bounds": velocity_bounds,
-        "Cp_min": Cp_min,
-        "Cp_max": Cp_max,
-        "Cg_min": Cg_min,
-        "Cg_max": Cg_max,
-        "w_main": w_min,
-        "w_max": w_max,
-        "gwn_std_dev": 0,
-        "threshold": threshold,
-        "function": function
-    },
 ]
 
 
@@ -188,6 +180,7 @@ def run_pso(thread_id, iterations, num_particles, position_bounds,
         swarm.swarm_best_position,
         swarm.swarm_fitness_history,
         swarm.swarm_position_history,
+        swarm.swarm_best_model_weights
     )
 
 # Run this for the four rpso params, 500 iterations for the ANN training, 20 PSO iterations and particles
@@ -198,7 +191,7 @@ def run_pso(thread_id, iterations, num_particles, position_bounds,
 
 
 if __name__ == "__main__":
-    total_pso_runs = multiprocessing.cpu_count() - 1
+    total_pso_runs = 9
 
     for params in param_sets:
         model, iterations, num_particles,\
@@ -231,6 +224,7 @@ if __name__ == "__main__":
             swarm_best_position,
             swarm_fitness_history,
             swarm_position_history,
+            swarm_best_model_weights
         ) = zip(*results)
 
         mean_best_fitness = np.mean(swarm_best_fitness)
@@ -239,6 +233,10 @@ if __name__ == "__main__":
         best_swarm_fitness_index = np.where(
             swarm_best_fitness == min_best_fitness)
         best_swarm_position = swarm_best_position[best_swarm_fitness_index[0][0]]
+
+        best_swarm_weights = swarm_best_model_weights[best_swarm_fitness_index[0][0]]
+        best_swarm_weights = numpy_to_list(best_swarm_weights)
+        best_swarm_weights = list(itertools.chain(*best_swarm_weights))
 
         sys.stdout.write(
             f"Minimum fitness for {total_pso_runs} runs: {min_best_fitness}. Mean: {mean_best_fitness}. Max: {max_best_fitness}. Best value: {best_swarm_position}\n"
@@ -264,5 +262,6 @@ if __name__ == "__main__":
             w_max,
             threshold,
             elapsed_time,
-            gwn_std_dev
+            gwn_std_dev,
+            best_swarm_weights
         )

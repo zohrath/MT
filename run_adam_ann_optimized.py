@@ -20,13 +20,13 @@ def run_ann_fitting(id, learning_rate, beta_1, beta_2):
     model.add(Dense(6, activation="relu"))
     model.add(Dense(2))
 
-    adam_optimizer = tf.keras.optimizers.legacy.Adam(
+    adam_optimizer = tf.keras.optimizers.Adam(
         learning_rate=learning_rate,
         beta_1=beta_1,
         beta_2=beta_2,
     )
 
-    X_train, X_test, y_train, y_test, scaler = get_fingerprinted_random_points_calm_data()
+    X_train, X_test, y_train, y_test, scaler = get_fingerprinted_data_noisy()
 
     # Define the EarlyStopping callback
     early_stopping = tf.keras.callbacks.EarlyStopping(
@@ -145,27 +145,28 @@ if __name__ == "__main__":
     # learning_rate = 0.05677689792466579
     # beta_1 = 0.6751472722094489
     # beta_2 = 0.848038363244917
-    learning_rate = 0.001
-    beta_1 = 0.9
-    beta_2 = 0.999
+  
+    learning_rate = 0.03493588115825588
+    beta_1 = 0.7284982255951089
+    beta_2 = 0.8632245088246844
     rmse_results = []
-    for run_id in range(10):
+    for run_id in range(100):
         rmse, best_model = run_ann_fitting(
             run_id, learning_rate, beta_1, beta_2)
         rmse_results.append(rmse)
-    print(np.mean(rmse_results))
-    # sub_dir = "unoptimized_adam_ann_stats"
-    # os.makedirs(sub_dir, exist_ok=True)
+    print(np.min(rmse_results))
+    sub_dir = "optimized_adam_model_for_verification"
+    os.makedirs(sub_dir, exist_ok=True)
 
-    # box_plot_filename = generate_box_plot(
-    #     sub_dir, rmse_results, learning_rate, beta_1, beta_2)
+    box_plot_filename = generate_box_plot(
+        sub_dir, rmse_results, learning_rate, beta_1, beta_2)
 
-    # best_model_filename = save_model(sub_dir, best_model)
+    best_model_filename = save_model(sub_dir, best_model)
 
-    # save_json_results(
-    #     sub_dir,
-    #     {"learning_rate": learning_rate, "beta_1": beta_1, "beta_2": beta_2},
-    #     rmse_results,
-    #     best_model_filename=best_model_filename,
-    #     box_plot_filename=box_plot_filename,
-    # )
+    save_json_results(
+        sub_dir,
+        {"learning_rate": learning_rate, "beta_1": beta_1, "beta_2": beta_2},
+        rmse_results,
+        best_model_filename=best_model_filename,
+        box_plot_filename=box_plot_filename,
+    )
