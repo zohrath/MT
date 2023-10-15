@@ -1,18 +1,4 @@
 import numpy as np
-from CostFunctions import (
-    ann_node_count_fitness,
-    get_fingerprinted_data,
-    get_regression_data,
-    linear_regression,
-    penalized1,
-    rastrigin,
-    rosenbrock,
-    schwefel,
-    sphere,
-)
-
-from Particle import Particle
-
 
 class RPSOParticle:
     def __init__(
@@ -194,9 +180,6 @@ class RPSO:
             )
 
         return particles
-
-    def run_linear_regression(self, particle, X_test, y_test):
-        return linear_regression(particle.position, X_test, y_test)
 
     def run_pso(self, model):
         for iter in range(self.iterations):

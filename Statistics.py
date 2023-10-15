@@ -1,223 +1,8 @@
 import json
 import os
 import time
+from matplotlib import pyplot as plt
 import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.metrics import explained_variance_score
-from sklearn.preprocessing import MinMaxScaler
-
-from CostFunctions import get_fingerprinted_data
-
-
-def get_final_model(model, particle):
-    for layer in model.layers:
-        weights = layer.get_weights()[0]
-        biases = layer.get_weights()[1]
-        num_weights = weights.size
-        num_biases = biases.size
-
-        # Slice off values from the continuous_values array for weights and biases
-        sliced_weights = particle[:num_weights]
-        sliced_biases = particle[num_weights: num_weights + num_biases]
-
-        # Update the continuous_values array for the next iteration
-        particle = particle[num_weights + num_biases:]
-
-        # Set the sliced weights and biases in the layer
-        layer.set_weights(
-            [sliced_weights.reshape(weights.shape),
-             sliced_biases.reshape(biases.shape)]
-        )
-    return model
-
-
-def make_coordinate_prediction_with_ann_model(model, swarm_best_position):
-    X_train, X_test, y_train, y_test = get_fingerprinted_data()
-    finalModel = get_final_model(model, swarm_best_position)
-    predictions = finalModel.predict(X_test)
-    print(explained_variance_score(y_test, predictions))
-
-    # this should produce (1, 0)
-    some_position = [[75, 87, 80, 6920, 17112, 17286]]
-    # this should produce (8,6)
-    some_position_2 = [[72, 78, 81, 8503, 8420, 8924]]
-
-    scaler = MinMaxScaler()
-    scaler.fit(X_train)
-    transformed_some_position = scaler.transform(some_position_2)
-
-    x_value = finalModel.predict(transformed_some_position)
-    print(x_value)
-
-
-def get_ann_node_count(ann_nodes):
-    """
-    Calculate the sum of elements in each sub-array and return individual counts per array,
-    as well as the total count of all elements across all sub-arrays.
-
-    Parameters:
-    ann_nodes (list of np.ndarray): A list containing numpy arrays, each representing a sub-array.
-
-    Returns:
-    tuple: A tuple containing two elements:
-        - individual_ann_node_count (list of int): A list of sums of elements for each sub-array.
-        - total_nodes_count (int): Total count of all elements across all sub-arrays.
-    """
-
-    total_nodes_count = 0
-    individual_ann_node_count = []
-
-    for arr in ann_nodes:
-        count = len(arr)
-        total_nodes_count += count
-        arr_sum = np.sum(arr)
-        individual_ann_node_count.append(arr_sum)
-
-    return individual_ann_node_count, total_nodes_count
-
-
-# def get_swarm_total_particle_distance():
-#     data = np.load("history_data.npy")
-#     print("Total: ", data)
-#     print("----------------")
-#     for run_num, pso_run in enumerate(data):
-#         print("Run: ", run_num, pso_run)
-#         for iteration, swarm_positions in enumerate(pso_run):
-#             print(f"Positions for iteration {iteration + 1}: ", swarm_positions)
-#             for particle_num, particle_position in enumerate(swarm_positions):
-#                 print(
-#                     f"Particle position for particle {particle_num}: ",
-#                     particle_position,
-#                 )
-
-
-def calculate_distance(position1, position2):
-    return np.linalg.norm(position1 - position2)
-
-
-def get_swarm_total_particle_distance(data):
-    """
-    Calculate the total distance between particles for each iteration of each PSO run.
-
-    This function computes the total distance between all pairs of particles in each iteration
-    of every PSO run and returns a nested structure representing these distances.
-
-    Parameters:
-        data (list of lists of lists): A 3D list containing the position histories
-            of particles for each iteration within each PSO run.
-            Format: [ [ [run1_iter1_positions], [run1_iter2_positions], ... ],
-                      [ [run2_iter1_positions], [run2_iter2_positions], ... ],
-                      ... ]
-
-    Returns:
-        list of lists: A nested structure representing the total distances between particles.
-            The outermost list corresponds to different PSO runs, the inner lists correspond
-            to iterations within each run, and each element of the inner lists represents
-            the total distance for that iteration.
-            Format: [ [run1_iter1_distance, run1_iter2_distance, ... ],
-                      [run2_iter1_distance, run2_iter2_distance, ... ],
-                      ... ]
-
-    Example:
-        >>> swarm_positions = [ [ [iter1_particle1, iter1_particle2, ...], [iter2_particle1, iter2_particle2, ...], ... ],
-        >>>                     [ [iter1_particle1, iter1_particle2, ...], [iter2_particle1, iter2_particle2, ...], ... ],
-        >>>                     ... ]
-        >>> distances = get_swarm_total_particle_distance(swarm_positions)
-
-    Note:
-        The input data structure is expected to be organized as a list of PSO runs,
-        where each run contains lists of particle positions for each iteration.
-    """
-    total_distances = []
-
-    for run_num, pso_run in enumerate(data):
-        run_distances = []
-
-        for iteration, swarm_positions in enumerate(pso_run):
-            iteration_distance = 0
-
-            for particle_num, particle_position in enumerate(swarm_positions):
-                for other_particle_num, other_particle_position in enumerate(
-                    swarm_positions
-                ):
-                    if particle_num != other_particle_num:
-                        distance = calculate_distance(
-                            particle_position, other_particle_position
-                        )
-                        iteration_distance += distance
-
-            run_distances.append(iteration_distance)
-
-        total_distances.append(run_distances)
-
-    return total_distances
-
-
-def plot_average_total_distance(swarm_position_histories, pso_type, save_image=True):
-    """
-    Plot and visualize the average total particle distances over iterations for multiple PSO runs.
-
-    This function calculates the average total particle distance for each iteration
-    across multiple PSO runs and generates a plot to visualize the trend.
-
-    Parameters:
-        swarm_position_histories (list of lists of lists): A 3D list containing the position histories
-            of particles for each iteration within each PSO run.
-            Format: [
-                    [
-                        [run1_iter1_positions], [run1_iter2_positions], ... ],
-                    [
-                        [run2_iter1_positions], [run2_iter2_positions], ... ],
-                    ... ]
-
-        pso_type (str): Type of the PSO algorithm for labeling the plot and filename.
-
-        save_image (bool, optional): Whether to save the plot as an image. Default is True.
-
-    Returns:
-        None. Generates a plot showing the average total particle distances over iterations.
-
-    Example:
-        >>> swarm_positions = [ [ [iter1_particle1, iter1_particle2, ...], [iter2_particle1, iter2_particle2, ...], ... ],
-        >>>                     [ [iter1_particle1, iter1_particle2, ...], [iter2_particle1, iter2_particle2, ...], ... ],
-        >>>                     ... ]
-        >>> plot_average_total_distance(swarm_positions, "PSO_Type_A")
-
-    Note:
-        This function assumes that the input data structure is organized as a list of PSO runs,
-        where each run is represented as a list of iterations, and each iteration is a list
-        containing the particle positions for that specific iteration.
-    """
-    total_distances = get_swarm_total_particle_distance(
-        swarm_position_histories)
-    average_distances = np.mean(total_distances, axis=0)
-    plt.plot(average_distances, label="Average Total Distance")
-
-    if save_image:
-        sub_folder = f"{pso_type}_stats"
-        if not os.path.exists(sub_folder):
-            os.makedirs(sub_folder)
-        timestamp = time.strftime("%Y-%m-%d_%H-%M-%S")
-        plt.xlabel("Iteration")
-        plt.ylabel("Total Particle Distance")
-        plt.title("Average Total Particle Distance over Iterations")
-        plt.legend()
-        file_name = os.path.join(
-            sub_folder, f"average_distance_plot_{timestamp}.png")
-        plt.savefig(file_name)
-
-        # Save results in a JSON file
-        json_data = {
-            "pso_type": pso_type,
-            "total_distances": total_distances,
-            "average_distances": average_distances.tolist(),
-        }
-        json_file_name = f"average_distance_{timestamp}.json"
-        json_file_path = os.path.join(sub_folder, json_file_name)
-
-        with open(json_file_path, "w") as json_file:
-            json.dump(json_data, json_file, indent=4)
-
 
 def save_test_func_rpso_stats(
     fitness_histories,
@@ -483,155 +268,6 @@ def save_opt_ann_gbest_stats(
     with open(json_file_path, "w") as json_file:
         json.dump(json_data, json_file, indent=4)
 
-
-def plot_averages_fitness_histories(fitness_histories, pso_type, pso_runs):
-    """
-    Saves an image with a history of the average fitness values of multiple PSO runs
-
-    Parameters:
-        fitness_histories (Array of arrays): Numbers of the fitness value of the swarm for each iteration
-
-    Returns:
-        Nothing, saves an image locally
-
-    Example:
-        >>> plot_averages_fitness_histories([[1,2,3], [2,4,6], [7,8,9]])
-    """
-
-    # Calculate the averages for each position
-    averages = np.mean(fitness_histories, axis=0)
-
-    # Generate the x-axis positions for the points
-    x_positions = np.arange(1, len(averages) + 1)
-
-    plt.figure()
-    # Plot the points
-    plt.scatter(x_positions, averages, label="Averages", color="blue")
-
-    # Plot the lines between the points
-    plt.plot(x_positions, averages, linestyle="-", color="blue")
-
-    # Add labels and title
-    plt.xlabel("Element Position")
-    plt.ylabel("Average Value")
-    plt.title(f"Average fitness histories of {pso_runs} PSO runs")
-    f"{str(pso_type)}"
-
-    # Show the plot
-    plt.legend()
-    plt.grid(True)
-
-    sub_folder = f"{pso_type}_stats"
-    if not os.path.exists(sub_folder):
-        os.makedirs(sub_folder)
-
-    timestamp = time.strftime("%Y-%m-%d_%H-%M-%S")
-    file_name = os.path.join(
-        sub_folder, f"average_fitness_histories_{timestamp}.png")
-    plt.savefig(file_name)
-
-    # Save results in a JSON file
-    json_data = {
-        "pso_type": pso_type,
-        "pso_runs": pso_runs,
-        "fitness_histories": fitness_histories,
-        "averages": averages.tolist(),
-    }
-    json_file_name = f"average_fitness_histories_{timestamp}.json"
-    json_file_path = os.path.join(sub_folder, json_file_name)
-
-    with open(json_file_path, "w") as json_file:
-        json.dump(json_data, json_file, indent=4)
-
-
-def create_pso_sgd_run_stats(
-    swarm_position_history,
-    fitness_histories,
-    options,
-    pso_type,
-    pso_runs,
-    best_swarm_position,
-    *pso_params_used,
-):
-    sub_folder = f"opt_sgd_params_with_gbest_stats"
-
-    # Create a new structure for the desired output
-    output_data = []
-
-    # Define a run number counter
-    run_number = 0
-
-    for run in swarm_position_history:
-        run_data = []
-        for iteration in run:
-            particle_data = {}
-            for i, particle in enumerate(iteration):
-                particle_key = f"p{i}"
-                particle_data[particle_key] = particle.tolist()
-            run_data.append(particle_data)
-        output_data.append({"run" + str(run_number): run_data})
-        run_number += 1
-
-    if not os.path.exists(sub_folder):
-        os.makedirs(sub_folder)
-
-    timestamp = time.strftime("%Y-%m-%d_%H-%M-%S")
-
-    # Get the final fitness values from each PSO run
-    fitness_values = np.array(
-        [fitness_history[-1] for fitness_history in fitness_histories]
-    )
-    min_fitness = np.min(fitness_values)
-    mean_fitness = np.mean(fitness_values)
-    max_fitness = np.max(fitness_values)
-    std_dev_fitness = np.std(fitness_values)
-
-    (
-        iterations,
-        num_particles,
-        num_dimensions,
-        position_bounds,
-        velocity_bounds,
-        inertia,
-        c1,
-        c2,
-        threshold,
-        elapsed_time,
-    ) = pso_params_used
-    best_params = []
-    for param in best_swarm_position:
-        best_params.append(param)
-    json_data = {
-        "pso_type": pso_type,
-        "pso_runs": pso_runs,
-        "best_swarm_position": best_params,
-        "statistics": {
-            "min_fitness": min_fitness,
-            "mean_fitness": mean_fitness,
-            "max_fitness": max_fitness,
-            "std_dev_fitness": std_dev_fitness,
-        },
-        "function_name": options["function_name"],
-        "iterations": iterations,
-        "num_particles": num_particles,
-        "num_dimensions": num_dimensions,
-        "position_bounds": position_bounds,
-        "velocity_bounds": velocity_bounds,
-        "inertia": inertia,
-        "c1": c1,
-        "c2": c2,
-        "threshold": threshold,
-        "fitness_histories": fitness_histories,
-        "position_histories": output_data,
-        "elapsed_time": elapsed_time,
-    }
-    json_file_name = f"optimize_ann_optimizer_params_{timestamp}.json"
-    json_file_path = os.path.join(sub_folder, json_file_name)
-
-    with open(json_file_path, "w") as json_file:
-        json.dump(json_data, json_file, indent=4)
-
-
 def create_pso_run_stats(
     swarm_position_history,
     fitness_histories,
@@ -820,97 +456,422 @@ def create_pso_run_stats_rpso(
         json.dump(json_data, json_file, indent=4)
 
 
-def get_particle_dimension_history(
-    swarm_position_histories, particle_index, *dimension_indices
-):
-    """
-    Collects historical particle positions for specified dimensions from a series of runs.
+def plot_pso_averages_on_test_functions(file_path_gbest, file_path_rpso, start_iteration=100):
+    # Load the JSON data from the file
+    with open(file_path_gbest, 'r') as json_file:
+        data_gbest = json.load(json_file)
+    with open(file_path_rpso, 'r') as json_file:
+        data_rpso = json.load(json_file)
 
-    This function takes a series of runs, each containing iterations with particle positions,
-    and extracts historical positions for a specific particle and dimensions of interest.
+    # Extract relevant data
+    gbest_averages = data_gbest.get('averages', [])
+    rpso_averages = data_rpso.get('averages', [])
+    function_name = data_gbest.get('function_name')
 
-    Args:
-        swarm_position_histories (list): A list of runs, each containing iterations with particle positions.
-        particle_index (int): The index of the particle whose positions are being tracked.
-        *dimension_indices (int): Variable number of dimension indices to track positions for.
+    if not gbest_averages:
+        print("No data for averages found in the GBest JSON file.")
+        return
 
-    Returns:
-        list: A list of arrays containing historical positions for each specified dimension.
+    if not rpso_averages:
+        print("No data for averages found in the RPSO JSON file.")
+        return
 
-    Example:
-        swarm_positions = [
-            [
-                [(1, 2, 3), (2, 3, 4), (3, 4, 5)],
-                [(4, 5, 6), (5, 6, 7), (6, 7, 8)]
-            ],
-            [
-                [(7, 8, 9), (8, 9, 10), (9, 10, 11)],
-                [(10, 11, 12), (11, 12, 13), (12, 13, 14)]
-            ]
-        ]
+    # Slice the averages array to start from the specified iteration
+    sliced_averages_gbest = gbest_averages[start_iteration - 1:]
+    sliced_averages_rpso = rpso_averages[start_iteration - 1:]
 
-        history = plot_particle_dimension_history(swarm_positions, 0, 1, 2)
-        # Returns: [[2, 5, 8], [3, 6, 9], [4, 7, 10]]
-    """
-    particle_position_history = []
+    # Create a figure for the averages plot
+    plt.figure(figsize=(10, 6))
 
-    for run in swarm_position_histories:
-        run_positions = [[] for _ in range(len(dimension_indices))]
+    # Plot GBest data with a blue line and label
+    gbest_line, = plt.plot(sliced_averages_gbest,
+                           label='GBest Averages', color='blue')
 
-        for iteration in run:
-            dimensional_positions = iteration[particle_index]
+    # Plot RPSO data with a red line and label
+    rpso_line, = plt.plot(sliced_averages_rpso,
+                          label='RPSO Averages', color='red')
 
-            for i, dim_idx in enumerate(dimension_indices):
-                if dim_idx < len(dimensional_positions):
-                    position = dimensional_positions[dim_idx]
-                    run_positions[i].append(position)
+    plt.title('Averages Plot for GBest and RPSO')
+    plt.xlabel('Iteration')
+    plt.ylabel('Average Value')
+    plt.grid()
 
-        particle_position_history.append(run_positions)
+    # Extract the fitness values from data_gbest and data_rpso
+    gbest_min_fitness = data_gbest.get('min_best_fitness')
+    gbest_mean_fitness = data_gbest.get('mean_best_fitness')
+    gbest_max_fitness = data_gbest.get('max_best_fitness')
 
-    # Save results in a JSON file
-    json_data = {"particle_dimension_history": particle_position_history}
-    timestamp = time.strftime("%Y-%m-%d_%H-%M-%S")
-    json_file_name = f"particle_dimension_history_{timestamp}.json"
+    rpso_min_fitness = data_rpso.get('min_best_fitness')
+    rpso_mean_fitness = data_rpso.get('mean_best_fitness')
+    rpso_max_fitness = data_rpso.get('max_best_fitness')
 
-    with open(json_file_name, "w") as json_file:
-        json.dump(json_data, json_file, indent=4)
+    # Add fitness values to the legend
+    legend_labels = [
+        f'GBest \nMin: {gbest_min_fitness:.5f}\nMean: {gbest_mean_fitness:.5f}\nMax: {gbest_max_fitness:.5f}',
+        f'RPSO \nMin: {rpso_min_fitness:.5f}\nMean: {rpso_mean_fitness:.5f}\nMax: {rpso_max_fitness:.5f}'
+    ]
 
-    return particle_position_history
+    # Create a custom legend
+    plt.legend(handles=[gbest_line, rpso_line], labels=legend_labels)
 
+    # Save the plot with a fixed filename
+    json_folder = os.path.dirname(file_path_gbest)
+    plot_filename = f'stats_{function_name}.png'
+    plot_filepath = os.path.join(json_folder, plot_filename)
 
-def plot_particle_positions(swarm_position_histories, particle_index, *dimensions):
-    particle_position_history = get_particle_dimension_history(
-        swarm_position_histories, particle_index, *dimensions
-    )
-    """
-    Plots historical particle positions of one particle
+    # bbox_inches='tight' ensures that the legend is not cut off
+    plt.savefig(plot_filepath, bbox_inches='tight')
 
-    Args:
-        particle_position_history (list): A list of lists of arrays containing historical positions
-        for each specified dimension, separated by runs.
-    """
-    for run_idx, run_positions in enumerate(particle_position_history):
-        # Create a new figure
-        plt.figure()
-
-        # Plot lines for each data sublist
-        for i, line_data in enumerate(run_positions):
-            plt.plot(line_data, marker="o", label=f"Dimension {i}")
-
-        # Add labels and title
-        plt.xlabel("Iteration number")
-        plt.ylabel("Position value")
-        plt.title(
-            f"Particle X's position in {len(run_positions)} different dimensions")
-        plt.legend()
-        # Show the plot
-        plt.show()
+    # Show the plot
+    plt.show()
 
 
-def handle_data(
-    fitness_histories, swarm_position_histories, PSO_TYPE, pso_runs, options
-):
-    plot_average_total_distance(swarm_position_histories, PSO_TYPE)
-    plot_averages_fitness_histories(fitness_histories, PSO_TYPE, pso_runs)
-    plot_all_fitness_histories(fitness_histories, options, PSO_TYPE, pso_runs)
-    # plot_particle_positions(swarm_position_histories, 0, 0, 1, 2)
+def plot_rpso_averages(file_path, start_iteration=0):
+    # Load the JSON data from the file
+    with open(file_path, 'r') as json_file:
+        data = json.load(json_file)
+
+    # Extract relevant data
+    rpso_type = data['pso_type']
+    averages = data.get('averages', [])
+
+    if not averages:
+        print("No data for averages found in the JSON file.")
+        return
+
+    # Slice the averages array to start from the specified iteration
+    sliced_averages = averages[start_iteration - 1:]
+
+    # Create a figure for the averages plot
+    plt.figure(figsize=(10, 6))
+    plt.plot(sliced_averages, label='Averages', color='blue')
+
+    plt.title(f'Averages Plot for {rpso_type}')
+    plt.xlabel('Iteration')
+    plt.ylabel('Average Value')
+    plt.grid()
+    plt.legend()
+
+    # Save the plot as an image in the same folder as the JSON file
+    json_folder = os.path.dirname(file_path)
+    plot_filename = os.path.splitext(os.path.basename(file_path))[
+        0] + '_rpso_averages_plot.png'
+    plot_filepath = os.path.join(json_folder, plot_filename)
+    # bbox_inches='tight' ensures that the legend is not cut off
+    plt.savefig(plot_filepath, bbox_inches='tight')
+
+    # Show the plot
+    plt.show()
+
+
+def plot_rpso_fitness_histories(file_path):
+    # Load the JSON data from the file
+    with open(file_path, 'r') as json_file:
+        data = json.load(json_file)
+
+    # Extract relevant data
+    rpso_type = data['pso_type']
+    fitness_histories = data['fitness_histories']
+
+    # Create a figure for the combined plot
+    plt.figure(figsize=(10, 6))
+
+    # Plot each fitness history with a different color
+    for i, history in enumerate(fitness_histories):
+        plt.plot(history, label=f'History {i + 1}')
+
+    plt.title(f'All Fitness Histories for {rpso_type}')
+    plt.xlabel('Iterations')
+    plt.ylabel('Fitness Value')
+    plt.grid()
+
+    # Hardcoded legend labels
+    legend_labels = [f'Cp_min = {data["Cp_min"]}', f'Cp_max = {data["Cp_max"]}', f'Cg_min = {data["Cg_min"]}',
+                     f'Cg_max = {data["Cg_max"]}', f'w_min = {data["w_min"]}', f'w_max = {data["w_max"]}',
+                     f'gwn_std_dev = {data["gwn_std_dev"]}']
+    plt.legend(legend_labels, loc='upper right', bbox_to_anchor=(1.0, 0.85))
+
+    # Save the plot as an image in the same folder as the JSON file
+    json_folder = os.path.dirname(file_path)
+    plot_filename = os.path.splitext(os.path.basename(file_path))[
+        0] + '_rpso_fitness_histories_plot.png'
+    plot_filepath = os.path.join(json_folder, plot_filename)
+    # bbox_inches='tight' ensures that the legend is not cut off
+    plt.savefig(plot_filepath, bbox_inches='tight')
+
+    # Show the plot
+    plt.show()
+
+
+def rpso_box_plot(file_path):
+    # Load the JSON data from the file
+    with open(file_path, 'r') as json_file:
+        data = json.load(json_file)
+
+    # Extract relevant data
+    rpso_type = data['pso_type']
+    fitness_histories = data['fitness_histories']
+
+    # Extract the final fitness values from each history
+    final_fitness_values = [history[-1] for history in fitness_histories]
+
+    # Find the best and worst fitness values among all histories
+    best_fitness = min(final_fitness_values)
+    worst_fitness = max(final_fitness_values)
+
+    # Calculate mean, standard deviation, and other statistics
+    mean_fitness = np.mean(final_fitness_values)
+    std_deviation = np.std(final_fitness_values)
+    median_fitness = np.median(final_fitness_values)
+
+    # Extract additional data for the legend
+    gwn_std_dev = data.get('gwn_std_dev', '')
+
+    # Create a horizontal box plot with increased width
+    plt.figure(figsize=(10, 6))  # Adjust the figsize for a wider image
+    boxplot = plt.boxplot(final_fitness_values, vert=False)
+    plt.title(f'Final Fitness Histories for {rpso_type}')
+    plt.xlabel('Final Fitness Value')
+
+    # Adjust the horizontal positions for the "Best" and "Worst" labels
+    offset = 0.1  # Vertical offset for text labels
+    best_x = best_fitness - 0.5  # Slightly to the right
+    worst_x = worst_fitness + 0.5  # Slightly to the left
+    plt.text(best_x, 1 + offset, f'Best: {best_fitness:.3f}',
+             horizontalalignment='left', verticalalignment='center')
+    plt.text(worst_x, 1 + offset, f'Worst: {worst_fitness:.3f}',
+             horizontalalignment='right', verticalalignment='center')
+
+    # Set the x-axis range to 1 to 5 with 0.5 increments
+    plt.xticks(np.arange(1, 5.5, 0.5))
+
+    # Remove y-axis tick labels
+    plt.yticks([])
+
+    # Add a legend on the right-hand side with custom labels
+    legend_labels = [f'Cp_min = {data["Cp_min"]}', f'Cp_max = {data["Cp_max"]}', f'Cg_min = {data["Cg_min"]}',
+                     f'Cg_max = {data["Cg_max"]}', f'w_min = {data["w_min"]}', f'w_max = {data["w_max"]}',
+                     f'gwn_std_dev = {gwn_std_dev}']
+    plt.legend(legend_labels, loc='upper right', bbox_to_anchor=(1.0, 1.0))
+
+    # Save the plot as an image in the same folder as the JSON file
+    json_folder = os.path.dirname(file_path)
+    plot_filename = os.path.splitext(os.path.basename(file_path))[
+        0] + '_rpso_box_plot.png'
+    plot_filepath = os.path.join(json_folder, plot_filename)
+    # bbox_inches='tight' ensures that the legend is not cut off
+    plt.savefig(plot_filepath, bbox_inches='tight')
+
+    # Show the plot
+    plt.show()
+
+    # Display the statistics
+    print(f"Best Final Fitness: {best_fitness:.3f}")
+    print(f"Worst Final Fitness: {worst_fitness:.3f}")
+    print(f"Mean Final Fitness: {mean_fitness:.3f}")
+    print(f"Standard Deviation: {std_deviation:.3f}")
+    print(f"Median Final Fitness: {median_fitness:.3f}")
+
+
+def plot_averages(file_path):
+    # Load the JSON data from the file
+    with open(file_path, 'r') as json_file:
+        data = json.load(json_file)
+
+    # Extract relevant data
+    pso_type = data['pso_type']
+    averages = data.get('averages', [])
+
+    if not averages:
+        print("No data for averages found in the JSON file.")
+        return
+
+    # Create a figure for the averages plot
+    plt.figure(figsize=(10, 6))
+    plt.plot(averages, label='Averages', color='blue')
+
+    plt.title(f'Averages Plot for {pso_type}')
+    plt.xlabel('Iteration')
+    plt.ylabel('Average Value')
+    plt.grid()
+    plt.legend()
+
+    # Save the plot as an image in the same folder as the JSON file
+    json_folder = os.path.dirname(file_path)
+    plot_filename = os.path.splitext(os.path.basename(file_path))[
+        0] + '_averages_plot.png'
+    plot_filepath = os.path.join(json_folder, plot_filename)
+    # bbox_inches='tight' ensures that the legend is not cut off
+    plt.savefig(plot_filepath, bbox_inches='tight')
+
+    # Show the plot
+    plt.show()
+
+
+def plot_fitness_histories(file_path):
+    # Load the JSON data from the file
+    with open(file_path, 'r') as json_file:
+        data = json.load(json_file)
+
+    # Extract relevant data
+    pso_type = data['pso_type']
+    fitness_histories = data['fitness_histories']
+
+    # Create a figure for the combined plot
+    plt.figure(figsize=(10, 6))
+
+    # Plot each fitness history with a different color
+    for i, history in enumerate(fitness_histories):
+        plt.plot(history, label=f'History {i + 1}')
+
+    plt.title(f'All Fitness Histories for {pso_type}')
+    plt.xlabel('Iterations')
+    plt.ylabel('Fitness Value')
+    plt.grid()
+
+    # Hardcoded legend labels
+    legend_labels = [f'c1 = {data["c1"]}', f'c2 = {data["c2"]}', f'w = {data["inertia"]}',
+                     f'Particles = {data.get("num_particles", "")}', f'Iterations = {data.get("iterations", "")}']
+    plt.legend(legend_labels, loc='upper right', bbox_to_anchor=(1.0, 0.85))
+
+    # Save the plot as an image in the same folder as the JSON file
+    json_folder = os.path.dirname(file_path)
+    plot_filename = os.path.splitext(os.path.basename(file_path))[
+        0] + '_fitness_histories_plot.png'
+    plot_filepath = os.path.join(json_folder, plot_filename)
+    # bbox_inches='tight' ensures that the legend is not cut off
+    plt.savefig(plot_filepath, bbox_inches='tight')
+
+    # Show the plot
+    plt.show()
+
+
+def gbest_box_plot(file_path):
+    # Load the JSON data from the file
+    with open(file_path, 'r') as json_file:
+        data = json.load(json_file)
+
+    # Extract relevant data
+    pso_type = data['pso_type']
+    fitness_histories = data['fitness_histories']
+
+    # Extract the final fitness values from each history
+    final_fitness_values = [history[-1] for history in fitness_histories]
+
+    # Find the best and worst fitness values among all histories
+    best_fitness = min(final_fitness_values)
+    worst_fitness = max(final_fitness_values)
+
+    # Calculate mean, standard deviation, and other statistics
+    mean_fitness = np.mean(final_fitness_values)
+    std_deviation = np.std(final_fitness_values)
+    median_fitness = np.median(final_fitness_values)
+
+    # Extract additional data for the legend
+    num_particles = data.get('num_particles', '')
+    iterations = data.get('iterations', '')
+
+    # Create a horizontal box plot of the final fitness values with the x-axis range set to 1 to 5 with 0.5 increments
+    plt.figure(figsize=(8, 4))  # Adjust the figsize for a shorter y-axis
+    boxplot = plt.boxplot(final_fitness_values, vert=False)
+    plt.title(f'Final Fitness Histories for {pso_type}')
+    plt.xlabel('Final Fitness Value')
+
+    # Adjust the horizontal positions for the "Best" and "Worst" labels
+    offset = 0.1  # Vertical offset for text labels
+    best_x = best_fitness + 0.03  # Slightly to the right
+    worst_x = worst_fitness + 1.3  # Slightly to the left
+    plt.text(best_x, 1 + offset, f'Best: {best_fitness:.3f}',
+             horizontalalignment='left', verticalalignment='center')
+    plt.text(worst_x, 1 + offset, f'Worst: {worst_fitness:.3f}',
+             horizontalalignment='right', verticalalignment='center')
+
+    # Set the x-axis range to 1 to 5 with 0.5 increments
+    plt.xticks(np.arange(1, 5.5, 0.5))
+
+    # Remove y-axis tick labels
+    plt.yticks([])
+
+    # Add a legend on the right-hand side with custom labels
+    legend_labels = [f'c1 = {data["c1"]}', f'c2 = {data["c2"]}', f'w = {data["inertia"]}',
+                     f'Particles = {num_particles}', f'Iterations = {iterations}']
+    plt.legend(legend_labels, loc='upper right', bbox_to_anchor=(1.0, 0.85))
+
+    # Save the plot as an image in the same folder as the JSON file
+    json_folder = os.path.dirname(file_path)
+    plot_filename = os.path.splitext(os.path.basename(file_path))[
+        0] + '_box_plot.png'
+    plot_filepath = os.path.join(json_folder, plot_filename)
+    # bbox_inches='tight' ensures that the legend is not cut off
+    plt.savefig(plot_filepath, bbox_inches='tight')
+
+    # Show the plot
+    plt.show()
+
+    # Display the statistics
+    print(f"Best Final Fitness: {best_fitness:.3f}")
+    print(f"Worst Final Fitness: {worst_fitness:.3f}")
+    print(f"Mean Final Fitness: {mean_fitness:.3f}")
+    print(f"Standard Deviation: {std_deviation:.3f}")
+    print(f"Median Final Fitness: {median_fitness:.3f}")
+
+def display_random_uniform_distribution_search_results():
+    # Specify the path to the sub-folder containing the JSON files
+    subfolder_path = 'opt_ann_gbest_uniform_distribution_search/calm_data_set/100_runs'
+
+    # Initialize an empty list to store the fitness values for each run
+    fitness_values = []
+
+    # Iterate through the JSON files in the sub-folder
+    for filename in os.listdir(subfolder_path):
+        if filename.endswith('.json'):
+            json_file_path = os.path.join(subfolder_path, filename)
+            with open(json_file_path, 'r') as json_file:
+                data = json.load(json_file)
+                fitness_histories = data['fitness_histories']
+                
+                # Extract the final values from each sub-array
+                final_values = [subarray[-1] for subarray in fitness_histories]
+                
+                # Append the final values for this run
+                fitness_values.append(final_values)
+
+    # Generate 'runs' based on the number of JSON files processed
+    runs = [f'Run {i+1}' for i in range(len(fitness_values))]
+
+    # Create a single vertical box plot for all runs
+    fig, ax = plt.subplots(figsize=(16, 6))
+
+    # Plot a box plot for all runs
+    ax.boxplot(fitness_values, vert=True, widths=0.7, showfliers=False, patch_artist=True)
+
+    # Set labels and title
+    ax.set_xticklabels(runs, rotation=45)
+    ax.set_xlabel('Runs')
+    ax.set_ylabel('Fitness Values')
+    ax.set_title('Box Plot of Fitness Values for All Runs')
+
+    # Remove borders around the box plots
+    for box in ax.artists:
+        box.set_edgecolor('black')
+
+    # Show the plot
+    plt.tight_layout()
+    plt.show()
+
+# Example usage:
+# file_path = './opt_ann_gbest_stats/stats_2023-09-24_17-06-41.json'
+# opt_ann_gbest_box_plot(file_path)
+# plot_fitness_histories(file_path)
+# plot_averages(file_path)
+# RPSO usage
+# Example usage:
+file_path_rpso = './opt_ann_rpso_stats/noisy_data_set/no_gwn_val/stats_2023-09-29_17-05-42.json'
+# plot_rpso_averages(file_path_rpso, 1)
+# rpso_box_plot(file_path_rpso)
+# plot_rpso_fitness_histories(file_path_rpso)
+
+# file_path_gbest = './opt_adam_params_with_gbest_stats/noisy_data_set/500_iterations_during_training/random_search_params/optimize_ann_optimizer_params_2023-10-12_13-57-08.json'
+# plot_fitness_histories(file_path_gbest)
+# gbest_box_plot(file_path_gbest)
+# plot_averages(file_path_gbest)
