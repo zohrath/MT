@@ -41,7 +41,6 @@ def get_fingerprinted_data_noisy():
 
 def get_fingerprinted_random_points_noisy_data():
     df = pd.read_csv("fingerprints-random-points-noisy.csv", delimiter=",")
-    df = df[(df['X'] % 2 == 0) | (df['Y'] % 2 == 0)]
     df = df.drop(
         [
             "AP1_dev",
@@ -57,9 +56,8 @@ def get_fingerprinted_random_points_noisy_data():
 
     free_variables = df.drop(["X", "Y"], axis=1).values
     dependent_variables = df[["X", "Y"]].values
-    
-    scaler = MinMaxScaler()
 
+    scaler = MinMaxScaler()
 
     free_variables = scaler.fit_transform(free_variables)
 
@@ -68,7 +66,6 @@ def get_fingerprinted_random_points_noisy_data():
 
 def get_fingerprinted_random_points_calm_data():
     df = pd.read_csv("fingerprints-random-points-calm.csv", delimiter=",")
-    df = df[(df['X'] % 2 == 0) | (df['Y'] % 2 == 0)]
     df = df.drop(
         [
             "AP1_dev",
@@ -84,9 +81,8 @@ def get_fingerprinted_random_points_calm_data():
 
     free_variables = df.drop(["X", "Y"], axis=1).values
     dependent_variables = df[["X", "Y"]].values
-    
-    scaler = MinMaxScaler()
 
+    scaler = MinMaxScaler()
 
     free_variables = scaler.fit_transform(free_variables)
 
@@ -121,6 +117,7 @@ def get_fingerprinted_data():
     X_test = scaler.transform(X_test)
 
     return X_train, X_test, y_train, y_test, scaler
+
 
 def sphere(x):
     return sum(x_i**2 for x_i in x)
@@ -231,4 +228,3 @@ def step(args, lower_bound=-5.0, upper_bound=5.0):
         if not (lower_bound <= x <= upper_bound):
             return 1
     return 0
-

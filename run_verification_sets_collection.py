@@ -26,14 +26,15 @@ def find_combined_best(json_file_path, top=5):
     stats = data.get('verification_stats', [])
 
     if not stats:
-        return []  
+        return []
 
     sorted_stats = sorted(stats, key=lambda x: x.get('MedAE', float('inf')))
 
     return sorted_stats[:top]
 
 
-X_test, y_test = get_fingerprinted_random_points_noisy_data()
+X_test, y_test = get_fingerprinted_random_points_calm_data()
+
 
 def get_ann_stats(weights):
     model, _ = create_model()
@@ -45,10 +46,11 @@ def get_ann_stats(weights):
 
         # Slice off values from the continuous_values array for weights and biases
         sliced_weights = np.array(weights[:num_weights])
-        sliced_biases = np.array(weights[num_weights : num_weights + num_biases])
+        sliced_biases = np.array(
+            weights[num_weights: num_weights + num_biases])
 
         # Update the continuous_values array for the next iteration
-        weights = weights[num_weights + num_biases :]
+        weights = weights[num_weights + num_biases:]
 
         # Set the sliced weights and biases in the layer
         layer.set_weights(
@@ -59,7 +61,7 @@ def get_ann_stats(weights):
         )
     try:
         model.compile(optimizer="adam", loss="mse")
-        
+
         # Use the model to predict coordinates for the entire verification set
         predicted_locations = model.predict(X_test)
 
@@ -76,7 +78,7 @@ def get_ann_stats(weights):
         min_error = np.min(absolute_errors)
         max_error = np.max(absolute_errors)
 
-        return mae, mse, rmse, medae, min_error, max_error
+        return mae, mse, rmse, medae, min_error, max_error, predicted_locations, absolute_errors
 
     except tf.errors.InvalidArgumentError as e:
         # Handle the specific exception here
@@ -101,6 +103,7 @@ def flatten_list(input_list):
         else:
             output_list.append(item)
     return output_list
+
 
 if __name__ == "__main__":
     # --------------- GBest Calm Data Set -----------------
@@ -147,7 +150,7 @@ if __name__ == "__main__":
     opt_adam_rpso_calm_2 = 'opt_adam_params_with_rpso_stats/calm_data_set/500_iterations_during_training/grid_search_params/optimize_ann_optimizer_params_2023-10-12_23-35-01.json'
     opt_adam_rpso_calm_3 = 'opt_adam_params_with_rpso_stats/calm_data_set/500_iterations_during_training/no_gwn_val/optimize_ann_optimizer_params_2023-10-13_10-58-25.json'
     opt_adam_rpso_calm_4 = 'opt_adam_params_with_rpso_stats/calm_data_set/500_iterations_during_training/random_search_params/optimize_ann_optimizer_params_2023-10-13_02-09-15.json'
-    
+
     # --------------- Adam With RPSO Noisy Data Set -------------------
     opt_adam_rpso_noisy_1 = 'opt_adam_params_with_rpso_stats/noisy_data_set/gridSearch_params/optimize_ann_optimizer_params_2023-10-12_15-48-52.json'
     opt_adam_rpso_noisy_2 = 'opt_adam_params_with_rpso_stats/noisy_data_set/no_gwn_val/optimize_ann_optimizer_params_2023-10-12_20-06-39.json'
@@ -176,12 +179,12 @@ if __name__ == "__main__":
 
     # --------------- GBest Random Search Calm Data Set -------------------
     opt_ann_random_search_gbest_calm = 'opt_ann_gbest_uniform_distribution_search/calm_data_set/100_runs/stats_2023-10-08_15-29-34.json'
-    
+
     # --------------- RPSO Random Search Calm Data Set -------------------
     opt_ann_random_search_rpso_calm = 'opt_ann_rpso_uniform_distribution_search/100_runs/stats_2023-10-09_21-01-27.json'
-    
+
     file_paths = [
-        opt_ann_gbest_calm_1, opt_ann_gbest_calm_2, opt_ann_gbest_calm_3, opt_ann_gbest_calm_4, 
+        opt_ann_gbest_calm_1, opt_ann_gbest_calm_2, opt_ann_gbest_calm_3, opt_ann_gbest_calm_4,
         opt_ann_gbest_noisy_1, opt_ann_gbest_noisy_2, opt_ann_gbest_noisy_3, opt_ann_gbest_noisy_4,
         opt_ann_rpso_calm_1, opt_ann_rpso_calm_2, opt_ann_rpso_calm_3, opt_ann_rpso_calm_4, opt_ann_rpso_calm_5, opt_ann_rpso_calm_6, opt_ann_rpso_calm_7,
         opt_ann_rpso_noisy_1, opt_ann_rpso_noisy_2, opt_ann_rpso_noisy_3, opt_ann_rpso_noisy_4, opt_ann_rpso_noisy_5, opt_ann_rpso_noisy_6,
@@ -201,7 +204,7 @@ if __name__ == "__main__":
     for json_file_path in file_paths:
         with open(json_file_path, 'r') as json_file:
             data = json.load(json_file)
-        
+
         try:
             ann_weights = data['best_weights']
         except KeyError:
@@ -209,13 +212,14 @@ if __name__ == "__main__":
                 ann_weights = flatten_list(data['best_swarm_weights'])
             except KeyError:
                 ann_weights = None
-        
-        mae, mse, rmse, medae, min_error, max_error = get_ann_stats(ann_weights)
+
+        mae, mse, rmse, medae, min_error, max_error, predicted_locations, absolute_errors = get_ann_stats(
+            ann_weights)
         stats = [mae, mse, rmse, medae, min_error, max_error]
 
         folder_names = json_file_path.split("/")
         folder_names.pop()
-        folder_names = [folder for folder in folder_names if folder] 
+        folder_names = [folder for folder in folder_names if folder]
         folder_names = "_".join(folder_names)
 
         subfolder = "verification_stats"
@@ -223,26 +227,27 @@ if __name__ == "__main__":
             os.mkdir(subfolder)
 
         stats_dict = {
-            "File Name": folder_names ,
+            "File Name": folder_names,
             "MAE": mae,
             "MSE": mse,
             "RMSE": rmse,
             "MedAE": medae,
             "Min Error": min_error,
             "Max Error": max_error,
+            "Predicted Locations": predicted_locations.tolist(),
+            "Absolute Errors": absolute_errors.tolist()
         }
 
         verification_stats.append(stats_dict)
 
     result_dict = {
-    "verification_stats": verification_stats
+        "verification_stats": verification_stats
     }
-
 
     subfolder = "verification_stats/noisy_random_set"
     if not os.path.exists(subfolder):
         os.mkdir(subfolder)
-    
+
     output_json_file_name = os.path.join(subfolder, "verification_stats.json")
 
     with open(output_json_file_name, "w") as json_file:
@@ -251,10 +256,7 @@ if __name__ == "__main__":
     print(f"Statistics saved to {output_json_file_name}")
 
     # json_file_path = "verification_stats/calm_random_set/verification_stats.json"
-    
+
     # best =find_combined_best(json_file_path, top=5)
     # for x in best:
     #     print(x)
-    
-
-
