@@ -19,7 +19,7 @@ class Particle:
         return [np.random.uniform(self.position_bounds[i][0], self.position_bounds[i][1]) for i in range(self.num_dimensions)]
 
     def initialize_particle_velocity(self):
-        return [np.random.uniform(self.velocity_bounds[i][0], self.velocity_bounds[i][1]) for i in range(self.num_dimensions)]
+        return [0 for i in range(self.num_dimensions)]
 
     def get_social_parameter(self, c2, swarm_best_position, particle_current_position):
         r2 = np.random.rand()
@@ -58,6 +58,8 @@ class Particle:
         for i in range(self.num_dimensions):
             updated_velocity[i] = np.clip(
                 updated_velocity[i], self.velocity_bounds[i][0], self.velocity_bounds[i][1])
+            if particle_current_position[i] >= self.position_bounds[i][1] or particle_current_position[i] <= self.position_bounds[i][0]:
+                updated_velocity[i] = -updated_velocity[i]
 
         return updated_velocity
 
@@ -65,8 +67,12 @@ class Particle:
         new_position = current_position + updated_particle_velocity
 
         for i in range(self.num_dimensions):
-            new_position[i] = np.clip(
-                new_position[i], self.position_bounds[i][0], self.position_bounds[i][1])
+            if new_position[i] > self.position_bounds[i][1]:
+                new_position[i] = 2 * \
+                    self.position_bounds[i][1] - new_position[i]
+            elif new_position[i] < self.position_bounds[i][0]:
+                new_position[i] = 2 * \
+                    self.position_bounds[i][0] - new_position[i]
 
         self.position_history.append(new_position)
 

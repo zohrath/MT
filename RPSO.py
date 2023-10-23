@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class RPSOParticle:
     def __init__(
         self,
@@ -47,12 +48,13 @@ class RPSOParticle:
 
     def initialize_particle_position(self):
         return np.array(
-            [np.random.uniform(p_min, p_max) for p_min, p_max in self.position_bounds]
+            [np.random.uniform(p_min, p_max)
+             for p_min, p_max in self.position_bounds]
         )
 
     def initialize_particle_velocity(self):
         return np.array(
-            [np.random.uniform(v_min, v_max) for v_min, v_max in self.velocity_bounds]
+            [0 for v_min, v_max in self.velocity_bounds]
         )
 
     def get_inertia_weight_parameter(self):
@@ -95,20 +97,28 @@ class RPSOParticle:
 
         updated_velocity = inertia_param + cognitive_param + social_param
 
-        updated_velocity = np.clip(
-            updated_velocity,
-            [v_min for v_min, _ in self.velocity_bounds],
-            [v_max for _, v_max in self.velocity_bounds],
-        )
+        for i in range(self.num_dimensions):
+            updated_velocity[i] = np.clip(
+                updated_velocity[i], self.velocity_bounds[i][0], self.velocity_bounds[i][1])
+            if (
+                self.position[i] >= self.position_bounds[i][1]
+                or self.position[i] <= self.position_bounds[i][0]
+            ):
+                updated_velocity[i] = -updated_velocity[i]
 
         self.velocity = updated_velocity
 
     def update_position(self):
-        new_position = np.clip(
-            self.position + self.velocity,
-            [p_min for p_min, _ in self.position_bounds],
-            [p_max for _, p_max in self.position_bounds],
-        )
+        new_position = self.position + self.velocity
+
+        for i in range(self.num_dimensions):
+            if new_position[i] >= self.position_bounds[i][1]:
+                new_position[i] = 2 * \
+                    self.position_bounds[i][1] - new_position[i]
+            elif new_position[i] <= self.position_bounds[i][0]:
+                new_position[i] = 2 * \
+                    self.position_bounds[i][0] - new_position[i]
+
         np.append(self.position_history, new_position)
         self.position = new_position
 
@@ -185,8 +195,8 @@ class RPSO:
         for iter in range(self.iterations):
             print("ITER", iter)
             for particle in self.particles:
-                fitness, weights = self.function(particle.position)
-                # fitness = self.function(particle.position, model)
+                # fitness, weights = self.function(particle.position)
+                fitness = self.function(particle.position, model)
                 # fitness = ann_node_count_fitness(particle.position)
                 if fitness < particle.best_fitness:
                     particle.best_fitness = fitness
@@ -195,7 +205,7 @@ class RPSO:
                     self.swarm_best_fitness = fitness
                     self.swarm_best_position = particle.position
                     self.iterations_since_improved = 0
-                    self.swarm_best_model_weights = weights
+                    # self.swarm_best_model_weights = weights
             # Check if fitness threshold has been reached
             if fitness <= self.threshold:
                 break

@@ -1091,6 +1091,34 @@ def generate_verification_set_absolute_error_histogram():
     plt.show()
 
 
-# generate_verification_set_absolute_error_histogram()
+def plot_fitness_histories_from_json(json_file_path):
+    # Get the full path to the JSON file, assuming it's in a subfolder named "data"
 
-create_verification_result_plot()
+    try:
+        with open(json_file_path, 'r') as file:
+            data = json.load(file)
+
+        fitness_histories = data.get("fitness_histories", [])
+
+        if not fitness_histories:
+            print("No fitness histories found in the JSON file.")
+            return
+
+        for history in fitness_histories:
+            plt.plot(history, label="Fitness History")
+
+        plt.xlabel('Generation')
+        plt.ylabel('Fitness Value')
+        plt.title('Fitness History Plot')
+        plt.legend()
+        plt.show()
+
+    except FileNotFoundError:
+        print(f"File '{json_file_path}' not found.")
+    except json.JSONDecodeError:
+        print(f"Error decoding JSON from '{json_file_path}'.")
+
+
+# Replace with the name of your JSON file
+json_file = "opt_ann_rpso_stats/stats_2023-10-23_12-12-21.json"
+# plot_fitness_histories_from_json(json_file)
