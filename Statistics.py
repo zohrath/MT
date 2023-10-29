@@ -3,6 +3,7 @@ import os
 import time
 from matplotlib import pyplot as plt
 import numpy as np
+import re
 
 
 def save_test_func_rpso_stats(
@@ -728,7 +729,7 @@ def plot_fitness_histories(file_path):
 
     plt.title(f'All Fitness Histories for {pso_type}')
     plt.xlabel('Iterations')
-    plt.ylabel('Fitness Value')
+    plt.ylabel('Fitness Value (meters)')
     plt.grid()
 
     # Hardcoded legend labels
@@ -777,7 +778,7 @@ def gbest_box_plot(file_path):
     plt.figure(figsize=(8, 4))  # Adjust the figsize for a shorter y-axis
     boxplot = plt.boxplot(final_fitness_values, vert=False)
     plt.title(f'Final Fitness Histories for {pso_type}')
-    plt.xlabel('Final Fitness Value')
+    plt.xlabel('Final Fitness Value (meters)')
 
     # Adjust the horizontal positions for the "Best" and "Worst" labels
     offset = 0.1  # Vertical offset for text labels
@@ -865,33 +866,51 @@ def display_random_uniform_distribution_search_results():
 
 
 def create_verification_result_plot():
-    file_path = "./verification_stats/noisy_random_set/opt_ann/verification_stats.json"
+    file_path = "./verification_stats/mean_value_noisy_models/verification_stats.json"
 
     with open(file_path, 'r') as json_file:
         data = json.load(json_file)
 
     verification_stats = data.get('verification_stats', [])
     sorted_stats = sorted(verification_stats,
-                          key=lambda x: x.get('MedAE', float('inf')))
-    sorted_stats = sorted_stats[:5]
+                          key=lambda x: x.get('Median error mean', float('inf')))
+    sorted_stats = sorted_stats[:10]
     if not sorted_stats:
         print("No data for verification stats found in the JSON file.")
         return
     print(sorted_stats)
     # Define a list of colors to use for the bars
     colors = ['b', 'g', 'r', 'c', 'm']
+    # Words to remove
 
     titles = [
-        sorted_stats[0]["File Name"],
-        sorted_stats[1]["File Name"],
-        sorted_stats[2]["File Name"],
-        sorted_stats[3]["File Name"],
-        sorted_stats[4]["File Name"],
+        sorted_stats[0]["File Name"].replace("_", " ").capitalize(),
+        sorted_stats[1]["File Name"].replace("_", " ").capitalize(),
+        sorted_stats[2]["File Name"].replace("_", " ").capitalize(),
+        sorted_stats[3]["File Name"].replace("_", " ").capitalize(),
+        sorted_stats[4]["File Name"].replace("_", " ").capitalize(),
+        sorted_stats[5]["File Name"].replace("_", " ").capitalize(),
+        sorted_stats[6]["File Name"].replace("_", " ").capitalize(),
+        sorted_stats[7]["File Name"].replace("_", " ").capitalize(),
+        sorted_stats[8]["File Name"].replace("_", " ").capitalize(),
+        sorted_stats[9]["File Name"].replace("_", " ").capitalize(),
     ]
 
+    words_to_remove = ["500", "iterations", "stats", "during", "training"]
+    pattern = r'\b(?:' + '|'.join(re.escape(word)
+                                  for word in words_to_remove) + r')\b'
+    # Loop through the titles list and apply the transformations
+    formatted_titles = []
+    for title in titles:
+        # Remove specified words
+        formatted_title = re.sub(pattern, '', title)
+        # Replace multiple spaces with a single space
+        formatted_title = ' '.join(formatted_title.split())
+        formatted_titles.append(formatted_title)
+
     for i, stats in enumerate(sorted_stats):
-        metric_names = ['MAE', 'MSE', 'RMSE',
-                        'MedAE', 'Min Error', 'Max Error']
+        metric_names = ['MAE mean', 'MSE mean', 'RMSE mean',
+                        'Median error mean', 'Min error mean', 'Max error mean']
         metric_values = [stats.get(metric_name, 0)
                          for metric_name in metric_names]
 
@@ -901,7 +920,7 @@ def create_verification_result_plot():
         bars = plt.bar(metric_names, metric_values, color=colors)
         plt.xlabel('Metrics')
         plt.ylabel('Meters')
-        plt.title(titles[i])
+        plt.title(formatted_titles[i])
         plt.ylim(0, 9)
 
         for bar, value in zip(bars, metric_values):
@@ -918,55 +937,54 @@ def create_verification_result_plot():
 
 
 def generate_verification_set_absolute_error_histogram():
-    
 
     data_errors = [
-                [3.5743465423583984, 0.2107219696044922],
-                [3.449167490005493, 0.45858192443847656],
-                [2.409945011138916, 0.55859375],
-                [4.079694747924805, 0.3928394317626953],
-                [0.38111114501953125, 0.17768383026123047],
-                [1.2815914154052734, 1.471817970275879],
-                [1.7282557487487793, 0.5521974563598633],
-                [0.7924472093582153, 1.651357650756836],
-                [0.08137130737304688, 0.4992713928222656],
-                [1.1834864616394043, 1.2972314357757568],
-                [0.6844336986541748, 0.02749776840209961],
-                [1.0368618965148926, 0.5309829711914062],
-                [1.551931381225586, 0.37918615341186523],
-                [1.6687297821044922, 2.1513200998306274],
-                [1.9856910705566406, 1.195833146572113],
-                [1.6521825790405273, 0.005169987678527832],
-                [0.5066413879394531, 0.2833542823791504],
-                [1.3473749160766602, 0.060303688049316406],
-                [2.1676416397094727, 0.059762001037597656],
-                [0.8070535659790039, 1.5664339065551758],
-                [3.3412656784057617, 0.3856205940246582],
-                [0.4689455032348633, 0.5975174903869629],
-                [2.9067726135253906, 0.5545867681503296],
-                [3.0228700637817383, 0.6832327842712402],
-                [2.1122589111328125, 0.012772083282470703],
-                [3.0077056884765625, 0.09112691879272461],
-                [1.1556453704833984, 0.10997676849365234],
-                [1.6269245147705078, 1.5461845397949219],
-                [1.9969062805175781, 1.5220909118652344],
-                [0.3511810302734375, 0.5826959609985352],
-                [1.9786567687988281, 2.0618391036987305],
-                [1.522726058959961, 0.3058891296386719],
-                [0.178802490234375, 0.716526985168457],
-                [1.019521713256836, 0.7005538940429688],
-                [2.2980871200561523, 1.3431310653686523],
-                [0.4175844192504883, 0.8997149467468262],
-                [0.5885772705078125, 0.17059659957885742],
-                [0.7370052337646484, 0.45836734771728516],
-                [0.3396415710449219, 0.2434673309326172],
-                [0.1753406524658203, 1.3635759353637695],
-                [0.31200408935546875, 1.347219467163086],
-                [1.2463407516479492, 1.2928047180175781],
-                [1.570070743560791, 0.7096672058105469],
-                [1.5350384712219238, 2.0574073791503906],
-                [0.039583444595336914, 0.30926990509033203]
-            ]
+        [3.5743465423583984, 0.2107219696044922],
+        [3.449167490005493, 0.45858192443847656],
+        [2.409945011138916, 0.55859375],
+        [4.079694747924805, 0.3928394317626953],
+        [0.38111114501953125, 0.17768383026123047],
+        [1.2815914154052734, 1.471817970275879],
+        [1.7282557487487793, 0.5521974563598633],
+        [0.7924472093582153, 1.651357650756836],
+        [0.08137130737304688, 0.4992713928222656],
+        [1.1834864616394043, 1.2972314357757568],
+        [0.6844336986541748, 0.02749776840209961],
+        [1.0368618965148926, 0.5309829711914062],
+        [1.551931381225586, 0.37918615341186523],
+        [1.6687297821044922, 2.1513200998306274],
+        [1.9856910705566406, 1.195833146572113],
+        [1.6521825790405273, 0.005169987678527832],
+        [0.5066413879394531, 0.2833542823791504],
+        [1.3473749160766602, 0.060303688049316406],
+        [2.1676416397094727, 0.059762001037597656],
+        [0.8070535659790039, 1.5664339065551758],
+        [3.3412656784057617, 0.3856205940246582],
+        [0.4689455032348633, 0.5975174903869629],
+        [2.9067726135253906, 0.5545867681503296],
+        [3.0228700637817383, 0.6832327842712402],
+        [2.1122589111328125, 0.012772083282470703],
+        [3.0077056884765625, 0.09112691879272461],
+        [1.1556453704833984, 0.10997676849365234],
+        [1.6269245147705078, 1.5461845397949219],
+        [1.9969062805175781, 1.5220909118652344],
+        [0.3511810302734375, 0.5826959609985352],
+        [1.9786567687988281, 2.0618391036987305],
+        [1.522726058959961, 0.3058891296386719],
+        [0.178802490234375, 0.716526985168457],
+        [1.019521713256836, 0.7005538940429688],
+        [2.2980871200561523, 1.3431310653686523],
+        [0.4175844192504883, 0.8997149467468262],
+        [0.5885772705078125, 0.17059659957885742],
+        [0.7370052337646484, 0.45836734771728516],
+        [0.3396415710449219, 0.2434673309326172],
+        [0.1753406524658203, 1.3635759353637695],
+        [0.31200408935546875, 1.347219467163086],
+        [1.2463407516479492, 1.2928047180175781],
+        [1.570070743560791, 0.7096672058105469],
+        [1.5350384712219238, 2.0574073791503906],
+        [0.039583444595336914, 0.30926990509033203]
+    ]
     # Calculate the combined errors
     combined_errors = np.sort([sum(error) for error in data_errors])
     y_errors = np.sort([error[1] for error in data_errors])
@@ -1013,8 +1031,42 @@ def plot_fitness_histories_from_json(json_file_path):
         print(f"Error decoding JSON from '{json_file_path}'.")
 
 
+def create_latex_table_from_verification_stats(json_file):
+    with open(json_file, 'r') as file:
+        data = json.load(file)
+
+    verification_stats = data.get("verification_stats", [])
+
+    if not verification_stats:
+        return "No verification stats found in the JSON file."
+
+    # Create the LaTeX table header
+    latex_table = "\\begin{table}[h]\n"
+    latex_table += "\\centering\n"
+    latex_table += "\\begin{tabular}{|c|c|c|c|c|c|c|}\n"
+    latex_table += "\\hline\n"
+    latex_table += "MAE & MSE & RMSE & MedAE & Min Error & Max Error \\\\\n"
+    latex_table += "\\hline\n"
+
+    # Iterate over the verification_stats and populate the table
+    for stat in verification_stats:
+        latex_table += f"{stat['MAE']} & {stat['MSE']} & {stat['RMSE']} & {stat['MedAE']} & {stat['Min Error']} & {stat['Max Error']} \\\\\n"
+
+    # Complete the LaTeX table
+    latex_table += "\\hline\n"
+    latex_table += "\\end{tabular}\n"
+    latex_table += "\\end{table}\n"
+
+    print(latex_table)
+
+
 # Replace with the name of your JSON file
-json_file = "opt_ann_rpso_stats/stats_2023-10-23_12-12-21.json"
-# plot_fitness_histories_from_json(json_file)
-generate_verification_set_absolute_error_histogram()
+# json_file = "opt_adam_params_with_gbest_stats/noisy_data_set/500_iterations_during_training/random_search_params/optimize_ann_optimizer_params_2023-10-12_13-57-08.json"
+# plot_fitness_histories(json_file)
+# gbest_box_plot(json_file)
+
+# generate_verification_set_absolute_error_histogram()
 # create_verification_result_plot()
+
+# json_file = ""
+# create_latex_table_from_verification_stats(json_file)
