@@ -9,7 +9,7 @@ import multiprocessing
 from functools import partial
 import pandas as pd
 import tensorflow as tf
-from CostFunctions import get_fingerprinted_random_points_calm_data, get_fingerprinted_random_points_noisy_data
+from CostFunctions import get_fingerprinted_random_points_calm_data, get_fingerprinted_random_points_noisy_data, get_fingerprinted_data_noisy_as_verification_set, get_fingerprinted_data_as_verification_set
 
 from GBestPSO import GBest_PSO
 from Statistics import save_opt_ann_gbest_stats, save_opt_ann_rpso_stats
@@ -17,6 +17,7 @@ from pso_options import create_model
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.metrics import explained_variance_score
+from collections import defaultdict
 
 
 def find_combined_best(json_file_path, top=5):
@@ -28,12 +29,28 @@ def find_combined_best(json_file_path, top=5):
     if not stats:
         return []
 
-    sorted_stats = sorted(stats, key=lambda x: x.get('MedAE', float('inf')))
+    sorted_stats = sorted(stats, key=lambda x: (x.get('MedAE', float('inf')), x.get('Max Error', float('inf'))))
+
 
     return sorted_stats[:top]
 
 
-X_test, y_test = get_fingerprinted_random_points_calm_data()
+def find_combined_worst(json_file_path, bottom=5):
+    with open(json_file_path, 'r') as json_file:
+        data = json.load(json_file)
+
+    stats = data.get('verification_stats', [])
+
+    if not stats:
+        return []
+
+    sorted_stats = sorted(stats, key=lambda x: x.get('MedAE', float('inf')))
+    sorted_stats.reverse()
+
+    return sorted_stats[:bottom]
+
+
+X_test, y_test = get_fingerprinted_data_as_verification_set()
 
 
 def get_ann_stats(weights):
@@ -104,9 +121,8 @@ def flatten_list(input_list):
             output_list.append(item)
     return output_list
 
-
-if __name__ == "__main__":
-    # --------------- GBest Calm Data Set -----------------
+def collect_verification_set_stats():
+     # --------------- GBest Calm Data Set -----------------
     opt_ann_gbest_calm_1 = 'opt_ann_gbest_stats/calm_data_set/c120w08/stats_2023-09-24_16-23-32.json'
     opt_ann_gbest_calm_2 = 'opt_ann_gbest_stats/calm_data_set/c1c2149445w0729/stats_2023-09-24_16-39-20.json'
     opt_ann_gbest_calm_3 = 'opt_ann_gbest_stats/calm_data_set/extra_long_single_run/stats_2023-09-24_17-34-25.json'
@@ -244,7 +260,7 @@ if __name__ == "__main__":
         "verification_stats": verification_stats
     }
 
-    subfolder = "verification_stats/noisy_random_set"
+    subfolder = "verification_stats/calm_fingerprinted_set"
     if not os.path.exists(subfolder):
         os.mkdir(subfolder)
 
@@ -255,8 +271,125 @@ if __name__ == "__main__":
 
     print(f"Statistics saved to {output_json_file_name}")
 
-    # json_file_path = "verification_stats/calm_random_set/verification_stats.json"
+def collect_verification_set_stats_from_random_search():
+    subfolder_path = os.path.join("opt_ann_gbest_uniform_distribution_search", "with_velocity_bounds")
 
-    # best =find_combined_best(json_file_path, top=5)
-    # for x in best:
-    #     print(x)
+    json_data = []
+    for filename in os.listdir(subfolder_path):
+        file_path = os.path.join(subfolder_path, filename)
+
+        if filename.endswith(".json"):
+            with open(file_path, 'r') as file:
+                try:
+                    json_content = json.load(file)
+                    ann_weights = json_content['best_weights']
+                    mae, mse, rmse, medae, min_error, max_error, predicted_locations, absolute_errors = get_ann_stats(
+                        ann_weights)
+                    json_data.append({
+                        "File Name": filename,
+                        "MAE": mae,
+                        "MSE": mse,
+                        "RMSE": rmse,
+                        "MedAE": medae,
+                        "Min Error": min_error,
+                        "Max Error": max_error,
+                        "Predicted Locations": predicted_locations.tolist(),
+                        "Absolute Errors": absolute_errors.tolist()
+                    })
+                except json.JSONDecodeError:
+                    print(f"Error reading JSON file: {file_path}")
+
+
+    result_dict = {
+        "verification_stats": json_data
+    }
+
+    subfolder = "verification_stats/random_distribution_runs_gbest/with_velocity_bounds/noisy_fingerprinted_set"
+    
+    if not os.path.exists(subfolder):
+        os.makedirs(subfolder, exist_ok=True)
+
+    output_json_file_name = os.path.join(subfolder, "verification_stats.json")
+
+    with open(output_json_file_name, "w") as json_file:
+        json.dump(result_dict, json_file, indent=4)
+    
+def read_verification_stats(file_path):
+    try:
+        with open(file_path, 'r') as json_file:
+            data = json.load(json_file)
+        return data
+    except (IOError, json.JSONDecodeError) as e:
+        # Handle any potential errors while reading the file or parsing JSON
+        print(f"Error reading {file_path}: {e}")
+        return None
+
+def find_and_extract_verification_stats(folder_path):
+    # Dictionary to store extracted data (file name, MedAE, Max Error, and folder path)
+    extracted_data = defaultdict(list)
+
+    # Recursively find and extract data from verification_stats.json files
+    for foldername, subfolders, filenames in os.walk(folder_path):
+        if 'verification_stats.json' in filenames:
+            file_path = os.path.join(foldername, 'verification_stats.json')
+            data = read_verification_stats(file_path)
+            if data is not None:
+                for stats in data["verification_stats"]:
+                    file_name = stats["File Name"]
+                    medae = stats["MedAE"]
+                    max_error = stats["Max Error"]
+                    extracted_data[file_name].append({
+                        "MedAE": medae,
+                        "Max Error": max_error,
+                        "Folder Path": foldername
+                    })
+
+    return extracted_data
+
+def calculate_combined_performance(data):
+    # Calculate the combined performance score (average of MedAE and Max Error) for each file name
+    combined_performance = {}
+    for file_name, file_data in data.items():
+        num_stats = len(file_data)
+        total_performance = sum((entry["MedAE"] + entry["Max Error"]) / 2 for entry in file_data) / num_stats
+        combined_performance[file_name] = total_performance
+    return combined_performance
+
+
+
+def get_best_verified_models():
+    json_file_path = "verification_stats/noisy_fingerprinted_set/verification_stats.json"
+
+    best = find_combined_best(json_file_path, top=5)
+    for x in best:
+        print( x["File Name"], x["MedAE"], x["Max Error"])
+
+def get_worst_verified_models():
+    json_file_path = "verification_stats/random_distribution_runs_gbest/with_velocity_bounds/calm_random_points_set/verification_stats.json"
+
+    worst = find_combined_worst(json_file_path, bottom=5)
+    for x in worst:
+        print( x["File Name"], x["MedAE"], x["MAE"], x["MSE"], x["RMSE"], x["Min Error"], x["Max Error"])
+
+if __name__ == "__main__":
+#    collect_verification_set_stats()
+    # collect_verification_set_stats_from_random_search()
+    # get_best_verified_models()
+    # get_worst_verified_models()
+
+    # Example usage:
+    folder_path = 'verification_stats'
+    extracted_data = find_and_extract_verification_stats(folder_path)
+
+    # Calculate the combined performance scores
+    combined_performance = calculate_combined_performance(extracted_data)
+
+    # Sort the file names based on combined performance and select the top ten
+    sorted_combined_performance = sorted(combined_performance.items(), key=lambda x: x[1])[:10]
+
+    # Print the top ten file names, MedAE, and Max Error values
+    for index, (file_name, _) in enumerate(sorted_combined_performance):
+        file_data = extracted_data[file_name]
+        medae = sum(entry["MedAE"] for entry in file_data) / len(file_data)
+        max_error = sum(entry["Max Error"] for entry in file_data) / len(file_data)
+        print(f"Top {index + 1} - File Name: {file_name}, Average MedAE: {medae}, Average Max Error: {max_error}")

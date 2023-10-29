@@ -38,6 +38,53 @@ def get_fingerprinted_data_noisy():
 
     return X_train, X_test, y_train, y_test, scaler
 
+def get_fingerprinted_data_as_verification_set():
+    df = pd.read_csv("fingerprints-calm.csv", delimiter=",")
+    df = df.drop(
+        [
+            "AP1_dev",
+            "AP2_dev",
+            "AP3_dev",
+            "AP1_dist_dev",
+            "AP2_dist_dev",
+            "AP3_dist_dev",
+        ],
+        axis=1,
+    )
+
+    free_variables = df.drop(["X", "Y"], axis=1).values
+    dependent_variables = df[["X", "Y"]].values
+
+    scaler = MinMaxScaler()
+
+    free_variables = scaler.fit_transform(free_variables)
+
+    return free_variables, dependent_variables
+
+def get_fingerprinted_data_noisy_as_verification_set():
+    df = pd.read_csv("fingerprints-noisy.csv", delimiter=",")
+    df = df.drop(
+        [
+            "AP1_dev",
+            "AP2_dev",
+            "AP3_dev",
+            "AP1_dist_dev",
+            "AP2_dist_dev",
+            "AP3_dist_dev",
+            "id"
+        ],
+        axis=1,
+    )
+
+    free_variables = df.drop(["X", "Y"], axis=1).values
+    dependent_variables = df[["X", "Y"]].values
+
+    scaler = MinMaxScaler()
+
+    free_variables = scaler.fit_transform(free_variables)
+
+    return free_variables, dependent_variables
+
 
 def get_fingerprinted_random_points_noisy_data():
     df = pd.read_csv("fingerprints-random-points-noisy.csv", delimiter=",")
