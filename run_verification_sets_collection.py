@@ -29,8 +29,8 @@ def find_combined_best(json_file_path, top=5):
     if not stats:
         return []
 
-    sorted_stats = sorted(stats, key=lambda x: (x.get('MedAE', float('inf')), x.get('Max Error', float('inf'))))
-
+    sorted_stats = sorted(stats, key=lambda x: (
+        x.get('MedAE', float('inf')), x.get('Max Error', float('inf'))))
 
     return sorted_stats[:top]
 
@@ -121,8 +121,9 @@ def flatten_list(input_list):
             output_list.append(item)
     return output_list
 
+
 def collect_verification_set_stats():
-     # --------------- GBest Calm Data Set -----------------
+    # --------------- GBest Calm Data Set -----------------
     opt_ann_gbest_calm_1 = 'opt_ann_gbest_stats/calm_data_set/c120w08/stats_2023-09-24_16-23-32.json'
     opt_ann_gbest_calm_2 = 'opt_ann_gbest_stats/calm_data_set/c1c2149445w0729/stats_2023-09-24_16-39-20.json'
     opt_ann_gbest_calm_3 = 'opt_ann_gbest_stats/calm_data_set/extra_long_single_run/stats_2023-09-24_17-34-25.json'
@@ -193,12 +194,6 @@ def collect_verification_set_stats():
     opt_sgd_rpso_noisy_2 = 'opt_sgd_params_with_rpso_stats/noisy_data_set/optimize_ann_optimizer_params_2023-10-15_12-33-14.json'
     opt_sgd_rpso_noisy_3 = 'opt_sgd_params_with_rpso_stats/noisy_data_set/optimize_ann_optimizer_params_2023-10-15_14-05-30.json'
 
-    # --------------- GBest Random Search Calm Data Set -------------------
-    opt_ann_random_search_gbest_calm = 'opt_ann_gbest_uniform_distribution_search/calm_data_set/100_runs/stats_2023-10-08_15-29-34.json'
-
-    # --------------- RPSO Random Search Calm Data Set -------------------
-    opt_ann_random_search_rpso_calm = 'opt_ann_rpso_uniform_distribution_search/100_runs/stats_2023-10-09_21-01-27.json'
-
     file_paths = [
         opt_ann_gbest_calm_1, opt_ann_gbest_calm_2, opt_ann_gbest_calm_3, opt_ann_gbest_calm_4,
         opt_ann_gbest_noisy_1, opt_ann_gbest_noisy_2, opt_ann_gbest_noisy_3, opt_ann_gbest_noisy_4,
@@ -211,8 +206,7 @@ def collect_verification_set_stats():
         opt_sgd_gbest_calm_1, opt_sgd_gbest_calm_2, opt_sgd_gbest_calm_3,
         opt_sgd_gbest_noisy_1, opt_sgd_gbest_noisy_2, opt_sgd_gbest_noisy_3,
         opt_sgd_rpso_calm_1, opt_sgd_rpso_calm_2, opt_sgd_rpso_calm_3,
-        opt_sgd_rpso_noisy_1, opt_sgd_rpso_noisy_2, opt_sgd_rpso_noisy_3,
-        opt_ann_random_search_gbest_calm, opt_ann_random_search_rpso_calm
+        opt_sgd_rpso_noisy_1, opt_sgd_rpso_noisy_2, opt_sgd_rpso_noisy_3
     ]
 
     verification_stats = []
@@ -271,8 +265,10 @@ def collect_verification_set_stats():
 
     print(f"Statistics saved to {output_json_file_name}")
 
+
 def collect_verification_set_stats_from_random_search():
-    subfolder_path = os.path.join("opt_ann_gbest_uniform_distribution_search", "with_velocity_bounds")
+    subfolder_path = os.path.join(
+        "opt_ann_gbest_uniform_distribution_search", "with_velocity_bounds")
 
     json_data = []
     for filename in os.listdir(subfolder_path):
@@ -299,13 +295,12 @@ def collect_verification_set_stats_from_random_search():
                 except json.JSONDecodeError:
                     print(f"Error reading JSON file: {file_path}")
 
-
     result_dict = {
         "verification_stats": json_data
     }
 
     subfolder = "verification_stats/random_distribution_runs_gbest/with_velocity_bounds/noisy_fingerprinted_set"
-    
+
     if not os.path.exists(subfolder):
         os.makedirs(subfolder, exist_ok=True)
 
@@ -313,7 +308,8 @@ def collect_verification_set_stats_from_random_search():
 
     with open(output_json_file_name, "w") as json_file:
         json.dump(result_dict, json_file, indent=4)
-    
+
+
 def read_verification_stats(file_path):
     try:
         with open(file_path, 'r') as json_file:
@@ -323,6 +319,7 @@ def read_verification_stats(file_path):
         # Handle any potential errors while reading the file or parsing JSON
         print(f"Error reading {file_path}: {e}")
         return None
+
 
 def find_and_extract_verification_stats(folder_path):
     # Dictionary to store extracted data (file name, MedAE, Max Error, and folder path)
@@ -346,15 +343,16 @@ def find_and_extract_verification_stats(folder_path):
 
     return extracted_data
 
+
 def calculate_combined_performance(data):
     # Calculate the combined performance score (average of MedAE and Max Error) for each file name
     combined_performance = {}
     for file_name, file_data in data.items():
         num_stats = len(file_data)
-        total_performance = sum((entry["MedAE"] + entry["Max Error"]) / 2 for entry in file_data) / num_stats
+        total_performance = sum(
+            (entry["MedAE"] + entry["Max Error"]) / 2 for entry in file_data) / num_stats
         combined_performance[file_name] = total_performance
     return combined_performance
-
 
 
 def get_best_verified_models():
@@ -362,17 +360,20 @@ def get_best_verified_models():
 
     best = find_combined_best(json_file_path, top=5)
     for x in best:
-        print( x["File Name"], x["MedAE"], x["Max Error"])
+        print(x["File Name"], x["MedAE"], x["Max Error"])
+
 
 def get_worst_verified_models():
     json_file_path = "verification_stats/random_distribution_runs_gbest/with_velocity_bounds/calm_random_points_set/verification_stats.json"
 
     worst = find_combined_worst(json_file_path, bottom=5)
     for x in worst:
-        print( x["File Name"], x["MedAE"], x["MAE"], x["MSE"], x["RMSE"], x["Min Error"], x["Max Error"])
+        print(x["File Name"], x["MedAE"], x["MAE"], x["MSE"],
+              x["RMSE"], x["Min Error"], x["Max Error"])
+
 
 if __name__ == "__main__":
-#    collect_verification_set_stats()
+    #    collect_verification_set_stats()
     # collect_verification_set_stats_from_random_search()
     # get_best_verified_models()
     # get_worst_verified_models()
@@ -385,11 +386,14 @@ if __name__ == "__main__":
     combined_performance = calculate_combined_performance(extracted_data)
 
     # Sort the file names based on combined performance and select the top ten
-    sorted_combined_performance = sorted(combined_performance.items(), key=lambda x: x[1])[:10]
+    sorted_combined_performance = sorted(
+        combined_performance.items(), key=lambda x: x[1])[:10]
 
     # Print the top ten file names, MedAE, and Max Error values
     for index, (file_name, _) in enumerate(sorted_combined_performance):
         file_data = extracted_data[file_name]
         medae = sum(entry["MedAE"] for entry in file_data) / len(file_data)
-        max_error = sum(entry["Max Error"] for entry in file_data) / len(file_data)
-        print(f"Top {index + 1} - File Name: {file_name}, Average MedAE: {medae}, Average Max Error: {max_error}")
+        max_error = sum(entry["Max Error"]
+                        for entry in file_data) / len(file_data)
+        print(
+            f"Top {index + 1} - File Name: {file_name}, Average MedAE: {medae}, Average Max Error: {max_error}")
