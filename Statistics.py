@@ -878,25 +878,26 @@ def create_verification_result_plot():
     if not sorted_stats:
         print("No data for verification stats found in the JSON file.")
         return
-    print(sorted_stats)
+
     # Define a list of colors to use for the bars
     colors = ['b', 'g', 'r', 'c', 'm']
     # Words to remove
 
     titles = [
-        sorted_stats[0]["File Name"].replace("_", " ").capitalize(),
-        sorted_stats[1]["File Name"].replace("_", " ").capitalize(),
-        sorted_stats[2]["File Name"].replace("_", " ").capitalize(),
-        sorted_stats[3]["File Name"].replace("_", " ").capitalize(),
-        sorted_stats[4]["File Name"].replace("_", " ").capitalize(),
-        sorted_stats[5]["File Name"].replace("_", " ").capitalize(),
-        sorted_stats[6]["File Name"].replace("_", " ").capitalize(),
-        sorted_stats[7]["File Name"].replace("_", " ").capitalize(),
-        sorted_stats[8]["File Name"].replace("_", " ").capitalize(),
-        sorted_stats[9]["File Name"].replace("_", " ").capitalize(),
+        sorted_stats[0]["File name"].replace("_", " ").capitalize(),
+        sorted_stats[1]["File name"].replace("_", " ").capitalize(),
+        sorted_stats[2]["File name"].replace("_", " ").capitalize(),
+        sorted_stats[3]["File name"].replace("_", " ").capitalize(),
+        sorted_stats[4]["File name"].replace("_", " ").capitalize(),
+        sorted_stats[5]["File name"].replace("_", " ").capitalize(),
+        sorted_stats[6]["File name"].replace("_", " ").capitalize(),
+        sorted_stats[7]["File name"].replace("_", " ").capitalize(),
+        sorted_stats[8]["File name"].replace("_", " ").capitalize(),
+        sorted_stats[9]["File name"].replace("_", " ").capitalize(),
     ]
 
-    words_to_remove = ["500", "iterations", "stats", "during", "training"]
+    words_to_remove = ["500", "iterations", "stats",
+                       "during", "training", 'c149445w0729', 'c20w08']
     pattern = r'\b(?:' + '|'.join(re.escape(word)
                                   for word in words_to_remove) + r')\b'
     # Loop through the titles list and apply the transformations
@@ -914,13 +915,13 @@ def create_verification_result_plot():
         metric_values = [stats.get(metric_name, 0)
                          for metric_name in metric_names]
 
-        # Set the title for the current plot
-
         plt.figure(figsize=(10, 6))
         bars = plt.bar(metric_names, metric_values, color=colors)
         plt.xlabel('Metrics')
         plt.ylabel('Meters')
-        plt.title(formatted_titles[i])
+        # Work on title!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        
+        plt.title(f"{formatted_titles[i]}\n {sorted_stats[i]['Cp_min'] }")
         plt.ylim(0, 9)
 
         for bar, value in zip(bars, metric_values):
@@ -1066,7 +1067,7 @@ def create_latex_table_from_verification_stats(json_file):
 # gbest_box_plot(json_file)
 
 # generate_verification_set_absolute_error_histogram()
-# create_verification_result_plot()
+create_verification_result_plot()
 
 # json_file = ""
 # create_latex_table_from_verification_stats(json_file)
