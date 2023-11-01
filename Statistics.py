@@ -866,14 +866,14 @@ def display_random_uniform_distribution_search_results():
 
 
 def create_verification_result_plot():
-    file_path = "./verification_stats/mean_value_noisy_models/verification_stats.json"
+    file_path = "./verification_stats/noisy_fingerprinted_set/verification_stats.json"
 
     with open(file_path, 'r') as json_file:
         data = json.load(json_file)
 
     verification_stats = data.get('verification_stats', [])
     sorted_stats = sorted(verification_stats,
-                          key=lambda x: x.get('Median error mean', float('inf')))
+                          key=lambda x: x.get('Median error', float('inf')))
     sorted_stats = sorted_stats[:10]
     if not sorted_stats:
         print("No data for verification stats found in the JSON file.")
@@ -882,7 +882,7 @@ def create_verification_result_plot():
     # Define a list of colors to use for the bars
     colors = ['b', 'g', 'r', 'c', 'm']
     # Words to remove
-
+    
     titles = [
         sorted_stats[0]["File name"].replace("_", " ").capitalize(),
         sorted_stats[1]["File name"].replace("_", " ").capitalize(),
@@ -910,8 +910,8 @@ def create_verification_result_plot():
         formatted_titles.append(formatted_title)
 
     for i, stats in enumerate(sorted_stats):
-        metric_names = ['MAE mean', 'MSE mean', 'RMSE mean',
-                        'Median error mean', 'Min error mean', 'Max error mean']
+        metric_names = ['MAE', 'MSE', 'RMSE',
+                        'Median error', 'Min error', 'Max error']
         metric_values = [stats.get(metric_name, 0)
                          for metric_name in metric_names]
 
@@ -919,9 +919,64 @@ def create_verification_result_plot():
         bars = plt.bar(metric_names, metric_values, color=colors)
         plt.xlabel('Metrics')
         plt.ylabel('Meters')
-        # Work on title!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        stats_dict = {}
+        # Add fields conditionally if they exist in the source file
+        try:
+            stats_dict["c1"] = sorted_stats[i]["c1"]
+        except KeyError:
+            pass
+
+        try:
+            stats_dict["c2"] = sorted_stats[i]["c2"]
+        except KeyError:
+            pass
+
+        try:
+            if "w" in sorted_stats[i]:
+                stats_dict["w"] = sorted_stats[i]["w"]
+            elif "inertia" in sorted_stats[i]:
+                stats_dict["w"] = sorted_stats[i]["inertia"]
+        except KeyError:
+            pass
+
+        try:
+            stats_dict["Cp_min"] = sorted_stats[i]["Cp_min"]
+        except KeyError:
+            pass
+
+        try:
+            stats_dict["Cp_max"] = sorted_stats[i]["Cp_max"]
+        except KeyError:
+            pass
+
+        try:
+            stats_dict["Cg_min"] = sorted_stats[i]["Cg_min"]
+        except KeyError:
+            pass
+
+        try:
+            stats_dict["Cg_max"] = sorted_stats[i]["Cg_max"]
+        except KeyError:
+            pass
+
+        try:
+            stats_dict["w_min"] = sorted_stats[i]["w_min"]
+        except KeyError:
+            pass
+
+        try:
+            stats_dict["w_max"] = sorted_stats[i]["w_max"]
+        except KeyError:
+            pass
+
+        try:
+            stats_dict["gwn_std_dev"] = sorted_stats[i]["gwn_std_dev"]
+        except KeyError:
+            pass
+
         
-        plt.title(f"{formatted_titles[i]}\n {sorted_stats[i]['Cp_min'] }")
+        plt.title(f"{formatted_titles[i]}\n {stats_dict}")
         plt.ylim(0, 9)
 
         for bar, value in zip(bars, metric_values):
@@ -1067,7 +1122,6 @@ def create_latex_table_from_verification_stats(json_file):
 # gbest_box_plot(json_file)
 
 # generate_verification_set_absolute_error_histogram()
-create_verification_result_plot()
+# create_verification_result_plot()
 
-# json_file = ""
-# create_latex_table_from_verification_stats(json_file)
+# display_random_uniform_distribution_search_results()
