@@ -7,7 +7,15 @@ import multiprocessing
 from functools import partial
 import pandas as pd
 import tensorflow as tf
-from CostFunctions import sphere, rosenbrock_function, rastrigin_function, schwefel_function, griewank_function, penalized_1_function, step_function
+from CostFunctions import (
+    sphere,
+    rosenbrock_function,
+    rastrigin_function,
+    schwefel_function,
+    griewank_function,
+    penalized_1_function,
+    step_function,
+)
 
 from RPSO import RPSO
 from Statistics import save_opt_ann_rpso_stats, save_test_func_rpso_stats
@@ -31,7 +39,7 @@ def run_pso(
     w_min,
     w_max,
     gwn_std_dev,
-    num_dimensions
+    num_dimensions,
 ):
     swarm = RPSO(
         iterations,
@@ -46,7 +54,7 @@ def run_pso(
         w_min,
         w_max,
         fitness_threshold,
-        penalized_1_function,
+        griewank_function,
         gwn_std_dev,
     )
 
@@ -63,8 +71,8 @@ def run_pso(
 if __name__ == "__main__":
     # ---- RSPO options ----
     num_dimensions = 30
-    position_bounds = [(-100, 100)] * num_dimensions
-    velocity_bounds = [(-40, 40)] * num_dimensions
+    position_bounds = [(-600, 600)] * num_dimensions
+    velocity_bounds = [(-240, 240)] * num_dimensions
     fitness_threshold = 0.01
     num_particles = 30
     Cp_min = 0.5
@@ -90,7 +98,7 @@ if __name__ == "__main__":
         w_min=w_min,
         w_max=w_max,
         gwn_std_dev=gwn_std_dev,
-        num_dimensions=num_dimensions
+        num_dimensions=num_dimensions,
     )
 
     pso_runs = 50
@@ -140,5 +148,5 @@ if __name__ == "__main__":
         mean_best_fitness,
         max_best_fitness,
         best_weights,
-        "Step"
+        "Step",
     )

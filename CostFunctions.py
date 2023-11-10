@@ -10,7 +10,7 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 
 def get_fingerprinted_data_noisy():
     df = pd.read_csv("fingerprints-noisy.csv", delimiter=",")
-    df = df[(df['X'] % 2 == 0) | (df['Y'] % 2 == 0)]
+    df = df[(df["X"] % 2 == 0) | (df["Y"] % 2 == 0)]
     df = df.drop(
         [
             "AP1_dev",
@@ -19,7 +19,7 @@ def get_fingerprinted_data_noisy():
             "AP1_dist_dev",
             "AP2_dist_dev",
             "AP3_dist_dev",
-            "id"
+            "id",
         ],
         axis=1,
     )
@@ -37,6 +37,7 @@ def get_fingerprinted_data_noisy():
     X_test = scaler.transform(X_test)
 
     return X_train, X_test, y_train, y_test, scaler
+
 
 def get_fingerprinted_data_as_verification_set():
     df = pd.read_csv("fingerprints-calm.csv", delimiter=",")
@@ -61,6 +62,7 @@ def get_fingerprinted_data_as_verification_set():
 
     return free_variables, dependent_variables
 
+
 def get_fingerprinted_data_noisy_as_verification_set():
     df = pd.read_csv("fingerprints-noisy.csv", delimiter=",")
     df = df.drop(
@@ -71,7 +73,7 @@ def get_fingerprinted_data_noisy_as_verification_set():
             "AP1_dist_dev",
             "AP2_dist_dev",
             "AP3_dist_dev",
-            "id"
+            "id",
         ],
         axis=1,
     )
@@ -96,7 +98,7 @@ def get_fingerprinted_random_points_noisy_data():
             "AP1_dist_dev",
             "AP2_dist_dev",
             "AP3_dist_dev",
-            "id"
+            "id",
         ],
         axis=1,
     )
@@ -121,7 +123,7 @@ def get_fingerprinted_random_points_calm_data():
             "AP1_dist_dev",
             "AP2_dist_dev",
             "AP3_dist_dev",
-            "id"
+            "id",
         ],
         axis=1,
     )
@@ -138,7 +140,7 @@ def get_fingerprinted_random_points_calm_data():
 
 def get_fingerprinted_data():
     df = pd.read_csv("fingerprints-calm.csv", delimiter=",")
-    df = df[(df['X'] % 2 == 0) | (df['Y'] % 2 == 0)]
+    df = df[(df["X"] % 2 == 0) | (df["Y"] % 2 == 0)]
     df = df.drop(
         [
             "AP1_dev",
@@ -166,6 +168,46 @@ def get_fingerprinted_data():
     return X_train, X_test, y_train, y_test, scaler
 
 
+def add_synthetic_noise(data, noise_level=0.05):
+    # Generate random uniform noise between -noise_level/2 and noise_level/2
+    noise = np.random.uniform(-noise_level / 2, noise_level / 2, data.shape)
+    data_noisy = data + noise
+    return data_noisy
+
+
+def get_fingerprinted_synthetic_noise_data(noise_level=0.05):
+    df = pd.read_csv("fingerprints-calm.csv", delimiter=",")
+    df = df[(df["X"] % 2 == 0) | (df["Y"] % 2 == 0)]
+    df = df.drop(
+        [
+            "AP1_dev",
+            "AP2_dev",
+            "AP3_dev",
+            "AP1_dist_dev",
+            "AP2_dist_dev",
+            "AP3_dist_dev",
+        ],
+        axis=1,
+    )
+
+    free_variables = df.drop(["X", "Y"], axis=1).values
+    dependent_variables = df[["X", "Y"]].values
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        free_variables, dependent_variables, test_size=0.2, random_state=42
+    )
+
+    # Add synthetic noise to the data before scaling
+    X_train_noisy = add_synthetic_noise(X_train, noise_level)
+
+    scaler = MinMaxScaler()
+
+    X_train_noisy = scaler.fit_transform(X_train_noisy)
+    X_test = scaler.transform(X_test)
+
+    return X_train_noisy, X_test, y_train, y_test, scaler
+
+
 def sphere(x):
     return sum(x_i**2 for x_i in x)
 
@@ -174,8 +216,8 @@ def rosenbrock_function(x):
     result = 0.0
     n = len(x)
     for i in range(n - 1):
-        term1 = 100.0 * (x[i + 1] - x[i]**2)**2
-        term2 = (x[i] - 1)**2
+        term1 = 100.0 * (x[i + 1] - x[i] ** 2) ** 2
+        term2 = (x[i] - 1) ** 2
         result += term1 + term2
     return result
 
@@ -219,7 +261,7 @@ def griewank_function(x):
     prod_term = 1.0
 
     for i in range(1, n + 1):
-        sum_term += x[i - 1]**2
+        sum_term += x[i - 1] ** 2
         prod_term *= math.cos(x[i - 1] / math.sqrt(i))
 
     result = 1 + (sum_term / 4000) - prod_term
@@ -228,18 +270,17 @@ def griewank_function(x):
 
 def griewank(args):
     term1 = sum(x**2 for x in args) / 4000
-    term2 = np.prod(list(np.cos(x / np.sqrt(i + 1))
-                    for i, x in enumerate(args)))
+    term2 = np.prod(list(np.cos(x / np.sqrt(i + 1)) for i, x in enumerate(args)))
     return term1 - term2 + 1
 
 
 def penalty_function(x):
     if x < -10:
-        return 100 * (-x - 10)**4
+        return 100 * (-x - 10) ** 4
     elif -10 <= abs(x) <= 10:
         return 0
     else:
-        return 100 * (x - 10)**4
+        return 100 * (x - 10) ** 4
 
 
 def penalized_1_function(x):
@@ -247,8 +288,8 @@ def penalized_1_function(x):
     sum_term = 0.0
 
     for i in range(D):
-        yi = 1 + (1/4) * (x[i] + 1)
-        sum_term += (10 * math.sin(math.pi * yi)**2)
+        yi = 1 + (1 / 4) * (x[i] + 1)
+        sum_term += 10 * math.sin(math.pi * yi) ** 2
 
     penalty_term = sum(penalty_function(xi) for xi in x)
 
@@ -267,7 +308,7 @@ def penalized1(args):
 
 
 def step_function(x):
-    return sum((math.floor(xi + 0.5))**2 for xi in x)
+    return sum((math.floor(xi + 0.5)) ** 2 for xi in x)
 
 
 def step(args, lower_bound=-5.0, upper_bound=5.0):

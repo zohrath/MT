@@ -16,18 +16,31 @@ class Particle:
         self.position_history = []
 
     def initialize_particle_position(self):
-        return [np.random.uniform(self.position_bounds[i][0], self.position_bounds[i][1]) for i in range(self.num_dimensions)]
+        return [
+            np.random.uniform(self.position_bounds[i][0], self.position_bounds[i][1])
+            for i in range(self.num_dimensions)
+        ]
 
     def initialize_particle_velocity(self):
         return [0 for i in range(self.num_dimensions)]
 
     def get_social_parameter(self, c2, swarm_best_position, particle_current_position):
         r2 = np.random.rand()
-        return c2 * r2 * (np.array(swarm_best_position) - np.array(particle_current_position))
+        return (
+            c2
+            * r2
+            * (np.array(swarm_best_position) - np.array(particle_current_position))
+        )
 
-    def get_cognitive_parameter(self, c1, particle_best_position, particle_current_position):
+    def get_cognitive_parameter(
+        self, c1, particle_best_position, particle_current_position
+    ):
         r1 = np.random.rand()
-        return c1 * r1 * (np.array(particle_best_position) - np.array(particle_current_position))
+        return (
+            c1
+            * r1
+            * (np.array(particle_best_position) - np.array(particle_current_position))
+        )
 
     def get_inertia_velocity_part(self, inertia, particle_current_velocity):
         inertia_param = [inertia * v for v in particle_current_velocity]
@@ -57,8 +70,14 @@ class Particle:
 
         for i in range(self.num_dimensions):
             updated_velocity[i] = np.clip(
-                updated_velocity[i], self.velocity_bounds[i][0], self.velocity_bounds[i][1])
-            if particle_current_position[i] >= self.position_bounds[i][1] or particle_current_position[i] <= self.position_bounds[i][0]:
+                updated_velocity[i],
+                self.velocity_bounds[i][0],
+                self.velocity_bounds[i][1],
+            )
+            if (
+                particle_current_position[i] >= self.position_bounds[i][1]
+                or particle_current_position[i] <= self.position_bounds[i][0]
+            ):
                 updated_velocity[i] = -updated_velocity[i]
 
         return updated_velocity
@@ -68,11 +87,9 @@ class Particle:
 
         for i in range(self.num_dimensions):
             if new_position[i] > self.position_bounds[i][1]:
-                new_position[i] = 2 * \
-                    self.position_bounds[i][1] - new_position[i]
+                new_position[i] = 2 * self.position_bounds[i][1] - new_position[i]
             elif new_position[i] < self.position_bounds[i][0]:
-                new_position[i] = 2 * \
-                    self.position_bounds[i][0] - new_position[i]
+                new_position[i] = 2 * self.position_bounds[i][0] - new_position[i]
 
         self.position_history.append(new_position)
 
@@ -125,7 +142,6 @@ class GBest_PSO:
         return particles
 
     def run_pso(self, model):
-        X_train, X_test, y_train, y_test, scaler = get_fingerprinted_data()
         for iter in range(self.iterations):
             print("ITERATION", iter)
             for particle in self.particles:
@@ -158,6 +174,5 @@ class GBest_PSO:
                     particle.position, particle.velocity
                 )
             self.swarm_fitness_history.append(self.swarm_best_fitness)
-            swarm_positions = [
-                particle.position for particle in self.particles]
+            swarm_positions = [particle.position for particle in self.particles]
             self.swarm_position_history.append(swarm_positions)

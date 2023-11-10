@@ -48,14 +48,11 @@ class RPSOParticle:
 
     def initialize_particle_position(self):
         return np.array(
-            [np.random.uniform(p_min, p_max)
-             for p_min, p_max in self.position_bounds]
+            [np.random.uniform(p_min, p_max) for p_min, p_max in self.position_bounds]
         )
 
     def initialize_particle_velocity(self):
-        return np.array(
-            [0 for v_min, v_max in self.velocity_bounds]
-        )
+        return np.array([0 for v_min, v_max in self.velocity_bounds])
 
     def get_inertia_weight_parameter(self):
         return self.w_max - (self.w_max - self.w_min) * (
@@ -99,7 +96,10 @@ class RPSOParticle:
 
         for i in range(self.num_dimensions):
             updated_velocity[i] = np.clip(
-                updated_velocity[i], self.velocity_bounds[i][0], self.velocity_bounds[i][1])
+                updated_velocity[i],
+                self.velocity_bounds[i][0],
+                self.velocity_bounds[i][1],
+            )
             if (
                 self.position[i] >= self.position_bounds[i][1]
                 or self.position[i] <= self.position_bounds[i][0]
@@ -113,13 +113,11 @@ class RPSOParticle:
 
         for i in range(self.num_dimensions):
             if new_position[i] >= self.position_bounds[i][1]:
-                new_position[i] = 2 * \
-                    self.position_bounds[i][1] - new_position[i]
+                new_position[i] = 2 * self.position_bounds[i][1] - new_position[i]
             elif new_position[i] <= self.position_bounds[i][0]:
-                new_position[i] = 2 * \
-                    self.position_bounds[i][0] - new_position[i]
+                new_position[i] = 2 * self.position_bounds[i][0] - new_position[i]
 
-        np.append(self.position_history, new_position)
+        # np.append(self.position_history, new_position)
         self.position = new_position
 
     def update_current_iteration(self):
@@ -218,7 +216,7 @@ class RPSO:
                 )
                 particle.update_position()
                 particle.update_current_iteration()
-            self.swarm_fitness_history.append(self.swarm_best_fitness)
-            self.swarm_position_history.append(
-                [particle.position for particle in self.particles]
-            )
+            # self.swarm_fitness_history.append(self.swarm_best_fitness)
+            # self.swarm_position_history.append(
+            #     [particle.position for particle in self.particles]
+            # )

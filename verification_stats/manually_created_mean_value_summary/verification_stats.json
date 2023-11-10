@@ -1,2245 +1,676 @@
 {
-  "verification_stats": [
-    {
-      "File Name": "opt_ann_gbest_stats_calm_data_set_c120w08",
-      "MAE Mean": 1.6145254358328254,
-      "MSE Mean": 4.192062568758241,
-      "RMSE Mean": 2.0462256717903258,
-      "Med Mean": 1.370756467183431,
-      "Min Error Mean": 0.008395512898763021,
-      "Max Error Mean": 5.761935234069824
-    },
-    {
-      "File Name": "opt_ann_gbest_stats_calm_data_set_c1c2149445w0729",
-      "MAE Mean": 1.808945372108249,
-      "MSE Mean": 5.162337766609089,
-      "RMSE Mean": 2.2635686130786405,
-      "Med Mean": 1.5351097186406453,
-      "Min Error Mean": 0.017707188924153645,
-      "Max Error Mean": 6.308844884236653
-    },
-    {
-      "File Name": "opt_ann_gbest_stats_calm_data_set_extra_long_single_run",
-      "MAE Mean": 1.7279070112124952,
-      "MSE Mean": 4.6631495635274645,
-      "RMSE Mean": 2.1572093400561676,
-      "Med Mean": 1.4539836049079895,
-      "Min Error Mean": 0.03928581873575846,
-      "Max Error Mean": 5.796948750813802
-    },
-    {
-      "File Name": "opt_ann_gbest_stats_calm_data_set_random_search_params",
-      "MAE Mean": 1.612286383789863,
-      "MSE Mean": 4.270006027833496,
-      "RMSE Mean": 2.0659227223963907,
-      "Med Mean": 1.3476643164952595,
-      "Min Error Mean": 0.009900252024332682,
-      "Max Error Mean": 5.77736250559489
-    },
-    {
-      "File Name": "opt_ann_rpso_stats_calm_data_set_default_rpso_params_res",
-      "MAE Mean": 1.8596028649662808,
-      "MSE Mean": 5.374771439243813,
-      "RMSE Mean": 2.3138497754786163,
-      "Med Mean": 1.6593005259831746,
-      "Min Error Mean": 0.018895626068115234,
-      "Max Error Mean": 6.035134156545003
-    },
-    {
-      "File Name": "opt_ann_rpso_stats_calm_data_set_extra_long_single_run_grid_search_params",
-      "MAE Mean": 1.7013256360096005,
-      "MSE Mean": 4.599648690301863,
-      "RMSE Mean": 2.142951343998641,
-      "Med Mean": 1.406914234161377,
-      "Min Error Mean": 0.02006673812866211,
-      "Max Error Mean": 6.330540021260579
-    },
-    {
-      "File Name": "opt_ann_rpso_stats_calm_data_set_extra_long_single_run_random_search_params",
-      "MAE Mean": 1.7546238810792623,
-      "MSE Mean": 4.629022784544001,
-      "RMSE Mean": 2.1438393650355683,
-      "Med Mean": 1.5553514162699382,
-      "Min Error Mean": 0.02364460627237956,
-      "Max Error Mean": 5.898007710774739
-    },
-    {
-      "File Name": "opt_ann_rpso_stats_calm_data_set_extra_long_single_run_standard_params",
-      "MAE Mean": 2.2298233963870135,
-      "MSE Mean": 8.347017541457914,
-      "RMSE Mean": 2.8861374702366245,
-      "Med Mean": 1.7156527837117512,
-      "Min Error Mean": 0.011933644612630209,
-      "Max Error Mean": 8.431297620137533
-    },
-    {
-      "File Name": "opt_ann_rpso_stats_calm_data_set_gwn_random_search_res",
-      "MAE Mean": 1.760710643246511,
-      "MSE Mean": 5.009536198543295,
-      "RMSE Mean": 2.237528846245576,
-      "Med Mean": 1.4000278512636821,
-      "Min Error Mean": 0.0071328481038411455,
-      "Max Error Mean": 6.5912167231241865
-    },
-    {
-      "File Name": "opt_ann_rpso_stats_calm_data_set_no_gwn_val_res",
-      "MAE Mean": 1.7913501382887766,
-      "MSE Mean": 5.722937958025464,
-      "RMSE Mean": 2.3845632419100613,
-      "Med Mean": 1.3775375286738079,
-      "Min Error Mean": 0.04765653610229492,
-      "Max Error Mean": 7.292252063751221
-    },
-    {
-      "File Name": "opt_ann_rpso_stats_calm_data_set_no_gwn_val_res",
-      "MAE Mean": 1.8359417995988467,
-      "MSE Mean": 5.4152623060202805,
-      "RMSE Mean": 2.324576762000785,
-      "Med Mean": 1.545460005601247,
-      "Min Error Mean": 0.02442057927449544,
-      "Max Error Mean": 6.711342811584473
-    },
-    {
-      "File Name": "opt_adam_params_with_gbest_stats_calm_data_set_500_iterations_during_training_c149445w0729",
-      "MAE Mean": 1.388906533302048,
-      "MSE Mean": 3.151940069798456,
-      "RMSE Mean": 1.76379183202015,
-      "Med Mean": 1.1358715295791626,
-      "Min Error Mean": 0.033097426096598305,
-      "Max Error Mean": 5.546919186909993
-    },
-    {
-      "File Name": "opt_adam_params_with_gbest_stats_calm_data_set_500_iterations_during_training_c20w08",
-      "MAE Mean": 1.2689635564376707,
-      "MSE Mean": 2.817609929273718,
-      "RMSE Mean": 1.6629993884010326,
-      "Med Mean": 0.9737281401952108,
-      "Min Error Mean": 0.020276546478271484,
-      "Max Error Mean": 5.521361351013184
-    },
-    {
-      "File Name": "opt_adam_params_with_gbest_stats_calm_data_set_500_iterations_during_training_random_search_params",
-      "MAE Mean": 1.3292740062926631,
-      "MSE Mean": 3.221669796404509,
-      "RMSE Mean": 1.7750030220617437,
-      "Med Mean": 0.9790237545967102,
-      "Min Error Mean": 0.007311900456746419,
-      "Max Error Mean": 6.360846042633057
-    },
-    {
-      "File Name": "opt_adam_params_with_rpso_stats_calm_data_set_500_iterations_during_training_default_params",
-      "MAE Mean": 1.3748135827194536,
-      "MSE Mean": 3.1781664742323046,
-      "RMSE Mean": 1.7749409654780717,
-      "Med Mean": 1.0722982585430145,
-      "Min Error Mean": 0.03498649597167969,
-      "Max Error Mean": 5.214216868082683
-    },
-    {
-      "File Name": "opt_adam_params_with_rpso_stats_calm_data_set_500_iterations_during_training_grid_search_params",
-      "MAE Mean": 1.2415341362109351,
-      "MSE Mean": 2.8383074190007824,
-      "RMSE Mean": 1.662149406613951,
-      "Med Mean": 0.8857011596361796,
-      "Min Error Mean": 0.004461348056793213,
-      "Max Error Mean": 5.116191148757935
-    },
-    {
-      "File Name": "opt_adam_params_with_rpso_stats_calm_data_set_500_iterations_during_training_no_gwn_val",
-      "MAE Mean": 1.2985752902401277,
-      "MSE Mean": 2.8615144622258057,
-      "RMSE Mean": 1.673876603310859,
-      "Med Mean": 1.0310495297114055,
-      "Min Error Mean": 0.016364256540934246,
-      "Max Error Mean": 5.25480588277181
-    },
-    {
-      "File Name": "opt_adam_params_with_rpso_stats_calm_data_set_500_iterations_during_training_random_search_params",
-      "MAE Mean": 1.295405953401701,
-      "MSE Mean": 2.7708862678759574,
-      "RMSE Mean": 1.6570323271340472,
-      "Med Mean": 1.0300420920054119,
-      "Min Error Mean": 0.010469555854797363,
-      "Max Error Mean": 4.487733840942383
-    },
-    {
-      "File Name": "opt_sgd_params_with_gbest_stats_calm_data_set",
-      "MAE Mean": 1.3121281864804386,
-      "MSE Mean": 3.0198935478216153,
-      "RMSE Mean": 1.7277119439644348,
-      "Med Mean": 1.0298132101694744,
-      "Min Error Mean": 0.017126719156901043,
-      "Max Error Mean": 5.8933210372924805
-    },
-    {
-      "File Name": "opt_sgd_params_with_gbest_stats_calm_data_set",
-      "MAE Mean": 1.4227532915697798,
-      "MSE Mean": 3.2163829173902503,
-      "RMSE Mean": 1.7778139298465012,
-      "Med Mean": 1.1357990304629009,
-      "Min Error Mean": 0.015246709187825521,
-      "Max Error Mean": 5.081862131754558
-    },
-    {
-      "File Name": "opt_sgd_params_with_gbest_stats_calm_data_set",
-      "MAE Mean": 1.3028366185369944,
-      "MSE Mean": 2.691665605505708,
-      "RMSE Mean": 1.6329344605269558,
-      "Med Mean": 1.0809790293375652,
-      "Min Error Mean": 0.007829666137695312,
-      "Max Error Mean": 4.5622274080912275
-    },
-    {
-      "File Name": "opt_sgd_params_with_rpso_stats_calm_data_set",
-      "MAE Mean": 1.6488550197710412,
-      "MSE Mean": 4.3676714688051055,
-      "RMSE Mean": 2.079395570059779,
-      "Med Mean": 1.4214599132537842,
-      "Min Error Mean": 0.019749800364176433,
-      "Max Error Mean": 6.161846558252971
-    },
-    {
-      "File Name": "opt_sgd_params_with_rpso_stats_calm_data_set",
-      "MAE Mean": 1.580445714635058,
-      "MSE Mean": 4.088891911379696,
-      "RMSE Mean": 2.0020346744074704,
-      "Med Mean": 1.3005553086598713,
-      "Min Error Mean": 0.018624623616536457,
-      "Max Error Mean": 6.324734528859456
-    },
-    {
-      "File Name": "opt_sgd_params_with_rpso_stats_calm_data_set",
-      "MAE Mean": 1.3284126698249954,
-      "MSE Mean": 2.826268034859058,
-      "RMSE Mean": 1.67510614608638,
-      "Med Mean": 1.1235959927241008,
-      "Min Error Mean": 0.014932632446289062,
-      "Max Error Mean": 4.761016050974528
-    },
-    {
-      "File Name": "opt_ann_gbest_stats_noisy_data_set_c120w08",
-      "MAE Mean": 1.9395140760474738,
-      "MSE Mean": 6.077071888121632,
-      "RMSE Mean": 2.4326821756883032,
-      "Med Mean": 1.7347654501597087,
-      "Min Error Mean": 0.0332482655843099,
-      "Max Error Mean": 7.641562620798747
-    },
-    {
-      "File Name": "opt_ann_gbest_stats_noisy_data_set_c1c2149445w0729",
-      "MAE Mean": 1.7030843473307442,
-      "MSE Mean": 4.478140304746671,
-      "RMSE Mean": 2.1047878263547055,
-      "Med Mean": 1.4902875622113545,
-      "Min Error Mean": 0.03206141789754232,
-      "Max Error Mean": 5.867663701375325
-    },
-    {
-      "File Name": "opt_ann_gbest_stats_noisy_data_set_extra_long_single_run",
-      "MAE Mean": 1.6092725935275392,
-      "MSE Mean": 3.8998541660008885,
-      "RMSE Mean": 1.967190645541774,
-      "Med Mean": 1.4595842361450195,
-      "Min Error Mean": 0.026885986328125,
-      "Max Error Mean": 5.55659548441569
-    },
-    {
-      "File Name": "opt_ann_gbest_stats_noisy_data_set_random_search_params",
-      "MAE Mean": 1.543682750559304,
-      "MSE Mean": 3.8010375231646862,
-      "RMSE Mean": 1.9255012270004623,
-      "Med Mean": 1.3357094128926594,
-      "Min Error Mean": 0.04008960723876953,
-      "Max Error Mean": 5.6378475824991865
-    },
-    {
-      "File Name": "opt_ann_rpso_stats_noisy_data_set_default_rpso_params",
-      "MAE Mean": 1.772596771525435,
-      "MSE Mean": 4.793058263112997,
-      "RMSE Mean": 2.173929162808626,
-      "Med Mean": 1.5598455270131428,
-      "Min Error Mean": 0.030749956766764324,
-      "Max Error Mean": 5.912238438924153
-    },
-    {
-      "File Name": "opt_ann_rpso_stats_noisy_data_set_extra_long_single_run_default_params",
-      "MAE Mean": 1.9584335660070202,
-      "MSE Mean": 5.73958702334068,
-      "RMSE Mean": 2.3912977927692682,
-      "Med Mean": 1.6676977475484211,
-      "Min Error Mean": 0.0342864195505778,
-      "Max Error Mean": 6.004555702209473
-    },
-    {
-      "File Name": "opt_ann_rpso_stats_noisy_data_set_grid_search_params",
-      "MAE Mean": 1.5387579614952662,
-      "MSE Mean": 3.872219072846747,
-      "RMSE Mean": 1.95904785220543,
-      "Med Mean": 1.2393898566563923,
-      "Min Error Mean": 0.003918965657552083,
-      "Max Error Mean": 5.908661524454753
-    },
-    {
-      "File Name": "opt_ann_rpso_stats_noisy_data_set_gwn_random_search",
-      "MAE Mean": 1.6694944494864057,
-      "MSE Mean": 4.375784306708886,
-      "RMSE Mean": 2.0899528146705912,
-      "Med Mean": 1.4639742374420166,
-      "Min Error Mean": 0.011948506037394205,
-      "Max Error Mean": 5.9254576365153
-    },
-    {
-      "File Name": "opt_ann_rpso_stats_noisy_data_set_no_gwn_val",
-      "MAE Mean": 1.7806301422810538,
-      "MSE Mean": 4.854668734849586,
-      "RMSE Mean": 2.1912680160314797,
-      "Med Mean": 1.5853757858276367,
-      "Min Error Mean": 0.040880282719930015,
-      "Max Error Mean": 5.674717903137207
-    },
-    {
-      "File Name": "opt_ann_rpso_stats_noisy_data_set_no_gwn_val",
-      "MAE Mean": 1.933058822007044,
-      "MSE Mean": 5.574168959165804,
-      "RMSE Mean": 2.3530631946610665,
-      "Med Mean": 1.743608832359314,
-      "Min Error Mean": 0.04506063461303711,
-      "Max Error Mean": 6.43802531560262
-    },
-    {
-      "File Name": "opt_adam_params_with_gbest_stats_noisy_data_set_500_iterations_during_training_c149445w0729",
-      "MAE Mean": 1.25667529272648,
-      "MSE Mean": 2.5485148291221207,
-      "RMSE Mean": 1.5886200088902918,
-      "Med Mean": 1.056903600692749,
-      "Min Error Mean": 0.013703664143880209,
-      "Max Error Mean": 4.61029330889384
-    },
-    {
-      "File Name": "opt_adam_params_with_gbest_stats_noisy_data_set_500_iterations_during_training_c20w08",
-      "MAE Mean": 1.3582325112594216,
-      "MSE Mean": 3.2763019209624384,
-      "RMSE Mean": 1.7836204241728117,
-      "Med Mean": 1.1042581001917522,
-      "Min Error Mean": 0.02103632688522339,
-      "Max Error Mean": 6.963036855061849
-    },
-    {
-      "File Name": "opt_adam_params_with_gbest_stats_noisy_data_set_500_iterations_during_training_random_search_params",
-      "MAE Mean": 1.5953748677169555,
-      "MSE Mean": 4.3182398607540895,
-      "RMSE Mean": 2.04196338441894,
-      "Med Mean": 1.27984623114268,
-      "Min Error Mean": 0.09036342302958171,
-      "Max Error Mean": 6.8110300699869795
-    },
-    {
-      "File Name": "opt_adam_params_with_rpso_stats_noisy_data_set_gridSearch_params",
-      "MAE Mean": 1.271918105282964,
-      "MSE Mean": 2.57714311999341,
-      "RMSE Mean": 1.5780822291942753,
-      "Med Mean": 1.0411482254664104,
-      "Min Error Mean": 0.005576213200887044,
-      "Max Error Mean": 4.947043736775716
-    },
-    {
-      "File Name": "opt_adam_params_with_rpso_stats_noisy_data_set_no_gwn_val",
-      "MAE Mean": 1.4649874402839806,
-      "MSE Mean": 3.7015452319640754,
-      "RMSE Mean": 1.895082114368008,
-      "Med Mean": 1.1829074025154114,
-      "Min Error Mean": 0.008783658345540365,
-      "Max Error Mean": 6.622622489929199
-    },
-    {
-      "File Name": "opt_adam_params_with_rpso_stats_noisy_data_set_random_search_params",
-      "MAE Mean": 1.47866785593325,
-      "MSE Mean": 3.571145828260533,
-      "RMSE Mean": 1.8547538865290047,
-      "Med Mean": 1.2327405611673992,
-      "Min Error Mean": 0.023068030675252277,
-      "Max Error Mean": 5.6300482749938965
-    },
-    {
-      "File Name": "opt_adam_params_with_rpso_stats_noisy_data_set_standard_params",
-      "MAE Mean": 1.4187815291567805,
-      "MSE Mean": 3.259231487014869,
-      "RMSE Mean": 1.776893675558161,
-      "Med Mean": 1.154393235842387,
-      "Min Error Mean": 0.01217214266459147,
-      "Max Error Mean": 5.009816328684489
-    },
-    {
-      "File Name": "opt_sgd_params_with_gbest_stats_noisy_data_set",
-      "MAE Mean": 1.3511273188512094,
-      "MSE Mean": 2.7796234964821562,
-      "RMSE Mean": 1.649463337895534,
-      "Med Mean": 1.1736302773157756,
-      "Min Error Mean": 0.02752844492594401,
-      "Max Error Mean": 4.788165171941121
-    },
-    {
-      "File Name": "opt_sgd_params_with_gbest_stats_noisy_data_set",
-      "MAE Mean": 1.401808876851302,
-      "MSE Mean": 3.285028517629588,
-      "RMSE Mean": 1.7870422099095782,
-      "Med Mean": 1.1086242894331615,
-      "Min Error Mean": 0.018755276997884113,
-      "Max Error Mean": 5.953956047693889
-    },
-    {
-      "File Name": "opt_sgd_params_with_gbest_stats_noisy_data_set",
-      "MAE Mean": 1.2829146285992705,
-      "MSE Mean": 2.7718798757760506,
-      "RMSE Mean": 1.6325323435494699,
-      "Med Mean": 1.020761529604594,
-      "Min Error Mean": 0.010595162709554037,
-      "Max Error Mean": 6.1483209530512495
-    },
-    {
-      "File Name": "opt_sgd_params_with_rpso_stats_noisy_data_set",
-      "MAE Mean": 1.4871551127486384,
-      "MSE Mean": 3.8172063660687834,
-      "RMSE Mean": 1.9228674024468335,
-      "Med Mean": 1.2243232329686482,
-      "Min Error Mean": 0.03507709503173828,
-      "Max Error Mean": 6.754911303520203
-    },
-    {
-      "File Name": "opt_sgd_params_with_rpso_stats_noisy_data_set",
-      "MAE Mean": 1.237011829335639,
-      "MSE Mean": 2.5914480409120655,
-      "RMSE Mean": 1.5910676951309368,
-      "Med Mean": 0.9776844580968221,
-      "Min Error Mean": 0.025183677673339844,
-      "Max Error Mean": 5.875925223032634
-    },
-    {
-      "File Name": "opt_sgd_params_with_rpso_stats_noisy_data_set",
-      "MAE Mean": 1.3453529590809785,
-      "MSE Mean": 3.0561320161023473,
-      "RMSE Mean": 1.725759863474335,
-      "Med Mean": 1.1200520594914753,
-      "Min Error Mean": 0.028628031412760418,
-      "Max Error Mean": 5.751631577809651
-    },
-    {
-      "File Name": "stats_2023-10-24_04-20-43.json",
-      "MAE Mean": 1.8709618801441117,
-      "MSE Mean": 5.476429517536707,
-      "RMSE Mean": 2.337661988251437,
-      "Med Mean": 1.6066323121388753,
-      "Min Error Mean": 0.016605695088704426,
-      "Max Error Mean": 6.1428883870442705
-    },
-    {
-      "File Name": "stats_2023-10-24_20-06-24.json",
-      "MAE Mean": 2.259838250860606,
-      "MSE Mean": 7.903543587636828,
-      "RMSE Mean": 2.765558873302302,
-      "Med Mean": 1.9846448103586833,
-      "Min Error Mean": 0.007904529571533203,
-      "Max Error Mean": 7.04226032892863
-    },
-    {
-      "File Name": "stats_2023-10-23_17-24-50.json",
-      "MAE Mean": 1.9529311329588148,
-      "MSE Mean": 5.6486638711320625,
-      "RMSE Mean": 2.3539127710023777,
-      "Med Mean": 1.7751540342966716,
-      "Min Error Mean": 0.01850438117980957,
-      "Max Error Mean": 5.927168051401774
-    },
-    {
-      "File Name": "stats_2023-10-24_20-19-01.json",
-      "MAE Mean": 2.132082947978267,
-      "MSE Mean": 7.18669615027198,
-      "RMSE Mean": 2.6766571968970125,
-      "Med Mean": 1.7163284222284954,
-      "Min Error Mean": 0.04213309288024902,
-      "Max Error Mean": 7.475072860717773
-    },
-    {
-      "File Name": "stats_2023-10-24_18-26-46.json",
-      "MAE Mean": 1.8305533885234968,
-      "MSE Mean": 5.328454827722507,
-      "RMSE Mean": 2.3036844694265226,
-      "Med Mean": 1.5742800533771515,
-      "Min Error Mean": 0.02558302879333496,
-      "Max Error Mean": 6.529550234476726
-    },
-    {
-      "File Name": "stats_2023-10-23_23-44-35.json",
-      "MAE Mean": 1.8047764435894813,
-      "MSE Mean": 5.214405824218605,
-      "RMSE Mean": 2.281548270823525,
-      "Med Mean": 1.5571909348169963,
-      "Min Error Mean": 0.008078654607137045,
-      "Max Error Mean": 6.953982353210449
-    },
-    {
-      "File Name": "stats_2023-10-24_21-08-44.json",
-      "MAE Mean": 1.9197930736989572,
-      "MSE Mean": 5.634763253982559,
-      "RMSE Mean": 2.3602645472217083,
-      "Med Mean": 1.6512624820073445,
-      "Min Error Mean": 0.017395734786987305,
-      "Max Error Mean": 6.361636161804199
-    },
-    {
-      "File Name": "stats_2023-10-24_22-10-46.json",
-      "MAE Mean": 1.708515035903373,
-      "MSE Mean": 4.871392133518309,
-      "RMSE Mean": 2.2019605692810758,
-      "Med Mean": 1.3744936684767406,
-      "Min Error Mean": 0.0022443135579427085,
-      "Max Error Mean": 6.761965115865071
-    },
-    {
-      "File Name": "stats_2023-10-23_23-32-01.json",
-      "MAE Mean": 1.9070607498209313,
-      "MSE Mean": 5.926941263172433,
-      "RMSE Mean": 2.43311577355182,
-      "Med Mean": 1.511510968208313,
-      "Min Error Mean": 0.034123857816060386,
-      "Max Error Mean": 6.3689314524332685
-    },
-    {
-      "File Name": "stats_2023-10-23_22-04-32.json",
-      "MAE Mean": 2.1812538049563215,
-      "MSE Mean": 8.993593195365408,
-      "RMSE Mean": 2.9619092018987985,
-      "Med Mean": 1.578837792078654,
-      "Min Error Mean": 0.04164346059163412,
-      "Max Error Mean": 10.591889301935831
-    },
-    {
-      "File Name": "stats_2023-10-24_23-13-24.json",
-      "MAE Mean": 1.9918252996779353,
-      "MSE Mean": 6.204162707031649,
-      "RMSE Mean": 2.474984936021255,
-      "Med Mean": 1.8294939200083415,
-      "Min Error Mean": 0.0287936528523763,
-      "Max Error Mean": 6.436558087666829
-    },
-    {
-      "File Name": "stats_2023-10-24_19-28-47.json",
-      "MAE Mean": 1.9646001837984324,
-      "MSE Mean": 6.167358906440005,
-      "RMSE Mean": 2.456950197767956,
-      "Med Mean": 1.7053874731063843,
-      "Min Error Mean": 0.012108802795410156,
-      "Max Error Mean": 6.809958616892497
-    },
-    {
-      "File Name": "stats_2023-10-23_19-07-11.json",
-      "MAE Mean": 2.0585513746214907,
-      "MSE Mean": 6.839805237829856,
-      "RMSE Mean": 2.614620014520325,
-      "Med Mean": 1.7053467084964116,
-      "Min Error Mean": 0.027941544850667317,
-      "Max Error Mean": 7.581952750682831
-    },
-    {
-      "File Name": "stats_2023-10-24_05-23-21.json",
-      "MAE Mean": 1.985696346754277,
-      "MSE Mean": 5.901275161392834,
-      "RMSE Mean": 2.4219202595744984,
-      "Med Mean": 1.7343054016431172,
-      "Min Error Mean": 0.014994621276855469,
-      "Max Error Mean": 5.787192900975545
-    },
-    {
-      "File Name": "stats_2023-10-23_18-29-03.json",
-      "MAE Mean": 1.7419128600567106,
-      "MSE Mean": 4.701856059107455,
-      "RMSE Mean": 2.152166163859892,
-      "Med Mean": 1.5551129579544067,
-      "Min Error Mean": 0.030896663665771484,
-      "Max Error Mean": 5.873082160949707
-    },
-    {
-      "File Name": "stats_2023-10-24_11-58-37.json",
-      "MAE Mean": 1.4908672831247216,
-      "MSE Mean": 3.869253220683566,
-      "RMSE Mean": 1.9551698419703971,
-      "Med Mean": 1.1435721516609192,
-      "Min Error Mean": 0.026239315668741863,
-      "Max Error Mean": 5.641817172368367
-    },
-    {
-      "File Name": "stats_2023-10-24_11-47-28.json",
-      "MAE Mean": 2.0779291411871634,
-      "MSE Mean": 6.58662751510806,
-      "RMSE Mean": 2.5630567722416413,
-      "Med Mean": 1.785725196202596,
-      "Min Error Mean": 0.037784576416015625,
-      "Max Error Mean": 6.604461868604024
-    },
-    {
-      "File Name": "stats_2023-10-24_01-50-09.json",
-      "MAE Mean": 2.080033735882488,
-      "MSE Mean": 6.573704387976462,
-      "RMSE Mean": 2.5560636993228165,
-      "Med Mean": 1.7888158957163494,
-      "Min Error Mean": 0.04735875129699707,
-      "Max Error Mean": 7.211359024047852
-    },
-    {
-      "File Name": "stats_2023-10-24_22-48-25.json",
-      "MAE Mean": 2.083020238669551,
-      "MSE Mean": 6.488322784946857,
-      "RMSE Mean": 2.539003295146989,
-      "Med Mean": 1.859742780526479,
-      "Min Error Mean": 0.015573064486185709,
-      "Max Error Mean": 6.491242090861003
-    },
-    {
-      "File Name": "stats_2023-10-23_22-17-03.json",
-      "MAE Mean": 1.5239025773983155,
-      "MSE Mean": 3.9001999664590303,
-      "RMSE Mean": 1.971870691940848,
-      "Med Mean": 1.1763139963150024,
-      "Min Error Mean": 0.02497704823811849,
-      "Max Error Mean": 5.704377810160319
-    },
-    {
-      "File Name": "stats_2023-10-24_00-09-43.json",
-      "MAE Mean": 1.99267113469175,
-      "MSE Mean": 5.871479579362791,
-      "RMSE Mean": 2.4176568713630124,
-      "Med Mean": 1.8091435035069783,
-      "Min Error Mean": 0.008861859639485678,
-      "Max Error Mean": 5.843425114949544
-    },
-    {
-      "File Name": "stats_2023-10-24_12-20-53.json",
-      "MAE Mean": 2.006754322891783,
-      "MSE Mean": 7.0102773105091245,
-      "RMSE Mean": 2.6455521368038255,
-      "Med Mean": 1.647115707397461,
-      "Min Error Mean": 0.03699143727620443,
-      "Max Error Mean": 8.467763106028238
-    },
-    {
-      "File Name": "stats_2023-10-23_19-45-03.json",
-      "MAE Mean": 2.1658567755759743,
-      "MSE Mean": 7.52133606909145,
-      "RMSE Mean": 2.7315215171660903,
-      "Med Mean": 1.8760557572046916,
-      "Min Error Mean": 0.014754295349121094,
-      "Max Error Mean": 8.39836640159289
-    },
-    {
-      "File Name": "stats_2023-10-24_20-44-00.json",
-      "MAE Mean": 1.599584890743795,
-      "MSE Mean": 4.005799418464833,
-      "RMSE Mean": 2.000165064249885,
-      "Med Mean": 1.376623233159383,
-      "Min Error Mean": 0.028445879618326824,
-      "Max Error Mean": 5.887380599975586
-    },
-    {
-      "File Name": "stats_2023-10-24_20-31-28.json",
-      "MAE Mean": 1.9982614835061117,
-      "MSE Mean": 6.244652272371385,
-      "RMSE Mean": 2.4910904036344177,
-      "Med Mean": 1.7379203637440999,
-      "Min Error Mean": 0.04742884635925293,
-      "Max Error Mean": 7.438704172770183
-    },
-    {
-      "File Name": "stats_2023-10-24_02-40-26.json",
-      "MAE Mean": 1.8608897421478054,
-      "MSE Mean": 5.8250417192492145,
-      "RMSE Mean": 2.4066819852446866,
-      "Med Mean": 1.4660577376683552,
-      "Min Error Mean": 0.018018007278442383,
-      "Max Error Mean": 7.596853256225586
-    },
-    {
-      "File Name": "stats_2023-10-24_21-45-58.json",
-      "MAE Mean": 1.815847451059332,
-      "MSE Mean": 5.154897431328341,
-      "RMSE Mean": 2.265913213608997,
-      "Med Mean": 1.58316965897878,
-      "Min Error Mean": 0.025298198064168293,
-      "Max Error Mean": 6.70001761118571
-    },
-    {
-      "File Name": "stats_2023-10-23_21-39-10.json",
-      "MAE Mean": 1.7690191148870393,
-      "MSE Mean": 4.852475199960968,
-      "RMSE Mean": 2.187738696401421,
-      "Med Mean": 1.5214558839797974,
-      "Min Error Mean": 0.01600019137064616,
-      "Max Error Mean": 5.454266786575317
-    },
-    {
-      "File Name": "stats_2023-10-24_05-10-53.json",
-      "MAE Mean": 1.8469951766153807,
-      "MSE Mean": 5.324955027021878,
-      "RMSE Mean": 2.3069279253823933,
-      "Med Mean": 1.5802145451307297,
-      "Min Error Mean": 0.022265116373697918,
-      "Max Error Mean": 6.770241419474284
-    },
-    {
-      "File Name": "stats_2023-10-24_03-55-46.json",
-      "MAE Mean": 1.7572353297755479,
-      "MSE Mean": 4.8358122344266725,
-      "RMSE Mean": 2.193360433970604,
-      "Med Mean": 1.444984495639801,
-      "Min Error Mean": 0.04749093453089396,
-      "Max Error Mean": 6.216193199157715
-    },
-    {
-      "File Name": "stats_2023-10-24_06-13-21.json",
-      "MAE Mean": 1.7058347011358108,
-      "MSE Mean": 4.624144198452555,
-      "RMSE Mean": 2.149565483142639,
-      "Med Mean": 1.4842831293741863,
-      "Min Error Mean": 0.02561906973520915,
-      "Max Error Mean": 6.45873228708903
-    },
-    {
-      "File Name": "stats_2023-10-24_06-38-23.json",
-      "MAE Mean": 1.9349171386441766,
-      "MSE Mean": 6.184470438206334,
-      "RMSE Mean": 2.4833582708839717,
-      "Med Mean": 1.576315959294637,
-      "Min Error Mean": 0.025060176849365234,
-      "Max Error Mean": 6.759260813395183
-    },
-    {
-      "File Name": "stats_2023-10-23_19-32-27.json",
-      "MAE Mean": 1.7705340564735261,
-      "MSE Mean": 4.899006389256388,
-      "RMSE Mean": 2.208342572703549,
-      "Med Mean": 1.5213207801183064,
-      "Min Error Mean": 0.021821022033691406,
-      "Max Error Mean": 6.368718147277832
-    },
-    {
-      "File Name": "stats_2023-10-23_17-12-01.json",
-      "MAE Mean": 1.6885418689335985,
-      "MSE Mean": 4.265590048262881,
-      "RMSE Mean": 2.061942641070477,
-      "Med Mean": 1.4718239307403564,
-      "Min Error Mean": 0.021836896737416584,
-      "Max Error Mean": 5.0613352457682295
-    },
-    {
-      "File Name": "stats_2023-10-23_17-37-46.json",
-      "MAE Mean": 2.194009571560206,
-      "MSE Mean": 7.872720949123807,
-      "RMSE Mean": 2.781328539273066,
-      "Med Mean": 1.855323314666748,
-      "Min Error Mean": 0.022472143173217773,
-      "Max Error Mean": 7.187865575154622
-    },
-    {
-      "File Name": "stats_2023-10-23_23-19-33.json",
-      "MAE Mean": 1.795723011393666,
-      "MSE Mean": 5.667237914094419,
-      "RMSE Mean": 2.3792496643743566,
-      "Med Mean": 1.439488371213277,
-      "Min Error Mean": 0.05355962117513021,
-      "Max Error Mean": 7.709867795308431
-    },
-    {
-      "File Name": "stats_2023-10-24_04-58-18.json",
-      "MAE Mean": 1.8951204785166234,
-      "MSE Mean": 5.616145736306144,
-      "RMSE Mean": 2.3633383746500756,
-      "Med Mean": 1.6044221719106038,
-      "Min Error Mean": 0.02144463857014974,
-      "Max Error Mean": 6.287296295166016
-    },
-    {
-      "File Name": "stats_2023-10-24_01-25-06.json",
-      "MAE Mean": 2.1722755462978705,
-      "MSE Mean": 7.446821830715199,
-      "RMSE Mean": 2.724741956741821,
-      "Med Mean": 1.9550254344940186,
-      "Min Error Mean": 0.005998293558756511,
-      "Max Error Mean": 7.625675201416016
-    },
-    {
-      "File Name": "stats_2023-10-24_19-03-59.json",
-      "MAE Mean": 1.9704499410145768,
-      "MSE Mean": 5.71744916891265,
-      "RMSE Mean": 2.3865894915751933,
-      "Med Mean": 1.7445472876230876,
-      "Min Error Mean": 0.05973005294799805,
-      "Max Error Mean": 6.052448272705078
-    },
-    {
-      "File Name": "stats_2023-10-24_21-58-20.json",
-      "MAE Mean": 1.840847921004281,
-      "MSE Mean": 5.267234404928977,
-      "RMSE Mean": 2.2880202621452383,
-      "Med Mean": 1.6185658772786458,
-      "Min Error Mean": 0.020194053649902344,
-      "Max Error Mean": 6.020407835642497
-    },
-    {
-      "File Name": "stats_2023-10-24_03-30-34.json",
-      "MAE Mean": 2.2503386358994475,
-      "MSE Mean": 8.16835994361339,
-      "RMSE Mean": 2.854152376078792,
-      "Med Mean": 1.8404549558957417,
-      "Min Error Mean": 0.027008692423502605,
-      "Max Error Mean": 8.106359322865805
-    },
-    {
-      "File Name": "stats_2023-10-24_02-02-44.json",
-      "MAE Mean": 1.831004452020583,
-      "MSE Mean": 5.244043647021591,
-      "RMSE Mean": 2.266405042241932,
-      "Med Mean": 1.5537802775700886,
-      "Min Error Mean": 0.03139944871266683,
-      "Max Error Mean": 6.117298603057861
-    },
-    {
-      "File Name": "stats_2023-10-24_02-15-17.json",
-      "MAE Mean": 1.9640366752446825,
-      "MSE Mean": 6.14188862439742,
-      "RMSE Mean": 2.4781314483108754,
-      "Med Mean": 1.6108866135279338,
-      "Min Error Mean": 0.009853204091389975,
-      "Max Error Mean": 7.383016904195149
-    },
-    {
-      "File Name": "stats_2023-10-24_21-21-07.json",
-      "MAE Mean": 1.7178297900119608,
-      "MSE Mean": 4.80625371366548,
-      "RMSE Mean": 2.18881598635053,
-      "Med Mean": 1.3914383451143901,
-      "Min Error Mean": 0.04387378692626953,
-      "Max Error Mean": 6.2323792179425554
-    },
-    {
-      "File Name": "stats_2023-10-23_19-57-43.json",
-      "MAE Mean": 2.1120566455133467,
-      "MSE Mean": 6.382528940819725,
-      "RMSE Mean": 2.520688293571792,
-      "Med Mean": 1.9343541463216145,
-      "Min Error Mean": 0.043672402699788414,
-      "Max Error Mean": 6.940181334813436
-    },
-    {
-      "File Name": "stats_2023-10-24_23-38-21.json",
-      "MAE Mean": 1.9694745642573024,
-      "MSE Mean": 6.58673938615379,
-      "RMSE Mean": 2.555842076834892,
-      "Med Mean": 1.6008461316426594,
-      "Min Error Mean": 0.0176846186319987,
-      "Max Error Mean": 7.152756373087565
-    },
-    {
-      "File Name": "stats_2023-10-24_12-54-31.json",
-      "MAE Mean": 1.8079852596927752,
-      "MSE Mean": 4.7151653404788965,
-      "RMSE Mean": 2.1604300913623997,
-      "Med Mean": 1.6777780453364055,
-      "Min Error Mean": 0.010764280954996744,
-      "Max Error Mean": 4.902382771174113
-    },
-    {
-      "File Name": "stats_2023-10-24_03-17-58.json",
-      "MAE Mean": 1.6839263713841897,
-      "MSE Mean": 4.260224275976593,
-      "RMSE Mean": 2.0584044878915413,
-      "Med Mean": 1.5117587645848591,
-      "Min Error Mean": 0.028885364532470703,
-      "Max Error Mean": 4.953179677327474
-    },
-    {
-      "File Name": "stats_2023-10-24_18-51-35.json",
-      "MAE Mean": 2.013320078558302,
-      "MSE Mean": 6.636042488246663,
-      "RMSE Mean": 2.5752399431473347,
-      "Med Mean": 1.623642086982727,
-      "Min Error Mean": 0.03409417470296224,
-      "Max Error Mean": 8.475560983022055
-    },
-    {
-      "File Name": "stats_2023-10-24_12-43-19.json",
-      "MAE Mean": 2.352574687253456,
-      "MSE Mean": 9.131508557730086,
-      "RMSE Mean": 3.012528323826547,
-      "Med Mean": 1.9779372215270996,
-      "Min Error Mean": 0.0025173823038736978,
-      "Max Error Mean": 9.109251022338867
-    },
-    {
-      "File Name": "stats_2023-10-24_23-25-54.json",
-      "MAE Mean": 2.0612423213949187,
-      "MSE Mean": 6.930937376454131,
-      "RMSE Mean": 2.624599935671283,
-      "Med Mean": 1.7643485069274902,
-      "Min Error Mean": 0.009224494298299154,
-      "Max Error Mean": 7.59732715288798
-    },
-    {
-      "File Name": "stats_2023-10-23_22-29-32.json",
-      "MAE Mean": 1.682910623689177,
-      "MSE Mean": 4.484780754825608,
-      "RMSE Mean": 2.1170311158902546,
-      "Med Mean": 1.4262148936589558,
-      "Min Error Mean": 0.008960405985514322,
-      "Max Error Mean": 5.708302179972331
-    },
-    {
-      "File Name": "stats_2023-10-24_13-06-07.json",
-      "MAE Mean": 2.07802366739222,
-      "MSE Mean": 6.563554469349719,
-      "RMSE Mean": 2.5568068250580125,
-      "Med Mean": 1.7914973497390747,
-      "Min Error Mean": 0.03636328379313151,
-      "Max Error Mean": 7.621995131174724
-    },
-    {
-      "File Name": "stats_2023-10-24_18-14-17.json",
-      "MAE Mean": 1.7430165114119165,
-      "MSE Mean": 5.125821769029562,
-      "RMSE Mean": 2.25824876478827,
-      "Med Mean": 1.352941672007243,
-      "Min Error Mean": 0.01660601298014323,
-      "Max Error Mean": 7.367193380991618
-    },
-    {
-      "File Name": "stats_2023-10-24_03-05-27.json",
-      "MAE Mean": 1.8950151741491998,
-      "MSE Mean": 5.60651705221471,
-      "RMSE Mean": 2.365911656630639,
-      "Med Mean": 1.5720828771591187,
-      "Min Error Mean": 0.02875816822052002,
-      "Max Error Mean": 6.928706526756287
-    },
-    {
-      "File Name": "stats_2023-10-24_00-22-09.json",
-      "MAE Mean": 2.090994073776071,
-      "MSE Mean": 6.8909898543555785,
-      "RMSE Mean": 2.6216800949530987,
-      "Med Mean": 1.755950689315796,
-      "Min Error Mean": 0.01742442448933919,
-      "Max Error Mean": 7.344092686971028
-    },
-    {
-      "File Name": "stats_2023-10-24_06-00-52.json",
-      "MAE Mean": 1.80427009668525,
-      "MSE Mean": 5.668259295729809,
-      "RMSE Mean": 2.370469716843171,
-      "Med Mean": 1.437001903851827,
-      "Min Error Mean": 0.030461947123209637,
-      "Max Error Mean": 7.1200253168741865
-    },
-    {
-      "File Name": "stats_2023-10-23_23-07-03.json",
-      "MAE Mean": 1.957870321163875,
-      "MSE Mean": 5.846506894158618,
-      "RMSE Mean": 2.4135977922534124,
-      "Med Mean": 1.620793640613556,
-      "Min Error Mean": 0.025721510251363117,
-      "Max Error Mean": 6.734350840250651
-    },
-    {
-      "File Name": "stats_2023-10-23_19-19-50.json",
-      "MAE Mean": 2.418301465068905,
-      "MSE Mean": 9.560095911090675,
-      "RMSE Mean": 3.089551207016147,
-      "Med Mean": 1.9425160884857178,
-      "Min Error Mean": 0.08989942073822021,
-      "Max Error Mean": 11.018319447835287
-    },
-    {
-      "File Name": "stats_2023-10-23_18-16-27.json",
-      "MAE Mean": 1.9810188465828438,
-      "MSE Mean": 6.1072757647071905,
-      "RMSE Mean": 2.4691764586509253,
-      "Med Mean": 1.687624494234721,
-      "Min Error Mean": 0.01637117067972819,
-      "Max Error Mean": 6.597018877665202
-    },
-    {
-      "File Name": "stats_2023-10-23_20-10-24.json",
-      "MAE Mean": 2.045419949885579,
-      "MSE Mean": 6.379211899918171,
-      "RMSE Mean": 2.520458498186271,
-      "Med Mean": 1.7864913543065388,
-      "Min Error Mean": 0.016152699788411457,
-      "Max Error Mean": 6.9390387535095215
-    },
-    {
-      "File Name": "stats_2023-10-24_04-33-16.json",
-      "MAE Mean": 2.192208523544865,
-      "MSE Mean": 8.713914403421702,
-      "RMSE Mean": 2.947599411820052,
-      "Med Mean": 1.7220300833384197,
-      "Min Error Mean": 0.01671441396077474,
-      "Max Error Mean": 11.041425546010336
-    },
-    {
-      "File Name": "stats_2023-10-24_04-45-43.json",
-      "MAE Mean": 2.145419854760305,
-      "MSE Mean": 7.9337032462813575,
-      "RMSE Mean": 2.80049899573944,
-      "Med Mean": 1.8017003536224365,
-      "Min Error Mean": 0.003973642985026042,
-      "Max Error Mean": 9.675785382588705
-    },
-    {
-      "File Name": "stats_2023-10-24_12-32-06.json",
-      "MAE Mean": 1.8438272299750436,
-      "MSE Mean": 5.377709479085652,
-      "RMSE Mean": 2.3028860346970306,
-      "Med Mean": 1.5580382347106934,
-      "Min Error Mean": 0.01580206553141276,
-      "Max Error Mean": 6.549442330996196
-    },
-    {
-      "File Name": "stats_2023-10-23_18-03-33.json",
-      "MAE Mean": 1.7098036438136595,
-      "MSE Mean": 4.8044526536304994,
-      "RMSE Mean": 2.191305862831657,
-      "Med Mean": 1.4696735541025798,
-      "Min Error Mean": 0.01207439104715983,
-      "Max Error Mean": 7.390544573465983
-    },
-    {
-      "File Name": "stats_2023-10-24_00-34-40.json",
-      "MAE Mean": 1.8640826898755805,
-      "MSE Mean": 5.287851631844682,
-      "RMSE Mean": 2.298560199720921,
-      "Med Mean": 1.6195101737976074,
-      "Min Error Mean": 0.01599295934041341,
-      "Max Error Mean": 5.59093314409256
-    },
-    {
-      "File Name": "stats_2023-10-24_19-16-22.json",
-      "MAE Mean": 1.7054196524624559,
-      "MSE Mean": 4.458087182412727,
-      "RMSE Mean": 2.104848535057944,
-      "Med Mean": 1.4838270743687947,
-      "Min Error Mean": 0.014743804931640625,
-      "Max Error Mean": 5.733904838562012
-    },
-    {
-      "File Name": "stats_2023-10-24_01-12-32.json",
-      "MAE Mean": 1.6436940146614365,
-      "MSE Mean": 4.680229872313969,
-      "RMSE Mean": 2.1496348981469073,
-      "Med Mean": 1.2845488389333088,
-      "Min Error Mean": 0.00985860824584961,
-      "Max Error Mean": 6.412221431732178
-    },
-    {
-      "File Name": "stats_2023-10-23_22-54-35.json",
-      "MAE Mean": 1.8127700732340888,
-      "MSE Mean": 5.21821631426057,
-      "RMSE Mean": 2.282986274883734,
-      "Med Mean": 1.4646031459172566,
-      "Min Error Mean": 0.029759804407755535,
-      "Max Error Mean": 6.599729537963867
-    },
-    {
-      "File Name": "stats_2023-10-23_21-13-47.json",
-      "MAE Mean": 1.8006813204021546,
-      "MSE Mean": 5.409663270841084,
-      "RMSE Mean": 2.3189794028123307,
-      "Med Mean": 1.401737739642461,
-      "Min Error Mean": 0.012795289357503256,
-      "Max Error Mean": 6.622407595316569
-    },
-    {
-      "File Name": "stats_2023-10-23_20-35-35.json",
-      "MAE Mean": 2.183008540181819,
-      "MSE Mean": 8.220765806682417,
-      "RMSE Mean": 2.864625743217946,
-      "Med Mean": 1.812462866306305,
-      "Min Error Mean": 0.023514310518900555,
-      "Max Error Mean": 9.733672062555948
-    },
-    {
-      "File Name": "stats_2023-10-24_12-09-48.json",
-      "MAE Mean": 1.6353960817712145,
-      "MSE Mean": 4.501572178651377,
-      "RMSE Mean": 2.1210618990161616,
-      "Med Mean": 1.3046527703603108,
-      "Min Error Mean": 0.011838038762410482,
-      "Max Error Mean": 6.241897900899251
-    },
-    {
-      "File Name": "stats_2023-10-24_00-47-20.json",
-      "MAE Mean": 1.8454301247115579,
-      "MSE Mean": 5.762315824355521,
-      "RMSE Mean": 2.3894349063259783,
-      "Med Mean": 1.5253807306289673,
-      "Min Error Mean": 0.021503925323486328,
-      "Max Error Mean": 7.810092608133952
-    },
-    {
-      "File Name": "stats_2023-10-24_04-08-19.json",
-      "MAE Mean": 1.9049223068346939,
-      "MSE Mean": 5.566429667778158,
-      "RMSE Mean": 2.355732489815368,
-      "Med Mean": 1.7015504837036133,
-      "Min Error Mean": 0.01381834348042806,
-      "Max Error Mean": 6.42019526163737
-    },
-    {
-      "File Name": "stats_2023-10-24_21-33-34.json",
-      "MAE Mean": 1.8572866381769007,
-      "MSE Mean": 5.421277614666736,
-      "RMSE Mean": 2.3176777606499526,
-      "Med Mean": 1.5460838079452515,
-      "Min Error Mean": 0.005143324534098308,
-      "Max Error Mean": 6.231874545415242
-    },
-    {
-      "File Name": "stats_2023-10-23_18-41-46.json",
-      "MAE Mean": 2.0977853366270245,
-      "MSE Mean": 6.790614854652744,
-      "RMSE Mean": 2.5980527180088857,
-      "Med Mean": 1.7404224475224812,
-      "Min Error Mean": 0.04188315073649088,
-      "Max Error Mean": 6.8931684494018555
-    },
-    {
-      "File Name": "stats_2023-10-24_05-35-47.json",
-      "MAE Mean": 2.794642292806993,
-      "MSE Mean": 11.985295334396582,
-      "RMSE Mean": 3.459920506608766,
-      "Med Mean": 2.3642512957255044,
-      "Min Error Mean": 0.09218724568684895,
-      "Max Error Mean": 8.786085853974024
-    },
-    {
-      "File Name": "stats_2023-10-23_17-50-41.json",
-      "MAE Mean": 1.867426974941904,
-      "MSE Mean": 5.275147929057414,
-      "RMSE Mean": 2.2947363010971666,
-      "Med Mean": 1.6312688986460369,
-      "Min Error Mean": 0.044942220052083336,
-      "Max Error Mean": 6.255966544151306
-    },
-    {
-      "File Name": "stats_2023-10-24_05-48-19.json",
-      "MAE Mean": 1.8165468235258704,
-      "MSE Mean": 5.345482837244863,
-      "RMSE Mean": 2.311778651625211,
-      "Med Mean": 1.4603131810824077,
-      "Min Error Mean": 0.017323891321818035,
-      "Max Error Mean": 6.5086971918741865
-    },
-    {
-      "File Name": "stats_2023-10-24_23-01-01.json",
-      "MAE Mean": 2.111141650261004,
-      "MSE Mean": 7.116660336116186,
-      "RMSE Mean": 2.662266386630081,
-      "Med Mean": 1.8133761882781982,
-      "Min Error Mean": 0.019095738728841145,
-      "Max Error Mean": 7.730616013209025
-    },
-    {
-      "File Name": "stats_2023-10-24_19-53-53.json",
-      "MAE Mean": 2.32587654724582,
-      "MSE Mean": 8.098843802818381,
-      "RMSE Mean": 2.8359880666644925,
-      "Med Mean": 2.0258384545644126,
-      "Min Error Mean": 0.01997697353363037,
-      "Max Error Mean": 7.2090820868810015
-    },
-    {
-      "File Name": "stats_2023-10-24_18-39-16.json",
-      "MAE Mean": 1.896060484665772,
-      "MSE Mean": 5.7745318691847585,
-      "RMSE Mean": 2.396728927841046,
-      "Med Mean": 1.5708168546358745,
-      "Min Error Mean": 0.004820664723714192,
-      "Max Error Mean": 6.70050326983134
-    },
-    {
-      "File Name": "stats_2023-10-24_19-41-19.json",
-      "MAE Mean": 1.8998683986840426,
-      "MSE Mean": 5.674299979499455,
-      "RMSE Mean": 2.3790436957069887,
-      "Med Mean": 1.6624263922373455,
-      "Min Error Mean": 0.006151596705118815,
-      "Max Error Mean": 6.691760698954265
-    },
-    {
-      "File Name": "stats_2023-10-24_20-56-24.json",
-      "MAE Mean": 2.075911113446352,
-      "MSE Mean": 7.224065026644957,
-      "RMSE Mean": 2.6851916630719876,
-      "Med Mean": 1.6902704238891602,
-      "Min Error Mean": 0.04145733515421549,
-      "Max Error Mean": 9.378357887268066
-    },
-    {
-      "File Name": "stats_2023-10-23_21-01-06.json",
-      "MAE Mean": 1.5611253300593013,
-      "MSE Mean": 4.152260872797037,
-      "RMSE Mean": 2.0318514984012457,
-      "Med Mean": 1.2365745504697163,
-      "Min Error Mean": 0.010109742482503256,
-      "Max Error Mean": 6.136526902516683
-    },
-    {
-      "File Name": "stats_2023-10-24_03-43-06.json",
-      "MAE Mean": 2.16313850618026,
-      "MSE Mean": 7.168510091533849,
-      "RMSE Mean": 2.677281156298561,
-      "Med Mean": 1.8358912070592244,
-      "Min Error Mean": 0.02518431345621745,
-      "Max Error Mean": 7.709641774495442
-    },
-    {
-      "File Name": "stats_2023-10-23_22-42-01.json",
-      "MAE Mean": 1.7651080318724486,
-      "MSE Mean": 5.208892732968592,
-      "RMSE Mean": 2.2741348665423144,
-      "Med Mean": 1.3856599728266399,
-      "Min Error Mean": 0.018802483876546223,
-      "Max Error Mean": 7.016367594401042
-    },
-    {
-      "File Name": "stats_2023-10-24_22-23-10.json",
-      "MAE Mean": 1.8424364309338397,
-      "MSE Mean": 5.234772680658298,
-      "RMSE Mean": 2.2805320857956763,
-      "Med Mean": 1.5614765882492065,
-      "Min Error Mean": 0.05994530518849691,
-      "Max Error Mean": 6.406856218973796
-    },
-    {
-      "File Name": "stats_2023-10-24_06-25-52.json",
-      "MAE Mean": 2.260287582021114,
-      "MSE Mean": 8.466455507306982,
-      "RMSE Mean": 2.9071174467100604,
-      "Med Mean": 1.719286362330119,
-      "Min Error Mean": 0.0015142758687337239,
-      "Max Error Mean": 8.900712966918945
-    },
-    {
-      "File Name": "stats_2023-10-24_01-37-33.json",
-      "MAE Mean": 1.7812208718453404,
-      "MSE Mean": 5.079420367626493,
-      "RMSE Mean": 2.233849009140627,
-      "Med Mean": 1.4975096384684246,
-      "Min Error Mean": 0.010968844095865885,
-      "Max Error Mean": 5.926032582918803
-    },
-    {
-      "File Name": "stats_2023-10-23_21-51-49.json",
-      "MAE Mean": 2.116261618869634,
-      "MSE Mean": 6.9432638696522835,
-      "RMSE Mean": 2.625718048129744,
-      "Med Mean": 1.7921641667683919,
-      "Min Error Mean": 0.011396249135335287,
-      "Max Error Mean": 6.992048184076945
-    },
-    {
-      "File Name": "stats_2023-10-23_21-26-27.json",
-      "MAE Mean": 1.70819047602261,
-      "MSE Mean": 4.988617312839213,
-      "RMSE Mean": 2.227623378565476,
-      "Med Mean": 1.3144870201746623,
-      "Min Error Mean": 0.024754762649536133,
-      "Max Error Mean": 6.438673337300618
-    },
-    {
-      "File Name": "stats_2023-10-24_22-35-54.json",
-      "MAE Mean": 1.9005098605755144,
-      "MSE Mean": 6.133607775004061,
-      "RMSE Mean": 2.473940017396243,
-      "Med Mean": 1.5830175181229909,
-      "Min Error Mean": 0.02165718873341878,
-      "Max Error Mean": 7.764477729797363
-    },
-    {
-      "File Name": "stats_2023-10-24_02-27-50.json",
-      "MAE Mean": 1.6273371919595376,
-      "MSE Mean": 4.282923301038959,
-      "RMSE Mean": 2.0695096720810504,
-      "Med Mean": 1.3052967190742493,
-      "Min Error Mean": 0.0551456610361735,
-      "Max Error Mean": 6.050212542215983
-    },
-    {
-      "File Name": "stats_2023-10-23_23-57-06.json",
-      "MAE Mean": 2.0541190183385702,
-      "MSE Mean": 7.498791626343386,
-      "RMSE Mean": 2.7315354776340204,
-      "Med Mean": 1.574712077776591,
-      "Min Error Mean": 0.014138062795003256,
-      "Max Error Mean": 8.301554838816324
-    },
-    {
-      "File Name": "stats_2023-10-24_00-59-59.json",
-      "MAE Mean": 2.483297177931281,
-      "MSE Mean": 9.050289727583467,
-      "RMSE Mean": 3.004641635048287,
-      "Med Mean": 2.190088927745819,
-      "Min Error Mean": 0.02915775775909424,
-      "Max Error Mean": 7.6327330271403
-    },
-    {
-      "File Name": "stats_2023-10-23_20-23-00.json",
-      "MAE Mean": 1.847074920440252,
-      "MSE Mean": 5.105850835612141,
-      "RMSE Mean": 2.2576293255142095,
-      "Med Mean": 1.5520652731259663,
-      "Min Error Mean": 0.01485427220662435,
-      "Max Error Mean": 5.981036345163981
-    },
-    {
-      "File Name": "stats_2023-10-24_02-52-58.json",
-      "MAE Mean": 1.838798325463217,
-      "MSE Mean": 5.191859288374204,
-      "RMSE Mean": 2.2783433194654723,
-      "Med Mean": 1.4922796090443928,
-      "Min Error Mean": 0.0645306905110677,
-      "Max Error Mean": 6.321311950683594
-    },
-    {
-      "File Name": "stats_2023-10-23_20-48-20.json",
-      "MAE Mean": 2.0307420678645123,
-      "MSE Mean": 7.150650763259965,
-      "RMSE Mean": 2.667055518457117,
-      "Med Mean": 1.5220600366592407,
-      "Min Error Mean": 0.021000385284423828,
-      "Max Error Mean": 8.131104588508606
-    },
-    {
-      "File Name": "stats_2023-10-23_18-54-29.json",
-      "MAE Mean": 2.316801105646905,
-      "MSE Mean": 9.390186865864697,
-      "RMSE Mean": 3.0567779877431414,
-      "Med Mean": 1.8003361423810322,
-      "Min Error Mean": 0.01513528823852539,
-      "Max Error Mean": 9.368709246317545
-    },
-    {
-      "File Name": "stats_2023-10-25_16-02-57.json",
-      "MAE Mean": 1.5364572839289117,
-      "MSE Mean": 3.834032260914506,
-      "RMSE Mean": 1.9576374941254402,
-      "Med Mean": 1.2816860675811768,
-      "Min Error Mean": 0.018650631109873455,
-      "Max Error Mean": 5.7396392822265625
-    },
-    {
-      "File Name": "stats_2023-10-25_22-37-13.json",
-      "MAE Mean": 2.1437298142056256,
-      "MSE Mean": 6.996147453113359,
-      "RMSE Mean": 2.6414733499710183,
-      "Med Mean": 1.787990113099416,
-      "Min Error Mean": 0.08474620183308919,
-      "Max Error Mean": 6.382486025492351
-    },
-    {
-      "File Name": "stats_2023-10-26_18-02-38.json",
-      "MAE Mean": 1.755317916535545,
-      "MSE Mean": 4.887615711559413,
-      "RMSE Mean": 2.209921797626063,
-      "Med Mean": 1.4826842943827312,
-      "Min Error Mean": 0.04183586438496908,
-      "Max Error Mean": 6.248993476231893
-    },
-    {
-      "File Name": "stats_2023-10-26_19-43-04.json",
-      "MAE Mean": 2.2348550621918544,
-      "MSE Mean": 7.705205707740507,
-      "RMSE Mean": 2.7682732808302624,
-      "Med Mean": 1.8586301803588867,
-      "Min Error Mean": 0.03292524814605713,
-      "Max Error Mean": 7.710567474365234
-    },
-    {
-      "File Name": "stats_2023-10-25_17-53-10.json",
-      "MAE Mean": 1.7707790652933395,
-      "MSE Mean": 5.237182835398493,
-      "RMSE Mean": 2.286820055625349,
-      "Med Mean": 1.3989296754201253,
-      "Min Error Mean": 0.0416107972462972,
-      "Max Error Mean": 7.027448972066243
-    },
-    {
-      "File Name": "stats_2023-10-26_00-03-31.json",
-      "MAE Mean": 2.25340799914894,
-      "MSE Mean": 7.889889864976271,
-      "RMSE Mean": 2.8028392552848005,
-      "Med Mean": 2.00264040629069,
-      "Min Error Mean": 0.01193857192993164,
-      "Max Error Mean": 7.659995476404826
-    },
-    {
-      "File Name": "stats_2023-10-25_18-55-05.json",
-      "MAE Mean": 1.8104471599569125,
-      "MSE Mean": 5.611348980891674,
-      "RMSE Mean": 2.3554741638681205,
-      "Med Mean": 1.4577669302622478,
-      "Min Error Mean": 0.05099360148111979,
-      "Max Error Mean": 6.421954870223999
-    },
-    {
-      "File Name": "stats_2023-10-25_16-51-53.json",
-      "MAE Mean": 1.7984630070761893,
-      "MSE Mean": 5.204629515927504,
-      "RMSE Mean": 2.2735790655495154,
-      "Med Mean": 1.4576460272073746,
-      "Min Error Mean": 0.03827730814615885,
-      "Max Error Mean": 6.49220625559489
-    },
-    {
-      "File Name": "stats_2023-10-26_16-47-16.json",
-      "MAE Mean": 2.5879212608998774,
-      "MSE Mean": 9.768632144604174,
-      "RMSE Mean": 3.1251699489897153,
-      "Med Mean": 2.231845577557882,
-      "Min Error Mean": 0.07560992240905762,
-      "Max Error Mean": 7.65355904897054
-    },
-    {
-      "File Name": "stats_2023-10-25_13-30-38.json",
-      "MAE Mean": 2.331227213732239,
-      "MSE Mean": 9.021365414421481,
-      "RMSE Mean": 3.002969916014275,
-      "Med Mean": 1.8241084416707356,
-      "Min Error Mean": 0.007053693135579427,
-      "Max Error Mean": 8.59247620900472
-    },
-    {
-      "File Name": "stats_2023-10-25_12-26-02.json",
-      "MAE Mean": 2.2179208525595167,
-      "MSE Mean": 8.02113077641136,
-      "RMSE Mean": 2.8162755254263376,
-      "Med Mean": 1.7450569868087769,
-      "Min Error Mean": 0.02907530466715495,
-      "Max Error Mean": 9.03254779179891
-    },
-    {
-      "File Name": "stats_2023-10-25_23-38-28.json",
-      "MAE Mean": 1.8625831272337623,
-      "MSE Mean": 5.366657024493086,
-      "RMSE Mean": 2.285540332955361,
-      "Med Mean": 1.5901060501734416,
-      "Min Error Mean": 0.012481371561686197,
-      "Max Error Mean": 6.100285172462463
-    },
-    {
-      "File Name": "stats_2023-10-25_22-24-59.json",
-      "MAE Mean": 1.9844931362989449,
-      "MSE Mean": 6.0904624360933655,
-      "RMSE Mean": 2.4595586741976043,
-      "Med Mean": 1.7517023881276448,
-      "Min Error Mean": 0.024472554524739582,
-      "Max Error Mean": 6.185981114705403
-    },
-    {
-      "File Name": "stats_2023-10-25_20-08-43.json",
-      "MAE Mean": 1.6746785426851662,
-      "MSE Mean": 4.498220819088579,
-      "RMSE Mean": 2.119137006172383,
-      "Med Mean": 1.432620684305827,
-      "Min Error Mean": 0.02413944403330485,
-      "Max Error Mean": 6.172053257624309
-    },
-    {
-      "File Name": "stats_2023-10-26_14-30-12.json",
-      "MAE Mean": 1.9264206308874323,
-      "MSE Mean": 5.728245831842948,
-      "RMSE Mean": 2.391459143874039,
-      "Med Mean": 1.6446247895558674,
-      "Min Error Mean": 0.006565570831298828,
-      "Max Error Mean": 7.224074602127075
-    },
-    {
-      "File Name": "stats_2023-10-25_12-51-21.json",
-      "MAE Mean": 1.9298178283341414,
-      "MSE Mean": 5.949145985039092,
-      "RMSE Mean": 2.4379202035508523,
-      "Med Mean": 1.6435295343399048,
-      "Min Error Mean": 0.002997875213623047,
-      "Max Error Mean": 6.877939224243164
-    },
-    {
-      "File Name": "stats_2023-10-25_23-26-16.json",
-      "MAE Mean": 1.83555798921185,
-      "MSE Mean": 5.118117220702909,
-      "RMSE Mean": 2.260178714383515,
-      "Med Mean": 1.5999269485473633,
-      "Min Error Mean": 0.04382026195526123,
-      "Max Error Mean": 5.443047086397807
-    },
-    {
-      "File Name": "stats_2023-10-25_19-56-27.json",
-      "MAE Mean": 1.8092870396731573,
-      "MSE Mean": 5.144854595340585,
-      "RMSE Mean": 2.263680677613589,
-      "Med Mean": 1.6338070233662922,
-      "Min Error Mean": 0.0065771738688151045,
-      "Max Error Mean": 6.617372035980225
-    },
-    {
-      "File Name": "stats_2023-10-25_11-48-18.json",
-      "MAE Mean": 1.9782023931452926,
-      "MSE Mean": 6.066325088855385,
-      "RMSE Mean": 2.4606536790064815,
-      "Med Mean": 1.7063032388687134,
-      "Min Error Mean": 0.02344504992167155,
-      "Max Error Mean": 6.225047429402669
-    },
-    {
-      "File Name": "stats_2023-10-25_22-49-31.json",
-      "MAE Mean": 2.238120511543634,
-      "MSE Mean": 7.653318648549026,
-      "RMSE Mean": 2.7624268270528165,
-      "Med Mean": 1.8845748901367188,
-      "Min Error Mean": 0.01035165786743164,
-      "Max Error Mean": 7.283576488494873
-    },
-    {
-      "File Name": "stats_2023-10-25_11-10-21.json",
-      "MAE Mean": 2.1125131678728786,
-      "MSE Mean": 7.874342216554299,
-      "RMSE Mean": 2.8045191050156077,
-      "Med Mean": 1.7038398186365764,
-      "Min Error Mean": 0.011485854784647623,
-      "Max Error Mean": 9.464218825101852
-    },
-    {
-      "File Name": "stats_2023-10-26_00-28-12.json",
-      "MAE Mean": 1.9629717509469928,
-      "MSE Mean": 6.19752612063138,
-      "RMSE Mean": 2.4856768335318393,
-      "Med Mean": 1.5719629724820454,
-      "Min Error Mean": 0.025777180989583332,
-      "Max Error Mean": 6.839200019836426
-    },
-    {
-      "File Name": "stats_2023-10-26_11-58-19.json",
-      "MAE Mean": 2.1428785659468548,
-      "MSE Mean": 6.901361715475747,
-      "RMSE Mean": 2.614822021007599,
-      "Med Mean": 1.9314659436543782,
-      "Min Error Mean": 0.03722186883290609,
-      "Max Error Mean": 6.5156028270721436
-    },
-    {
-      "File Name": "stats_2023-10-26_16-21-35.json",
-      "MAE Mean": 1.6516709659645616,
-      "MSE Mean": 4.8108163720864665,
-      "RMSE Mean": 2.187867464594064,
-      "Med Mean": 1.3525518377621968,
-      "Min Error Mean": 0.045204480489095054,
-      "Max Error Mean": 8.32795778910319
-    },
-    {
-      "File Name": "stats_2023-10-26_00-15-54.json",
-      "MAE Mean": 2.4497710545871825,
-      "MSE Mean": 8.849893373205253,
-      "RMSE Mean": 2.973899016112133,
-      "Med Mean": 2.1856267104546228,
-      "Min Error Mean": 0.029895464579264324,
-      "Max Error Mean": 7.507339795430501
-    },
-    {
-      "File Name": "stats_2023-10-25_23-51-03.json",
-      "MAE Mean": 1.9730319197553625,
-      "MSE Mean": 6.2306827612459434,
-      "RMSE Mean": 2.490435909807769,
-      "Med Mean": 1.577218731244405,
-      "Min Error Mean": 0.01918824513753255,
-      "Max Error Mean": 7.301652272542317
-    },
-    {
-      "File Name": "stats_2023-10-25_13-56-07.json",
-      "MAE Mean": 1.859794738012044,
-      "MSE Mean": 5.683405377686728,
-      "RMSE Mean": 2.3798878423839516,
-      "Med Mean": 1.569731593132019,
-      "Min Error Mean": 0.00734563668568929,
-      "Max Error Mean": 7.231616457303365
-    },
-    {
-      "File Name": "stats_2023-10-25_20-21-00.json",
-      "MAE Mean": 2.0073410427500513,
-      "MSE Mean": 6.824533837408114,
-      "RMSE Mean": 2.6008409676884496,
-      "Med Mean": 1.6572120984395344,
-      "Min Error Mean": 0.005187034606933594,
-      "Max Error Mean": 7.9169676303863525
-    },
-    {
-      "File Name": "stats_2023-10-26_19-30-39.json",
-      "MAE Mean": 2.3858774719155833,
-      "MSE Mean": 8.445059181508073,
-      "RMSE Mean": 2.90526534273204,
-      "Med Mean": 2.139351010322571,
-      "Min Error Mean": 0.016789952913920086,
-      "Max Error Mean": 7.799707015355428
-    },
-    {
-      "File Name": "stats_2023-10-26_18-53-11.json",
-      "MAE Mean": 1.937453145261795,
-      "MSE Mean": 5.995427704680748,
-      "RMSE Mean": 2.443767609385752,
-      "Med Mean": 1.6834378639856975,
-      "Min Error Mean": 0.008327007293701172,
-      "Max Error Mean": 7.48344612121582
-    },
-    {
-      "File Name": "stats_2023-10-26_18-40-40.json",
-      "MAE Mean": 1.9434240681018597,
-      "MSE Mean": 6.0475853485638424,
-      "RMSE Mean": 2.4576165845130187,
-      "Med Mean": 1.5597965319951375,
-      "Min Error Mean": 0.0476226806640625,
-      "Max Error Mean": 7.595052560170491
-    },
-    {
-      "File Name": "stats_2023-10-25_19-44-11.json",
-      "MAE Mean": 1.803206272011036,
-      "MSE Mean": 5.174615805606891,
-      "RMSE Mean": 2.2645780101860216,
-      "Med Mean": 1.55300768216451,
-      "Min Error Mean": 0.030937035878499348,
-      "Max Error Mean": 6.744934717814128
-    },
-    {
-      "File Name": "stats_2023-10-26_14-17-02.json",
-      "MAE Mean": 2.373243211237932,
-      "MSE Mean": 8.736184763885229,
-      "RMSE Mean": 2.94239360120503,
-      "Med Mean": 1.96343727906545,
-      "Min Error Mean": 0.05842367808024088,
-      "Max Error Mean": 8.021137475967407
-    },
-    {
-      "File Name": "stats_2023-10-25_14-34-41.json",
-      "MAE Mean": 1.9121556411547276,
-      "MSE Mean": 5.993920824822934,
-      "RMSE Mean": 2.4475634048075627,
-      "Med Mean": 1.5655568440755208,
-      "Min Error Mean": 0.05604743957519531,
-      "Max Error Mean": 6.697330792744954
-    },
-    {
-      "File Name": "stats_2023-10-25_21-59-54.json",
-      "MAE Mean": 1.8431602287984037,
-      "MSE Mean": 5.259323014968749,
-      "RMSE Mean": 2.288693616012362,
-      "Med Mean": 1.6306663900613785,
-      "Min Error Mean": 0.01687765121459961,
-      "Max Error Mean": 6.647323290506999
-    },
-    {
-      "File Name": "stats_2023-10-26_13-51-34.json",
-      "MAE Mean": 1.847779643568277,
-      "MSE Mean": 4.998019015101525,
-      "RMSE Mean": 2.235418565819744,
-      "Med Mean": 1.6184340218702953,
-      "Min Error Mean": 0.025573253631591797,
-      "Max Error Mean": 6.248563925425212
-    },
-    {
-      "File Name": "stats_2023-10-25_21-22-35.json",
-      "MAE Mean": 1.9141655282425052,
-      "MSE Mean": 6.25770340848779,
-      "RMSE Mean": 2.500598774781009,
-      "Med Mean": 1.6014691988627117,
-      "Min Error Mean": 0.015589555104573568,
-      "Max Error Mean": 8.60375722249349
-    },
-    {
-      "File Name": "stats_2023-10-26_15-33-16.json",
-      "MAE Mean": 1.712561773697445,
-      "MSE Mean": 4.991117611340172,
-      "RMSE Mean": 2.2249683191529415,
-      "Med Mean": 1.424076755841573,
-      "Min Error Mean": 0.010692119598388672,
-      "Max Error Mean": 6.9888001680374146
-    },
-    {
-      "File Name": "stats_2023-10-26_16-59-43.json",
-      "MAE Mean": 1.7673020771075987,
-      "MSE Mean": 4.856058960600204,
-      "RMSE Mean": 2.184360440698924,
-      "Med Mean": 1.5272907416025798,
-      "Min Error Mean": 0.014894843101501465,
-      "Max Error Mean": 5.897536913553874
-    },
-    {
-      "File Name": "stats_2023-10-26_21-01-01.json",
-      "MAE Mean": 1.7877199781387028,
-      "MSE Mean": 5.390781789882894,
-      "RMSE Mean": 2.3186050317724822,
-      "Med Mean": 1.4363127152125041,
-      "Min Error Mean": 0.013970772425333658,
-      "Max Error Mean": 6.868569056193034
-    },
-    {
-      "File Name": "stats_2023-10-25_21-47-27.json",
-      "MAE Mean": 1.8102538675655495,
-      "MSE Mean": 5.138592940997994,
-      "RMSE Mean": 2.255306228324645,
-      "Med Mean": 1.5234823822975159,
-      "Min Error Mean": 0.029408613840738933,
-      "Max Error Mean": 6.773679733276367
-    },
-    {
-      "File Name": "stats_2023-10-26_17-12-14.json",
-      "MAE Mean": 2.1789099147136426,
-      "MSE Mean": 7.98659550759658,
-      "RMSE Mean": 2.81457977231088,
-      "Med Mean": 1.8333197832107544,
-      "Min Error Mean": 0.031944592793782554,
-      "Max Error Mean": 8.503176212310791
-    },
-    {
-      "File Name": "stats_2023-10-26_00-40-33.json",
-      "MAE Mean": 1.7045836441156907,
-      "MSE Mean": 5.170509638900487,
-      "RMSE Mean": 2.2705917761241876,
-      "Med Mean": 1.3016789555549622,
-      "Min Error Mean": 0.013793865839640299,
-      "Max Error Mean": 7.657164891560872
-    },
-    {
-      "File Name": "stats_2023-10-25_18-05-40.json",
-      "MAE Mean": 2.0721609819144042,
-      "MSE Mean": 6.5911646069450525,
-      "RMSE Mean": 2.557933548241546,
-      "Med Mean": 1.8797542254130046,
-      "Min Error Mean": 0.01664024591445923,
-      "Max Error Mean": 7.452075004577637
-    },
-    {
-      "File Name": "stats_2023-10-26_00-52-58.json",
-      "MAE Mean": 1.976597504998055,
-      "MSE Mean": 5.99163692727819,
-      "RMSE Mean": 2.442485840352732,
-      "Med Mean": 1.7150865495204926,
-      "Min Error Mean": 0.02388461430867513,
-      "Max Error Mean": 7.476931015650432
-    },
-    {
-      "File Name": "stats_2023-10-25_19-31-59.json",
-      "MAE Mean": 1.9246072728944295,
-      "MSE Mean": 5.489453196271711,
-      "RMSE Mean": 2.3404749611446327,
-      "Med Mean": 1.6414642333984375,
-      "Min Error Mean": 0.0286557674407959,
-      "Max Error Mean": 5.963475386301677
-    },
-    {
-      "File Name": "stats_2023-10-25_20-58-06.json",
-      "MAE Mean": 2.1499793662748057,
-      "MSE Mean": 7.3975117157873695,
-      "RMSE Mean": 2.6951864679406192,
-      "Med Mean": 1.7516664266586304,
-      "Min Error Mean": 0.03407434622446696,
-      "Max Error Mean": 7.571228742599487
-    },
-    {
-      "File Name": "stats_2023-10-26_14-42-55.json",
-      "MAE Mean": 1.9825186686721252,
-      "MSE Mean": 6.496164431408288,
-      "RMSE Mean": 2.5424967424602576,
-      "Med Mean": 1.7645090421040852,
-      "Min Error Mean": 0.04304027557373047,
-      "Max Error Mean": 8.148829460144043
-    },
-    {
-      "File Name": "stats_2023-10-25_16-15-15.json",
-      "MAE Mean": 1.7806678201260577,
-      "MSE Mean": 5.166678907698554,
-      "RMSE Mean": 2.2649459041714786,
-      "Med Mean": 1.5357915163040161,
-      "Min Error Mean": 0.019163886706034344,
-      "Max Error Mean": 6.244997024536133
-    },
-    {
-      "File Name": "stats_2023-10-25_13-43-25.json",
-      "MAE Mean": 2.030147787757381,
-      "MSE Mean": 6.186016765755892,
-      "RMSE Mean": 2.481888457496306,
-      "Med Mean": 1.756271203358968,
-      "Min Error Mean": 0.018305738766988117,
-      "Max Error Mean": 6.547962029774983
-    },
-    {
-      "File Name": "stats_2023-10-25_12-00-53.json",
-      "MAE Mean": 2.680287603371673,
-      "MSE Mean": 11.615254398150109,
-      "RMSE Mean": 3.4011708064403123,
-      "Med Mean": 2.2313600381215415,
-      "Min Error Mean": 0.04152973492940267,
-      "Max Error Mean": 10.592119057973227
-    },
-    {
-      "File Name": "stats_2023-10-25_23-01-50.json",
-      "MAE Mean": 1.7173528188581908,
-      "MSE Mean": 4.71652525252592,
-      "RMSE Mean": 2.167567367126346,
-      "Med Mean": 1.4676024516423543,
-      "Min Error Mean": 0.0322110652923584,
-      "Max Error Mean": 6.370547652244568
-    },
-    {
-      "File Name": "stats_2023-10-26_17-37-29.json",
-      "MAE Mean": 2.221082827649892,
-      "MSE Mean": 8.430275600996358,
-      "RMSE Mean": 2.888414122978798,
-      "Med Mean": 1.7987895409266155,
-      "Min Error Mean": 0.03428729375203451,
-      "Max Error Mean": 9.768431981404623
-    },
-    {
-      "File Name": "stats_2023-10-25_15-38-07.json",
-      "MAE Mean": 1.9359795005571094,
-      "MSE Mean": 6.567642614232194,
-      "RMSE Mean": 2.559576823130286,
-      "Med Mean": 1.5589137474695842,
-      "Min Error Mean": 0.01981937885284424,
-      "Max Error Mean": 8.493457635243734
-    },
-    {
-      "File Name": "stats_2023-10-25_15-25-48.json",
-      "MAE Mean": 1.8532636409252319,
-      "MSE Mean": 5.211061238235675,
-      "RMSE Mean": 2.2720014612310115,
-      "Med Mean": 1.6266371409098308,
-      "Min Error Mean": 0.06552314758300781,
-      "Max Error Mean": 5.641524473826091
-    },
-    {
-      "File Name": "stats_2023-10-26_17-24-54.json",
-      "MAE Mean": 1.7742353998389284,
-      "MSE Mean": 4.834312654687119,
-      "RMSE Mean": 2.1967754715795373,
-      "Med Mean": 1.4749731818834941,
-      "Min Error Mean": 0.007873058319091797,
-      "Max Error Mean": 5.60284145673116
-    },
-    {
-      "File Name": "stats_2023-10-25_18-30-29.json",
-      "MAE Mean": 1.8310152228096623,
-      "MSE Mean": 5.511326650205028,
-      "RMSE Mean": 2.346875079549234,
-      "Med Mean": 1.5086000561714172,
-      "Min Error Mean": 0.010415077209472656,
-      "Max Error Mean": 7.369290033976237
-    },
-    {
-      "File Name": "stats_2023-10-26_13-13-33.json",
-      "MAE Mean": 1.853843296175641,
-      "MSE Mean": 5.760141983415953,
-      "RMSE Mean": 2.399720369524509,
-      "Med Mean": 1.4979197184244792,
-      "Min Error Mean": 0.014463027318318685,
-      "Max Error Mean": 7.352698961893718
-    },
-    {
-      "File Name": "stats_2023-10-25_14-48-30.json",
-      "MAE Mean": 2.7885510764852763,
-      "MSE Mean": 12.222180544051866,
-      "RMSE Mean": 3.492952513311026,
-      "Med Mean": 2.328556776046753,
-      "Min Error Mean": 0.05002276102701823,
-      "Max Error Mean": 8.804306983947754
-    },
-    {
-      "File Name": "stats_2023-10-26_16-34-25.json",
-      "MAE Mean": 2.1672396386944697,
-      "MSE Mean": 7.284991183484777,
-      "RMSE Mean": 2.6831420871031995,
-      "Med Mean": 1.905590573946635,
-      "Min Error Mean": 0.021149555842081707,
-      "Max Error Mean": 7.553229649861653
-    },
-    {
-      "File Name": "stats_2023-10-25_15-13-30.json",
-      "MAE Mean": 1.7472125426227632,
-      "MSE Mean": 4.742990832237337,
-      "RMSE Mean": 2.1721805146639674,
-      "Med Mean": 1.528739372889201,
-      "Min Error Mean": 0.02460447947184245,
-      "Max Error Mean": 6.1977165540059405
-    },
-    {
-      "File Name": "stats_2023-10-25_10-57-46.json",
-      "MAE Mean": 2.224749724664926,
-      "MSE Mean": 8.151079174710746,
-      "RMSE Mean": 2.8471497406418447,
-      "Med Mean": 1.8692920605341594,
-      "Min Error Mean": 0.016651193300882976,
-      "Max Error Mean": 7.581592559814453
-    },
-    {
-      "File Name": "stats_2023-10-26_19-18-09.json",
-      "MAE Mean": 1.9048523874921008,
-      "MSE Mean": 6.510027561782944,
-      "RMSE Mean": 2.546637463392629,
-      "Med Mean": 1.4179613490899403,
-      "Min Error Mean": 0.021590391794840496,
-      "Max Error Mean": 7.645551443099976
-    },
-    {
-      "File Name": "stats_2023-10-26_18-15-14.json",
-      "MAE Mean": 2.550145348595654,
-      "MSE Mean": 10.273349140090323,
-      "RMSE Mean": 3.2047606761935747,
-      "Med Mean": 2.1821670532226562,
-      "Min Error Mean": 0.039435386657714844,
-      "Max Error Mean": 8.234171271324158
-    },
-    {
-      "File Name": "stats_2023-10-25_17-28-42.json",
-      "MAE Mean": 2.1008660215357895,
-      "MSE Mean": 7.167313483598491,
-      "RMSE Mean": 2.6703256565257756,
-      "Med Mean": 1.7180558840433757,
-      "Min Error Mean": 0.008516271909077963,
-      "Max Error Mean": 7.193641185760498
-    },
-    {
-      "File Name": "stats_2023-10-25_21-35-08.json",
-      "MAE Mean": 2.1130044608531087,
-      "MSE Mean": 7.3139730679773445,
-      "RMSE Mean": 2.6982665003661723,
-      "Med Mean": 1.6856854756673176,
-      "Min Error Mean": 0.01724688212076823,
-      "Max Error Mean": 7.609141667683919
-    },
-    {
-      "File Name": "stats_2023-10-26_11-45-52.json",
-      "MAE Mean": 2.6556913639344866,
-      "MSE Mean": 11.848690444018937,
-      "RMSE Mean": 3.4401040786167183,
-      "Med Mean": 2.1426223119099936,
-      "Min Error Mean": 0.02187824249267578,
-      "Max Error Mean": 10.43515141805013
-    },
-    {
-      "File Name": "stats_2023-10-25_23-13-59.json",
-      "MAE Mean": 1.778646930653492,
-      "MSE Mean": 5.095303594564385,
-      "RMSE Mean": 2.251837601942684,
-      "Med Mean": 1.4788634379704793,
-      "Min Error Mean": 0.051025072733561196,
-      "Max Error Mean": 6.421451886494954
-    },
-    {
-      "File Name": "stats_2023-10-26_19-55-32.json",
-      "MAE Mean": 1.8024673849169675,
-      "MSE Mean": 5.087098310170408,
-      "RMSE Mean": 2.252846188903575,
-      "Med Mean": 1.6356682380040486,
-      "Min Error Mean": 0.008825302124023438,
-      "Max Error Mean": 6.317332903544108
-    },
-    {
-      "File Name": "stats_2023-10-25_14-21-57.json",
-      "MAE Mean": 2.086098225215395,
-      "MSE Mean": 6.57228061058279,
-      "RMSE Mean": 2.556851542141901,
-      "Med Mean": 1.8030445178349812,
-      "Min Error Mean": 0.007971684137980143,
-      "Max Error Mean": 7.024282455444336
-    },
-    {
-      "File Name": "stats_2023-10-25_21-10-22.json",
-      "MAE Mean": 1.8961165441035412,
-      "MSE Mean": 5.574358963028552,
-      "RMSE Mean": 2.359021503618687,
-      "Med Mean": 1.5957356691360474,
-      "Min Error Mean": 0.014896392822265625,
-      "Max Error Mean": 6.736295700073242
-    },
-    {
-      "File Name": "stats_2023-10-25_14-09-08.json",
-      "MAE Mean": 1.9660544310792865,
-      "MSE Mean": 6.8162232306051775,
-      "RMSE Mean": 2.6091425192806157,
-      "Med Mean": 1.5514742533365886,
-      "Min Error Mean": 0.005365689595540364,
-      "Max Error Mean": 8.230716387430826
-    },
-    {
-      "File Name": "stats_2023-10-25_18-42-53.json",
-      "MAE Mean": 2.3759297675443976,
-      "MSE Mean": 8.729930725641081,
-      "RMSE Mean": 2.9509726476017177,
-      "Med Mean": 2.011018762985865,
-      "Min Error Mean": 0.030146360397338867,
-      "Max Error Mean": 8.427252769470215
-    },
-    {
-      "File Name": "stats_2023-10-26_13-26-14.json",
-      "MAE Mean": 1.7293476156743972,
-      "MSE Mean": 5.214521415893373,
-      "RMSE Mean": 2.2824047401827734,
-      "Med Mean": 1.3180062373479207,
-      "Min Error Mean": 0.008120338122049967,
-      "Max Error Mean": 6.878015518188477
-    },
-    {
-      "File Name": "stats_2023-10-25_17-04-09.json",
-      "MAE Mean": 2.6932497401097373,
-      "MSE Mean": 11.512476768465826,
-      "RMSE Mean": 3.3916933405161154,
-      "Med Mean": 2.1968234380086265,
-      "Min Error Mean": 0.027779658635457356,
-      "Max Error Mean": 8.554210344950357
-    },
-    {
-      "File Name": "stats_2023-10-25_20-45-51.json",
-      "MAE Mean": 2.0065377645504268,
-      "MSE Mean": 6.556544809697506,
-      "RMSE Mean": 2.545493612972265,
-      "Med Mean": 1.6963728666305542,
-      "Min Error Mean": 0.054061333338419594,
-      "Max Error Mean": 7.329814990361531
-    },
-    {
-      "File Name": "stats_2023-10-26_17-50-04.json",
-      "MAE Mean": 1.843450703365462,
-      "MSE Mean": 6.240048197644526,
-      "RMSE Mean": 2.4917602967041113,
-      "Med Mean": 1.4067060947418213,
-      "Min Error Mean": 0.039035956064860024,
-      "Max Error Mean": 10.299829641977945
-    },
-    {
-      "File Name": "stats_2023-10-26_14-04-11.json",
-      "MAE Mean": 1.8272144824412855,
-      "MSE Mean": 5.231414059054829,
-      "RMSE Mean": 2.2657628000203918,
-      "Med Mean": 1.5657824873924255,
-      "Min Error Mean": 0.028453906377156574,
-      "Max Error Mean": 6.5344804128011065
-    },
-    {
-      "File Name": "stats_2023-10-26_18-27-56.json",
-      "MAE Mean": 2.2617744192503566,
-      "MSE Mean": 7.961060426636416,
-      "RMSE Mean": 2.81813926134142,
-      "Med Mean": 1.9128950436909993,
-      "Min Error Mean": 0.029822468757629395,
-      "Max Error Mean": 8.067879676818848
-    },
-    {
-      "File Name": "stats_2023-10-25_16-39-41.json",
-      "MAE Mean": 1.672708283005478,
-      "MSE Mean": 4.439944036647396,
-      "RMSE Mean": 2.106697451046562,
-      "Med Mean": 1.4080002109209697,
-      "Min Error Mean": 0.038115501403808594,
-      "Max Error Mean": 6.340620994567871
-    },
-    {
-      "File Name": "stats_2023-10-25_20-33-23.json",
-      "MAE Mean": 2.4861514774669953,
-      "MSE Mean": 9.347330910856002,
-      "RMSE Mean": 3.0570924450119,
-      "Med Mean": 2.253643830617269,
-      "Min Error Mean": 0.04542112350463867,
-      "Max Error Mean": 8.497765064239502
-    },
-    {
-      "File Name": "stats_2023-10-26_13-38-56.json",
-      "MAE Mean": 2.569649804852627,
-      "MSE Mean": 10.537775174755884,
-      "RMSE Mean": 3.2094444402870366,
-      "Med Mean": 2.1465590794881186,
-      "Min Error Mean": 0.019943078358968098,
-      "Max Error Mean": 8.59866730372111
-    },
-    {
-      "File Name": "stats_2023-10-26_14-56-09.json",
-      "MAE Mean": 2.035462699295532,
-      "MSE Mean": 6.262472025876922,
-      "RMSE Mean": 2.4678632102257585,
-      "Med Mean": 1.7941683332125347,
-      "Min Error Mean": 0.03852494557698568,
-      "Max Error Mean": 6.274260679880778
-    },
-    {
-      "File Name": "stats_2023-10-25_15-01-11.json",
-      "MAE Mean": 2.0556659662810266,
-      "MSE Mean": 6.573698128874569,
-      "RMSE Mean": 2.5611248927174217,
-      "Med Mean": 1.731307586034139,
-      "Min Error Mean": 0.04152806599934896,
-      "Max Error Mean": 7.0453945597012835
-    },
-    {
-      "File Name": "stats_2023-10-25_12-13-27.json",
-      "MAE Mean": 1.8883793308846624,
-      "MSE Mean": 5.45362768435115,
-      "RMSE Mean": 2.3166091638642867,
-      "Med Mean": 1.6376432180404663,
-      "Min Error Mean": 0.019183635711669922,
-      "Max Error Mean": 5.48702875773112
-    },
-    {
-      "File Name": "stats_2023-10-25_18-18-07.json",
-      "MAE Mean": 2.7794454334724694,
-      "MSE Mean": 12.24079400582207,
-      "RMSE Mean": 3.4938059405540347,
-      "Med Mean": 2.342095692952474,
-      "Min Error Mean": 0.0664817492167155,
-      "Max Error Mean": 9.609281698862711
-    },
-    {
-      "File Name": "stats_2023-10-25_22-12-40.json",
-      "MAE Mean": 2.0176218040332548,
-      "MSE Mean": 5.988881767523048,
-      "RMSE Mean": 2.44479583882375,
-      "Med Mean": 1.8865977923075359,
-      "Min Error Mean": 0.03377946217854818,
-      "Max Error Mean": 6.230803569157918
-    },
-    {
-      "File Name": "stats_2023-10-26_15-08-30.json",
-      "MAE Mean": 1.7166783901670621,
-      "MSE Mean": 4.431633104859892,
-      "RMSE Mean": 2.104124006152283,
-      "Med Mean": 1.5351608594258626,
-      "Min Error Mean": 0.01937393347422282,
-      "Max Error Mean": 5.331926663716634
-    },
-    {
-      "File Name": "stats_2023-10-25_19-07-27.json",
-      "MAE Mean": 1.9875832841870285,
-      "MSE Mean": 7.286338194168088,
-      "RMSE Mean": 2.6926064252348207,
-      "Med Mean": 1.4001232385635376,
-      "Min Error Mean": 0.021290262540181477,
-      "Max Error Mean": 8.289069493611654
-    },
-    {
-      "File Name": "stats_2023-10-25_16-27-28.json",
-      "MAE Mean": 1.8334865389474846,
-      "MSE Mean": 5.509303879636438,
-      "RMSE Mean": 2.3470408201533495,
-      "Med Mean": 1.4909083048502605,
-      "Min Error Mean": 0.020077228546142578,
-      "Max Error Mean": 6.809774160385132
-    },
-    {
-      "File Name": "stats_2023-10-26_21-25-38.json",
-      "MAE Mean": 1.7163439591241352,
-      "MSE Mean": 4.646974769733383,
-      "RMSE Mean": 2.129181632207647,
-      "Med Mean": 1.4680008292198181,
-      "Min Error Mean": 0.016306241353352863,
-      "Max Error Mean": 5.73389466603597
-    },
-    {
-      "File Name": "stats_2023-10-26_21-13-18.json",
-      "MAE Mean": 1.8120111377263557,
-      "MSE Mean": 5.511510673949112,
-      "RMSE Mean": 2.3423091391648687,
-      "Med Mean": 1.3919593493143718,
-      "Min Error Mean": 0.0031493504842122397,
-      "Max Error Mean": 8.365463256835938
-    },
-    {
-      "File Name": "stats_2023-10-25_17-40-55.json",
-      "MAE Mean": 2.079563986598736,
-      "MSE Mean": 6.643228546542751,
-      "RMSE Mean": 2.5764382287304297,
-      "Med Mean": 1.8632951577504475,
-      "Min Error Mean": 0.042498270670572914,
-      "Max Error Mean": 6.792062123616536
-    },
-    {
-      "File Name": "stats_2023-10-25_15-50-33.json",
-      "MAE Mean": 1.6433275245957903,
-      "MSE Mean": 4.5062154266234895,
-      "RMSE Mean": 2.1184166085771614,
-      "Med Mean": 1.3217353026072185,
-      "Min Error Mean": 0.021884441375732422,
-      "Max Error Mean": 6.496809959411621
-    },
-    {
-      "File Name": "stats_2023-10-25_19-19-43.json",
-      "MAE Mean": 1.7808693591474316,
-      "MSE Mean": 5.386279844486716,
-      "RMSE Mean": 2.318527145653604,
-      "Med Mean": 1.517320950826009,
-      "Min Error Mean": 0.012791951497395834,
-      "Max Error Mean": 7.53148619333903
-    },
-    {
-      "File Name": "stats_2023-10-25_17-16-24.json",
-      "MAE Mean": 1.6749544134959071,
-      "MSE Mean": 4.860600287529153,
-      "RMSE Mean": 2.1978507423491034,
-      "Med Mean": 1.2307728628317516,
-      "Min Error Mean": 0.006289442380269368,
-      "Max Error Mean": 6.8142359256744385
-    },
-    {
-      "File Name": "stats_2023-10-25_11-35-44.json",
-      "MAE Mean": 1.7033423743911162,
-      "MSE Mean": 4.501395562763463,
-      "RMSE Mean": 2.1204477505602455,
-      "Med Mean": 1.5063477754592896,
-      "Min Error Mean": 0.021549224853515625,
-      "Max Error Mean": 6.221038262049357
-    },
-    {
-      "File Name": "stats_2023-10-26_19-05-41.json",
-      "MAE Mean": 2.1566475489152173,
-      "MSE Mean": 7.255567783590213,
-      "RMSE Mean": 2.6865354423330197,
-      "Med Mean": 1.8189090887705486,
-      "Min Error Mean": 0.017116705576578777,
-      "Max Error Mean": 7.133484522501628
-    },
-    {
-      "File Name": "stats_2023-10-25_12-38-45.json",
-      "MAE Mean": 1.7547853437146046,
-      "MSE Mean": 4.9182128887039935,
-      "RMSE Mean": 2.209749223743726,
-      "Med Mean": 1.4383688569068909,
-      "Min Error Mean": 0.023333628972371418,
-      "Max Error Mean": 6.87246052424113
-    },
-    {
-      "File Name": "stats_2023-10-26_15-20-54.json",
-      "MAE Mean": 1.8756419815815766,
-      "MSE Mean": 5.780483528377052,
-      "RMSE Mean": 2.403824258145717,
-      "Med Mean": 1.5331268707911174,
-      "Min Error Mean": 0.026288350423177082,
-      "Max Error Mean": 7.763888676961263
-    },
-    {
-      "File Name": "stats_2023-10-26_13-00-53.json",
-      "MAE Mean": 2.1145026096242083,
-      "MSE Mean": 7.426215652626259,
-      "RMSE Mean": 2.715117765957483,
-      "Med Mean": 1.8290140231450398,
-      "Min Error Mean": 0.04294121265411377,
-      "Max Error Mean": 8.803592681884766
-    },
-    {
-      "File Name": "stats_2023-10-25_11-23-00.json",
-      "MAE Mean": 1.542945149430522,
-      "MSE Mean": 3.9211554843175045,
-      "RMSE Mean": 1.9683444955169416,
-      "Med Mean": 1.211776614189148,
-      "Min Error Mean": 0.03547477722167969,
-      "Max Error Mean": 5.995702425638835
-    }
-  ]
+    "verification_stats": [
+        {
+            "File name": "opt_ann_gbest_stats_calm_data_set_c120w08",
+            "MAE mean": 1.6145254358328254,
+            "MSE mean": 4.192062568758241,
+            "RMSE mean": 2.0462256717903258,
+            "Median error mean": 1.370756467183431,
+            "Min error mean": 0.008395512898763021,
+            "Max error mean": 5.761935234069824,
+            "c1": 2.0,
+            "c2": 2.0,
+            "w": 0.8
+        },
+        {
+            "File name": "opt_ann_gbest_stats_calm_data_set_c1c2149445w0729",
+            "MAE mean": 1.808945372108249,
+            "MSE mean": 5.162337766609089,
+            "RMSE mean": 2.2635686130786405,
+            "Median error mean": 1.5351097186406453,
+            "Min error mean": 0.017707188924153645,
+            "Max error mean": 6.308844884236653,
+            "c1": 1.49445,
+            "c2": 1.49445,
+            "w": 0.729
+        },
+        {
+            "File name": "opt_ann_gbest_stats_calm_data_set_extra_long_single_run",
+            "MAE mean": 1.7279070112124952,
+            "MSE mean": 4.6631495635274645,
+            "RMSE mean": 2.1572093400561676,
+            "Median error mean": 1.4539836049079895,
+            "Min error mean": 0.03928581873575846,
+            "Max error mean": 5.796948750813802,
+            "c1": 1.8663,
+            "c2": 1.94016,
+            "w": 0.8
+        },
+        {
+            "File name": "opt_ann_gbest_stats_calm_data_set_random_search_params",
+            "MAE mean": 1.612286383789863,
+            "MSE mean": 4.270006027833496,
+            "RMSE mean": 2.0659227223963907,
+            "Median error mean": 1.3476643164952595,
+            "Min error mean": 0.009900252024332682,
+            "Max error mean": 5.77736250559489,
+            "c1": 1.8663,
+            "c2": 1.94016,
+            "w": 0.8
+        },
+        {
+            "File name": "opt_ann_rpso_stats_calm_data_set_default_rpso_params_res",
+            "MAE mean": 1.8596028649662808,
+            "MSE mean": 5.374771439243813,
+            "RMSE mean": 2.3138497754786163,
+            "Median error mean": 1.6593005259831746,
+            "Min error mean": 0.018895626068115234,
+            "Max error mean": 6.035134156545003,
+            "Cp_min": 0.5,
+            "Cp_max": 2.5,
+            "Cg_min": 0.5,
+            "Cg_max": 2.5,
+            "w_min": 0.4,
+            "w_max": 0.9,
+            "gwn_std_dev": 0.07
+        },
+        {
+            "File name": "opt_ann_rpso_stats_calm_data_set_extra_long_single_run_grid_search_params",
+            "MAE mean": 1.7013256360096005,
+            "MSE mean": 4.599648690301863,
+            "RMSE mean": 2.142951343998641,
+            "Median error mean": 1.406914234161377,
+            "Min error mean": 0.02006673812866211,
+            "Max error mean": 6.330540021260579,
+            "Cp_min": 0.1,
+            "Cp_max": 3.5,
+            "Cg_min": 0.9,
+            "Cg_max": 3.0,
+            "w_min": 0.3,
+            "w_max": 1.7,
+            "gwn_std_dev": 0.15
+        },
+        {
+            "File name": "opt_ann_rpso_stats_calm_data_set_extra_long_single_run_random_search_params",
+            "MAE mean": 1.7546238810792623,
+            "MSE mean": 4.629022784544001,
+            "RMSE mean": 2.1438393650355683,
+            "Median error mean": 1.5553514162699382,
+            "Min error mean": 0.02364460627237956,
+            "Max error mean": 5.898007710774739,
+            "Cp_min": 0.1,
+            "Cp_max": 3.5,
+            "Cg_min": 0.9,
+            "Cg_max": 3.0,
+            "w_min": 0.3,
+            "w_max": 1.7,
+            "gwn_std_dev": 0.17651345
+        },
+        {
+            "File name": "opt_ann_rpso_stats_calm_data_set_extra_long_single_run_standard_params",
+            "MAE mean": 2.2298233963870135,
+            "MSE mean": 8.347017541457914,
+            "RMSE mean": 2.8861374702366245,
+            "Median error mean": 1.7156527837117512,
+            "Min error mean": 0.011933644612630209,
+            "Max error mean": 8.431297620137533,
+            "Cp_min": 0.5,
+            "Cp_max": 2.5,
+            "Cg_min": 0.5,
+            "Cg_max": 2.5,
+            "w_min": 0.4,
+            "w_max": 0.9,
+            "gwn_std_dev": 0.07
+        },
+        {
+            "File name": "opt_ann_rpso_stats_calm_data_set_gwn_random_search_res",
+            "MAE mean": 1.760710643246511,
+            "MSE mean": 5.009536198543295,
+            "RMSE mean": 2.237528846245576,
+            "Median error mean": 1.4000278512636821,
+            "Min error mean": 0.0071328481038411455,
+            "Max error mean": 6.5912167231241865,
+            "Cp_min": 0.1,
+            "Cp_max": 3.5,
+            "Cg_min": 0.9,
+            "Cg_max": 3.0,
+            "w_min": 0.3,
+            "w_max": 1.7,
+            "gwn_std_dev": 0.171863
+        },
+        {
+            "File name": "opt_ann_rpso_stats_calm_data_set_no_gwn_val_res",
+            "MAE mean": 1.7913501382887766,
+            "MSE mean": 5.722937958025464,
+            "RMSE mean": 2.3845632419100613,
+            "Median error mean": 1.3775375286738079,
+            "Min error mean": 0.04765653610229492,
+            "Max error mean": 7.292252063751221,
+            "Cp_min": 0.1,
+            "Cp_max": 3.5,
+            "Cg_min": 0.9,
+            "Cg_max": 3.0,
+            "w_min": 0.3,
+            "w_max": 1.7,
+            "gwn_std_dev": 0.0
+        },
+        {
+            "File name": "opt_ann_rpso_stats_calm_data_set_no_gwn_val_res",
+            "MAE mean": 1.8359417995988467,
+            "MSE mean": 5.4152623060202805,
+            "RMSE mean": 2.324576762000785,
+            "Median error mean": 1.545460005601247,
+            "Min error mean": 0.02442057927449544,
+            "Max error mean": 6.711342811584473,
+            "Cp_min": 0.5,
+            "Cp_max": 2.5,
+            "Cg_min": 0.5,
+            "Cg_max": 2.5,
+            "w_min": 0.4,
+            "w_max": 0.9,
+            "gwn_std_dev": 0.0
+        },
+        {
+            "File name": "opt_adam_params_with_gbest_stats_calm_data_set_500_iterations_during_training_c149445w0729",
+            "MAE mean": 1.388906533302048,
+            "MSE mean": 3.151940069798456,
+            "RMSE mean": 1.76379183202015,
+            "Median error mean": 1.1358715295791626,
+            "Min error mean": 0.033097426096598305,
+            "Max error mean": 5.546919186909993,
+            "c1": 1.49445,
+            "c2": 1.49445,
+            "w": 0.729
+        },
+        {
+            "File name": "opt_adam_params_with_gbest_stats_calm_data_set_500_iterations_during_training_c20w08",
+            "MAE mean": 1.2689635564376707,
+            "MSE mean": 2.817609929273718,
+            "RMSE mean": 1.6629993884010326,
+            "Median error mean": 0.9737281401952108,
+            "Min error mean": 0.020276546478271484,
+            "Max error mean": 5.521361351013184,
+            "c1": 2.0,
+            "c2": 2.0,
+            "w": 0.8
+        },
+        {
+            "File name": "opt_adam_params_with_gbest_stats_calm_data_set_500_iterations_during_training_random_search_params",
+            "MAE mean": 1.3292740062926631,
+            "MSE mean": 3.221669796404509,
+            "RMSE mean": 1.7750030220617437,
+            "Median error mean": 0.9790237545967102,
+            "Min error mean": 0.007311900456746419,
+            "Max error mean": 6.360846042633057,
+            "c1": 1.8663,
+            "c2": 1.94016,
+            "w": 0.8
+        },
+        {
+            "File name": "opt_adam_params_with_rpso_stats_calm_data_set_500_iterations_during_training_default_params",
+            "MAE mean": 1.3748135827194536,
+            "MSE mean": 3.1781664742323046,
+            "RMSE mean": 1.7749409654780717,
+            "Median error mean": 1.0722982585430145,
+            "Min error mean": 0.03498649597167969,
+            "Max error mean": 5.214216868082683,
+            "Cp_min": 0.5,
+            "Cp_max": 2.5,
+            "Cg_min": 0.5,
+            "Cg_max": 2.5,
+            "w_min": 0.4,
+            "w_max": 0.9,
+            "gwn_std_dev": 0.07
+        },
+        {
+            "File name": "opt_adam_params_with_rpso_stats_calm_data_set_500_iterations_during_training_grid_search_params",
+            "MAE mean": 1.2415341362109351,
+            "MSE mean": 2.8383074190007824,
+            "RMSE mean": 1.662149406613951,
+            "Median error mean": 0.8857011596361796,
+            "Min error mean": 0.004461348056793213,
+            "Max error mean": 5.116191148757935,
+            "Cp_min": 0.1,
+            "Cp_max": 3.5,
+            "Cg_min": 0.9,
+            "Cg_max": 3.0,
+            "w_min": 0.3,
+            "w_max": 1.7,
+            "gwn_std_dev": 0.15
+        },
+        {
+            "File name": "opt_adam_params_with_rpso_stats_calm_data_set_500_iterations_during_training_no_gwn_val",
+            "MAE mean": 1.2985752902401277,
+            "MSE mean": 2.8615144622258057,
+            "RMSE mean": 1.673876603310859,
+            "Median error mean": 1.0310495297114055,
+            "Min error mean": 0.016364256540934246,
+            "Max error mean": 5.25480588277181,
+            "Cp_min": 0.1,
+            "Cp_max": 3.5,
+            "Cg_min": 0.9,
+            "Cg_max": 3.0,
+            "w_min": 0.3,
+            "w_max": 1.7,
+            "gwn_std_dev": 0
+        },
+        {
+            "File name": "opt_adam_params_with_rpso_stats_calm_data_set_500_iterations_during_training_random_search_params",
+            "MAE mean": 1.295405953401701,
+            "MSE mean": 2.7708862678759574,
+            "RMSE mean": 1.6570323271340472,
+            "Median error mean": 1.0300420920054119,
+            "Min error mean": 0.010469555854797363,
+            "Max error mean": 4.487733840942383,
+            "Cp_min": 0.1,
+            "Cp_max": 3.5,
+            "Cg_min": 0.9,
+            "Cg_max": 3.0,
+            "w_min": 0.3,
+            "w_max": 1.7,
+            "gwn_std_dev": 0.17651345
+        },
+        {
+            "File name": "opt_sgd_params_with_gbest_stats_calm_data_set",
+            "MAE mean": 1.3121281864804386,
+            "MSE mean": 3.0198935478216153,
+            "RMSE mean": 1.7277119439644348,
+            "Median error mean": 1.0298132101694744,
+            "Min error mean": 0.017126719156901043,
+            "Max error mean": 5.8933210372924805,
+            "c1": 2.0,
+            "c2": 2.0,
+            "w": 0.8
+        },
+        {
+            "File name": "opt_sgd_params_with_gbest_stats_calm_data_set",
+            "MAE mean": 1.4227532915697798,
+            "MSE mean": 3.2163829173902503,
+            "RMSE mean": 1.7778139298465012,
+            "Median error mean": 1.1357990304629009,
+            "Min error mean": 0.015246709187825521,
+            "Max error mean": 5.081862131754558,
+            "c1": 1.49445,
+            "c2": 1.49445,
+            "w": 0.729
+        },
+        {
+            "File name": "opt_sgd_params_with_gbest_stats_calm_data_set",
+            "MAE mean": 1.3028366185369944,
+            "MSE mean": 2.691665605505708,
+            "RMSE mean": 1.6329344605269558,
+            "Median error mean": 1.0809790293375652,
+            "Min error mean": 0.007829666137695312,
+            "Max error mean": 4.5622274080912275,
+            "c1": 1.8663,
+            "c2": 1.94016,
+            "w": 0.8
+        },
+        {
+            "File name": "opt_sgd_params_with_rpso_stats_calm_data_set",
+            "MAE mean": 1.6488550197710412,
+            "MSE mean": 4.3676714688051055,
+            "RMSE mean": 2.079395570059779,
+            "Median error mean": 1.4214599132537842,
+            "Min error mean": 0.019749800364176433,
+            "Max error mean": 6.161846558252971,
+            "Cp_min": 0.1,
+            "Cp_max": 3.5,
+            "Cg_min": 0.9,
+            "Cg_max": 3.0,
+            "w_min": 0.3,
+            "w_max": 1.7,
+            "gwn_std_dev": 0.15
+        },
+        {
+            "File name": "opt_sgd_params_with_rpso_stats_calm_data_set",
+            "MAE mean": 1.580445714635058,
+            "MSE mean": 4.088891911379696,
+            "RMSE mean": 2.0020346744074704,
+            "Median error mean": 1.3005553086598713,
+            "Min error mean": 0.018624623616536457,
+            "Max error mean": 6.324734528859456,
+            "Cp_min": 0.5,
+            "Cp_max": 2.5,
+            "Cg_min": 0.5,
+            "Cg_max": 2.5,
+            "w_min": 0.4,
+            "w_max": 0.9,
+            "gwn_std_dev": 0.07
+        },
+        {
+            "File name": "opt_sgd_params_with_rpso_stats_calm_data_set",
+            "MAE mean": 1.3284126698249954,
+            "MSE mean": 2.826268034859058,
+            "RMSE mean": 1.67510614608638,
+            "Median error mean": 1.1235959927241008,
+            "Min error mean": 0.014932632446289062,
+            "Max error mean": 4.761016050974528,
+            "Cp_min": 0.1,
+            "Cp_max": 3.5,
+            "Cg_min": 0.9,
+            "Cg_max": 3.0,
+            "w_min": 0.3,
+            "w_max": 1.7,
+            "gwn_std_dev": 0.17651345
+        },
+        {
+            "File name": "opt_ann_gbest_stats_noisy_data_set_c120w08",
+            "MAE mean": 1.9395140760474738,
+            "MSE mean": 6.077071888121632,
+            "RMSE mean": 2.4326821756883032,
+            "Median error mean": 1.7347654501597087,
+            "Min error mean": 0.0332482655843099,
+            "Max error mean": 7.641562620798747,
+            "c1": 2.0,
+            "c2": 2.0,
+            "w": 0.8
+        },
+        {
+            "File name": "opt_ann_gbest_stats_noisy_data_set_c1c2149445w0729",
+            "MAE mean": 1.7030843473307442,
+            "MSE mean": 4.478140304746671,
+            "RMSE mean": 2.1047878263547055,
+            "Median error mean": 1.4902875622113545,
+            "Min error mean": 0.03206141789754232,
+            "Max error mean": 5.867663701375325,
+            "c1": 1.49445,
+            "c2": 1.49445,
+            "w": 0.729
+        },
+        {
+            "File name": "opt_ann_gbest_stats_noisy_data_set_extra_long_single_run",
+            "MAE mean": 1.6092725935275392,
+            "MSE mean": 3.8998541660008885,
+            "RMSE mean": 1.967190645541774,
+            "Median error mean": 1.4595842361450195,
+            "Min error mean": 0.026885986328125,
+            "Max error mean": 5.55659548441569,
+            "c1": 1.8663,
+            "c2": 1.94016,
+            "w": 0.8
+        },
+        {
+            "File name": "opt_ann_gbest_stats_noisy_data_set_random_search_params",
+            "MAE mean": 1.543682750559304,
+            "MSE mean": 3.8010375231646862,
+            "RMSE mean": 1.9255012270004623,
+            "Median error mean": 1.3357094128926594,
+            "Min error mean": 0.04008960723876953,
+            "Max error mean": 5.6378475824991865,
+            "c1": 1.8663,
+            "c2": 1.94016,
+            "w": 0.8
+        },
+        {
+            "File name": "opt_ann_rpso_stats_noisy_data_set_default_rpso_params",
+            "MAE mean": 1.772596771525435,
+            "MSE mean": 4.793058263112997,
+            "RMSE mean": 2.173929162808626,
+            "Median error mean": 1.5598455270131428,
+            "Min error mean": 0.030749956766764324,
+            "Max error mean": 5.912238438924153,
+            "Cp_min": 0.5,
+            "Cp_max": 2.5,
+            "Cg_min": 0.5,
+            "Cg_max": 2.5,
+            "w_min": 0.4,
+            "w_max": 0.9,
+            "gwn_std_dev": 0.07
+        },
+        {
+            "File name": "opt_ann_rpso_stats_noisy_data_set_extra_long_single_run_default_params",
+            "MAE mean": 1.9584335660070202,
+            "MSE mean": 5.73958702334068,
+            "RMSE mean": 2.3912977927692682,
+            "Median error mean": 1.6676977475484211,
+            "Min error mean": 0.0342864195505778,
+            "Max error mean": 6.004555702209473,
+            "Cp_min": 0.5,
+            "Cp_max": 2.5,
+            "Cg_min": 0.5,
+            "Cg_max": 2.5,
+            "w_min": 0.4,
+            "w_max": 0.9,
+            "gwn_std_dev": 0.07
+        },
+        {
+            "File name": "opt_ann_rpso_stats_noisy_data_set_grid_search_params",
+            "MAE mean": 1.5387579614952662,
+            "MSE mean": 3.872219072846747,
+            "RMSE mean": 1.95904785220543,
+            "Median error mean": 1.2393898566563923,
+            "Min error mean": 0.003918965657552083,
+            "Max error mean": 5.908661524454753,
+            "Cp_min": 0.1,
+            "Cp_max": 3.5,
+            "Cg_min": 0.9,
+            "Cg_max": 3.0,
+            "w_min": 0.3,
+            "w_max": 1.7,
+            "gwn_std_dev": 0.15
+        },
+        {
+            "File name": "opt_ann_rpso_stats_noisy_data_set_gwn_random_search",
+            "MAE mean": 1.6694944494864057,
+            "MSE mean": 4.375784306708886,
+            "RMSE mean": 2.0899528146705912,
+            "Median error mean": 1.4639742374420166,
+            "Min error mean": 0.011948506037394205,
+            "Max error mean": 5.9254576365153,
+            "Cp_min": 0.1,
+            "Cp_max": 3.5,
+            "Cg_min": 0.9,
+            "Cg_max": 3.0,
+            "w_min": 0.3,
+            "w_max": 1.7,
+            "gwn_std_dev": 0.17651345
+        },
+        {
+            "File name": "opt_ann_rpso_stats_noisy_data_set_no_gwn_val",
+            "MAE mean": 1.7806301422810538,
+            "MSE mean": 4.854668734849586,
+            "RMSE mean": 2.1912680160314797,
+            "Median error mean": 1.5853757858276367,
+            "Min error mean": 0.040880282719930015,
+            "Max error mean": 5.674717903137207,
+            "Cp_min": 0.1,
+            "Cp_max": 3.5,
+            "Cg_min": 0.9,
+            "Cg_max": 3.0,
+            "w_min": 0.3,
+            "w_max": 1.7,
+            "gwn_std_dev": 0
+        },
+        {
+            "File name": "opt_ann_rpso_stats_noisy_data_set_no_gwn_val",
+            "MAE mean": 1.933058822007044,
+            "MSE mean": 5.574168959165804,
+            "RMSE mean": 2.3530631946610665,
+            "Median error mean": 1.743608832359314,
+            "Min error mean": 0.04506063461303711,
+            "Max error mean": 6.43802531560262,
+            "Cp_min": 0.5,
+            "Cp_max": 2.5,
+            "Cg_min": 0.5,
+            "Cg_max": 2.5,
+            "w_min": 0.4,
+            "w_max": 0.9,
+            "gwn_std_dev": 0
+        },
+        {
+            "File name": "opt_adam_params_with_gbest_stats_noisy_data_set_500_iterations_during_training_c149445w0729",
+            "MAE mean": 1.25667529272648,
+            "MSE mean": 2.5485148291221207,
+            "RMSE mean": 1.5886200088902918,
+            "Median error mean": 1.056903600692749,
+            "Min error mean": 0.013703664143880209,
+            "Max error mean": 4.61029330889384,
+            "c1": 1.49445,
+            "c2": 1.49445,
+            "w": 0.729
+        },
+        {
+            "File name": "opt_adam_params_with_gbest_stats_noisy_data_set_500_iterations_during_training_c20w08",
+            "MAE mean": 1.3582325112594216,
+            "MSE mean": 3.2763019209624384,
+            "RMSE mean": 1.7836204241728117,
+            "Median error mean": 1.1042581001917522,
+            "Min error mean": 0.02103632688522339,
+            "Max error mean": 6.963036855061849,
+            "c1": 2.0,
+            "c2": 2.0,
+            "w": 0.8
+        },
+        {
+            "File name": "opt_adam_params_with_gbest_stats_noisy_data_set_500_iterations_during_training_random_search_params",
+            "MAE mean": 1.5953748677169555,
+            "MSE mean": 4.3182398607540895,
+            "RMSE mean": 2.04196338441894,
+            "Median error mean": 1.27984623114268,
+            "Min error mean": 0.09036342302958171,
+            "Max error mean": 6.8110300699869795,
+            "c1": 1.8663,
+            "c2": 1.94016,
+            "w": 0.8
+        },
+        {
+            "File name": "opt_adam_params_with_rpso_stats_noisy_data_set_gridSearch_params",
+            "MAE mean": 1.271918105282964,
+            "MSE mean": 2.57714311999341,
+            "RMSE mean": 1.5780822291942753,
+            "Median error mean": 1.0411482254664104,
+            "Min error mean": 0.005576213200887044,
+            "Max error mean": 4.947043736775716,
+            "Cp_min": 0.1,
+            "Cp_max": 3.5,
+            "Cg_min": 0.9,
+            "Cg_max": 3.0,
+            "w_min": 0.3,
+            "w_max": 1.7,
+            "gwn_std_dev": 0.15
+        },
+        {
+            "File name": "opt_adam_params_with_rpso_stats_noisy_data_set_no_gwn_val",
+            "MAE mean": 1.4649874402839806,
+            "MSE mean": 3.7015452319640754,
+            "RMSE mean": 1.895082114368008,
+            "Median error mean": 1.1829074025154114,
+            "Min error mean": 0.008783658345540365,
+            "Max error mean": 6.622622489929199,
+            "Cp_min": 0.1,
+            "Cp_max": 3.5,
+            "Cg_min": 0.9,
+            "Cg_max": 3.0,
+            "w_min": 0.3,
+            "w_max": 1.7,
+            "gwn_std_dev": 0
+        },
+        {
+            "File name": "opt_adam_params_with_rpso_stats_noisy_data_set_random_search_params",
+            "MAE mean": 1.47866785593325,
+            "MSE mean": 3.571145828260533,
+            "RMSE mean": 1.8547538865290047,
+            "Median error mean": 1.2327405611673992,
+            "Min error mean": 0.023068030675252277,
+            "Max error mean": 5.6300482749938965,
+            "Cp_min": 0.1,
+            "Cp_max": 3.5,
+            "Cg_min": 0.9,
+            "Cg_max": 3.0,
+            "w_min": 0.3,
+            "w_max": 1.7,
+            "gwn_std_dev": 0.17651345
+        },
+        {
+            "File name": "opt_adam_params_with_rpso_stats_noisy_data_set_standard_params",
+            "MAE mean": 1.4187815291567805,
+            "MSE mean": 3.259231487014869,
+            "RMSE mean": 1.776893675558161,
+            "Median error mean": 1.154393235842387,
+            "Min error mean": 0.01217214266459147,
+            "Max error mean": 5.009816328684489,
+            "Cp_min": 0.5,
+            "Cp_max": 2.5,
+            "Cg_min": 0.5,
+            "Cg_max": 2.5,
+            "w_min": 0.4,
+            "w_max": 0.9,
+            "gwn_std_dev": 0.07
+        },
+        {
+            "File name": "opt_sgd_params_with_gbest_stats_noisy_data_set",
+            "MAE mean": 1.3511273188512094,
+            "MSE mean": 2.7796234964821562,
+            "RMSE mean": 1.649463337895534,
+            "Median error mean": 1.1736302773157756,
+            "Min error mean": 0.02752844492594401,
+            "Max error mean": 4.788165171941121,
+            "c1": 2.0,
+            "c2": 2.0,
+            "w": 0.8
+        },
+        {
+            "File name": "opt_sgd_params_with_gbest_stats_noisy_data_set",
+            "MAE mean": 1.401808876851302,
+            "MSE mean": 3.285028517629588,
+            "RMSE mean": 1.7870422099095782,
+            "Median error mean": 1.1086242894331615,
+            "Min error mean": 0.018755276997884113,
+            "Max error mean": 5.953956047693889,
+            "c1": 1.49445,
+            "c2": 1.49445,
+            "w": 0.729
+        },
+        {
+            "File name": "opt_sgd_params_with_gbest_stats_noisy_data_set",
+            "MAE mean": 1.2829146285992705,
+            "MSE mean": 2.7718798757760506,
+            "RMSE mean": 1.6325323435494699,
+            "Median error mean": 1.020761529604594,
+            "Min error mean": 0.010595162709554037,
+            "Max error mean": 6.1483209530512495,
+            "c1": 1.8663,
+            "c2": 1.94016,
+            "w": 0.8
+        },
+        {
+            "File name": "opt_sgd_params_with_rpso_stats_noisy_data_set",
+            "MAE mean": 1.4871551127486384,
+            "MSE mean": 3.8172063660687834,
+            "RMSE mean": 1.9228674024468335,
+            "Median error mean": 1.2243232329686482,
+            "Min error mean": 0.03507709503173828,
+            "Max error mean": 6.754911303520203,
+            "Cp_min": 0.1,
+            "Cp_max": 3.5,
+            "Cg_min": 0.9,
+            "Cg_max": 3.0,
+            "w_min": 0.3,
+            "w_max": 1.7,
+            "gwn_std_dev": 0.15
+        },
+        {
+            "File name": "opt_sgd_params_with_rpso_stats_noisy_data_set",
+            "MAE mean": 1.237011829335639,
+            "MSE mean": 2.5914480409120655,
+            "RMSE mean": 1.5910676951309368,
+            "Median error mean": 0.9776844580968221,
+            "Min error mean": 0.025183677673339844,
+            "Max error mean": 5.875925223032634,
+            "Cp_min": 0.5,
+            "Cp_max": 2.5,
+            "Cg_min": 0.5,
+            "Cg_max": 2.5,
+            "w_min": 0.4,
+            "w_max": 0.9,
+            "gwn_std_dev": 0.07
+        },
+        {
+            "File name": "opt_sgd_params_with_rpso_stats_noisy_data_set",
+            "MAE mean": 1.3453529590809785,
+            "MSE mean": 3.0561320161023473,
+            "RMSE mean": 1.725759863474335,
+            "Median error mean": 1.1200520594914753,
+            "Min error mean": 0.028628031412760418,
+            "Max error mean": 5.751631577809651,
+            "Cp_min": 0.1,
+            "Cp_max": 3.5,
+            "Cg_min": 0.9,
+            "Cg_max": 3.0,
+            "w_min": 0.3,
+            "w_max": 1.7,
+            "gwn_std_dev": 0.17651345
+        }
+    ]
 }
